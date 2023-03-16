@@ -5,7 +5,7 @@ const Error = () => {
     <>
       <div style={{ margin: '1rem' }}>
         <Alert key="warning" variant="danger">
-          Ummm... it's telling me this page doesn't exist..?
+          Ummm... it&apos;s telling me this page doesn&apos;t exist..?
         </Alert>
       </div>
     </>
