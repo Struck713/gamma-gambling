@@ -2,6 +2,9 @@ import Head from 'next/head'
 import TopNavbar from '@/components/navbar';
 
 import '@/style/main.scss'
+
+// import LocalFont from 'next/font/local'
+// const font = LocalFont({ src: '' });
 //import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import type { AppProps } from 'next/app'
@@ -10,6 +13,11 @@ import type { AppProps } from 'next/app'
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
+      {/* <style jsx global>{`
+        html {
+          font-family: ${font.style.fontFamily};
+        }
+      `}</style> */}
       <Head>
         <title>Gamma Gambling</title>
         <meta name="description" content="Make your money go up!" />
