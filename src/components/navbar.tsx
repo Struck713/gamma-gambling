@@ -7,7 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const TopNavbar = () => {
   return (
-    <Navbar bg="primary" expand="sm">
+    <Navbar bg="primary" variant="dark" expand="sm">
       <Container>
         <Navbar.Brand href="#home">Gamma Gambling</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
