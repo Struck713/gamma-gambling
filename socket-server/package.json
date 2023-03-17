@@ -1,9 +1,21 @@
 {
+  "name": "socket-server",
+  "version": "1.0.0",
+  "description": "Socket game server for our database project",
+  "main": "index.js",
   "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@types/socket.io": "^3.0.2",
     "typescript": "^5.0.2"
   },
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.6.1"
-  }
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "Umbrella",
+  "license": "ISC"
 }
