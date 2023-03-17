@@ -1,16 +1,37 @@
 @import url(https://fonts.googleapis.com/css?family=KoHo);
 
+// this is a bunch of global css stuff
+
+$primary: #200542;
+$secondary: #9768d1;
+$info: #553285;
+$font-family-base: Koho;
+
+// set the font and global backgroun
 body {
     background: url(../../public/assets/images/background.svg) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    margin: 0;
 }
 
-$primary: #200542;
-$secondary: #9768d1;
-$info: #553285;
-$font-family-base: Koho;
+// modify the scrollbar
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: whitesmoke;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $info;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7b52ab;
+}
 
 @import '~bootstrap/scss/bootstrap.scss'
