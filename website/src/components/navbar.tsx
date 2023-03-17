@@ -9,7 +9,7 @@ const TopNavbar = () => {
   return (
     <Navbar bg="primary" variant="dark" expand="sm">
       <Container>
-        <Navbar.Brand href="#home">Gamma Gambling</Navbar.Brand>
+        <Navbar.Brand href="#home">GAMMA GAMBLING</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
@@ -19,12 +19,10 @@ const TopNavbar = () => {
                 <NavDropdown.Item as={Link} href="/games/plinko">Plinko</NavDropdown.Item>
                 <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown title="Stats" id="profile-dropdown">
-                <NavDropdown.Item as={Link} href="/stats">All time</NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/stats/recent">Recent</NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
               <NavDropdown title="Profile" id="profile-dropdown">
                 <NavDropdown.Item as={Link} href="/account/login">Login</NavDropdown.Item>
+                <NavDropdown.Item as={Link} href="/account/signup">Sign Up</NavDropdown.Item>
               </NavDropdown>
           </Nav>
         </Navbar.Collapse>

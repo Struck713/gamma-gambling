@@ -1,12 +1,11 @@
 import { Alert } from 'react-bootstrap';
 
+// Ummm... it&apos;s telling me this page doesn&apos;t exist..?
 const Error = () => {
   return (
     <>
       <div style={{ margin: '1rem' }}>
-        <Alert key="warning" variant="danger">
-          Ummm... it&apos;s telling me this page doesn&apos;t exist..?
-        </Alert>
+        <h1 className="light text-center align-middle text-light">404</h1>
       </div>
     </>
   )

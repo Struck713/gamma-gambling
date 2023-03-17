@@ -1,4 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=KoHo);
+
+body {
+    background: url(../../public/assets/images/background.svg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 
 $primary: #200542;
+$secondary: #9768d1;
+$info: #553285;
+$font-family-base: Koho;
 
 @import '~bootstrap/scss/bootstrap.scss'
