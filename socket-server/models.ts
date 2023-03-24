@@ -18,12 +18,14 @@ class Game {
     max: number;
 
     players: Player[];
+    state: GameState;
 
     constructor(type: Games, min: number, max: number) {
         this.type = type;
         this.min = min;
         this.max = max;
         this.players = [];
+        this.state = GameState.Waiting;
     }
 
     join(player: Player) {
@@ -67,4 +69,12 @@ class Player {
 
 }
 
-export { Game, Player };
+enum GameState {
+
+    Started,
+    Ended,
+    Waiting,
+
+}
+
+export { Game, Player, GameState };

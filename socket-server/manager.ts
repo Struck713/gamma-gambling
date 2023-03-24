@@ -35,7 +35,7 @@ export default class GameManager {
                 if (game.join(player)) return true;
             }
         }
-
+        
         let createdGame: Nullable<Game> = this.create(name);
         if (!createdGame) return;
         createdGame.join(player);
