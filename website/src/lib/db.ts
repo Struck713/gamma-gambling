@@ -11,7 +11,7 @@ const db = mysql({
   }
 });
 
-export default async function execute(query: string, ...values:any[] ) {
+export default async function execute(query: string, ...values:any[]) {
   try {
     const results = await db.query(query, values);
     await db.end();

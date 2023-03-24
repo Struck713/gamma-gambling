@@ -47,3 +47,5 @@ class Crash extends Game {
     }
 
 }
+
+export { Roulette, Slots, Crash };
