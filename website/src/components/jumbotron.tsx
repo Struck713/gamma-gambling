@@ -6,20 +6,22 @@ interface JumbotronProps {
     children: string
 }
 
-import Kosilka from '../../public/assets/images/kosilka.jpg';
+import { Images } from "./images";
 
 const Jumbotron = ({ title, children } : JumbotronProps) => {
 
     return (
-        <div className="jumbotron jumbotron-fluid text-light"  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div className="jumbotron text-light">
             <Container>
                 <Row>
                     <Col>
                         <h1 className="display-4">{title}</h1>
                         <p className="lead">{children}</p>
                     </Col>
-                    <Col>
-                        <Image src={Kosilka} alt="Kolsilka" style={{height: "50%", width:"75%"}} />
+                    <Col style={{ verticalAlign: 'middle' }}>
+                        <Row style={{paddingBottom: "5px"}}><Image src={Images.Crash} alt="Crash" style={{height: "auto", width:"50%"}} /></Row>
+                        <Row style={{paddingBottom: "5px"}}><Image src={Images.Slots} alt="Slots" style={{height: "auto", width:"50%"}} /></Row>
+                        <Row style={{paddingBottom: "5px"}}><Image src={Images.Roulette} alt="Roulette" style={{height: "auto", width:"50%"}} /></Row>
                     </Col>
                 </Row>
             </Container>

@@ -34,4 +34,13 @@ body {
     background: #7b52ab;
 }
 
+// some other styles
+.jumbotron {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
 @import '~bootstrap/scss/bootstrap.scss'
