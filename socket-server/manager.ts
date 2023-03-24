@@ -43,6 +43,20 @@ export default class GameManager {
     }
 
     /**
+     * Searches all of the games to find the player
+     * we are looking for
+     * 
+     * @param player the player we want to find
+     * @returns the Game the player is in or null
+     */
+    find = (player: Player): Nullable<Game> => {
+        for (let game of this.games) {
+            if (game.players.includes(player)) return game;
+        }
+        return null;
+    }
+
+    /**
      * Creates a new instance of game based
      * on it's name.
      * 
@@ -55,6 +69,6 @@ export default class GameManager {
             case Games.Crash: return new Crash();
             case Games.Slots: return new Slots();
         }
-    }
+    } 
 
 }

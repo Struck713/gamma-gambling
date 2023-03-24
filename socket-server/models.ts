@@ -28,12 +28,28 @@ class Game {
         this.state = GameState.Waiting;
     }
 
+    /**
+     * Invoked to make a player join
+     * this game instance.
+     * 
+     * @param player the player who is joining
+     * @returns true if the player successfully joins
+     *          false if the lobby is full
+     */
     join(player: Player) {
         if (this.players.length + 1 > this.max) return false;
         this.players.push(player);
         return true;
     }
 
+    /**
+     * Invoked to make a player leave
+     * this game instance.
+     * 
+     * @param player the player who is leaving
+     * @returns true if the player successfully leaves
+     *          false if the player was not in the lobby
+     */
     leave(player: Player) {
         let found: number = this.players.indexOf(player);
         if (found == -1) return false;
@@ -41,7 +57,33 @@ class Game {
         return true;
     }
 
+    /**
+     * This function is called once upon game
+     * start. It can be used to setup concrete
+     * class variables and other stuff not offered
+     * in this abstraction.
+     * 
+     * @returns
+     */
+    start() {}
+
+    /**
+     * This function is called for each second
+     * that the game is running, it can modify
+     * game data sent to players or the game's
+     * internal state. 
+     * 
+     * @returns
+     */
     update() {}
+
+    /**
+     * This function is called when the game ends.
+     * Usually a winner will be chosen during this
+     * function call.
+     * 
+     * @returns
+     */
     end() {}
 
 }
@@ -69,6 +111,17 @@ class Player {
 
 }
 
+/**
+ * Game State
+ * 
+ * All of the possible game states:
+ * - Started: The game is currently running
+ * - Ended:   The game is in the end position, 
+ *            a winner is being picked or has
+ *            been picked
+ * - Waiting: The game is waiting for other
+ *            players to join
+ */
 enum GameState {
 
     Started,

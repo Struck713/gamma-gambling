@@ -1,5 +1,11 @@
 import { Game } from './models'
 
+/**
+ * Roulette
+ * 
+ * The concrete implementation of the Roulette
+ * game type.
+ */
 class Roulette extends Game {
 
     constructor() {
@@ -16,6 +22,12 @@ class Roulette extends Game {
 
 }
 
+/**
+ * Slots
+ * 
+ * The concrete implementation of the Slots
+ * game type.
+ */
 class Slots extends Game {
 
     constructor() {
@@ -32,6 +44,12 @@ class Slots extends Game {
 
 }
 
+/**
+ * Crash
+ * 
+ * The concrete implementation of the Crash
+ * game type.
+ */
 class Crash extends Game {
 
     constructor() {
@@ -48,6 +66,12 @@ class Crash extends Game {
 
 }
 
+/**
+ * Games
+ * 
+ * This enum just contains a list
+ * of the possible types of Game
+ */
 enum Games {
 
     Roulette,
