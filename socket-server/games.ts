@@ -3,7 +3,7 @@ import { Game } from './models'
 class Roulette extends Game {
 
     constructor() {
-        super("Roulette", 2, 16);
+        super(Games.Roulette, 2, 16);
     }
 
     update() {
@@ -19,7 +19,7 @@ class Roulette extends Game {
 class Slots extends Game {
 
     constructor() {
-        super("Slots", 2, 16);
+        super(Games.Slots, 2, 16);
     }
 
     update() {
@@ -35,7 +35,7 @@ class Slots extends Game {
 class Crash extends Game {
 
     constructor() {
-        super("Crash", 2, 16);
+        super(Games.Crash, 2, 16);
     }
 
     update() {
@@ -48,4 +48,12 @@ class Crash extends Game {
 
 }
 
-export { Roulette, Slots, Crash };
+enum Games {
+
+    Roulette,
+    Slots,
+    Crash
+
+}
+
+export { Games, Roulette, Slots, Crash };

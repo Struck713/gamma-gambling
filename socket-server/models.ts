@@ -1,13 +1,26 @@
+import { Games } from "./games";
+
+/**
+ * Game
+ * 
+ * Super class of all game instances, keeps code
+ * looking nice and tidy.
+ * 
+ * Base class just contains
+ * a name, a min amount of players and a max amount
+ * of players. 
+ * These values are all for the GameManager.
+ */
 class Game {
 
-    name: string;
+    type: Games;
     min: number;
     max: number;
 
     players: Player[];
 
-    constructor(name: string, min: number, max: number) {
-        this.name = name;
+    constructor(type: Games, min: number, max: number) {
+        this.type = type;
         this.min = min;
         this.max = max;
         this.players = [];
@@ -31,6 +44,17 @@ class Game {
 
 }
 
+/**
+ * Player
+ * 
+ * This class has an ID (user ID) and
+ * a name (username of player). The name
+ * will mostly be for displaying to other
+ * users who is in the lobby. 
+ * 
+ * All operations for Player should be done
+ * using ID.
+ */
 class Player {
 
     id: string;

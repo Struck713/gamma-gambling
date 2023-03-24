@@ -1,7 +1,16 @@
-import { Crash, Roulette, Slots } from "./games";
+import { Crash, Games, Roulette, Slots } from "./games";
 import { Game, Player } from "./models";
 import { Nullable } from "./utils";
 
+/**
+ * GameManager
+ * 
+ * Contains a list of games and utility
+ * functions that can be used on that list.
+ * 
+ * For example: Finding a player in a game,
+ * or create a new game
+ */
 export default class GameManager {
 
     games: Game[];
@@ -10,32 +19,42 @@ export default class GameManager {
         this.games = [];
     }
 
-    // have a player join a game based on the game name
-    join = (player: Player, name: string) => {
-        // search all games
+    /**
+     * Attempts to find an open game lobby
+     * with that type, if it can't, it will
+     * create a new one and add the player to
+     * it.
+     * 
+     * @param player the player to join
+     * @param name the name of the Game
+     * @returns
+     */
+    join = (player: Player, name: Games) => {
         for (let game of this.games) {
-            // if the game of that name has an open lobby, we join it
-            // else search all of the games
-            if (game.name == name) {
+            if (game.type == name) {
                 if (game.join(player)) return true;
             }
         }
 
-        // if we have made it to this part of the code, we have not found an empty lobby
         let createdGame: Nullable<Game> = this.create(name);
         if (!createdGame) return;
         createdGame.join(player);
         this.games.push(createdGame);
     }
 
-    create = (name: String): Nullable<Game> => {
-        let created: Nullable<Game> = null;
+    /**
+     * Creates a new instance of game based
+     * on it's name.
+     * 
+     * @param name the name of the Game
+     * @returns 
+     */
+    create = (name: Games): Nullable<Game> => {
         switch (name) {
-            case "Roulette": created = new Roulette();
-            case "Crash": created = new Crash();
-            case "Slots": created = new Slots();
+            case Games.Roulette: return new Roulette();
+            case Games.Crash: return new Crash();
+            case Games.Slots: return new Slots();
         }
-        return created;
     }
 
 }
