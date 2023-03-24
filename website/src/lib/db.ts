@@ -1,13 +1,12 @@
 import mysql from "serverless-mysql";
-import env from "env.json";
 
 const db = mysql({
   config: {
-    host: env.database.host,
-    port: env.database.port,
-    database: env.database.database,
-    user: env.database.credentials.user,
-    password: env.database.credentials.password
+    host: process.env.SQL_HOST,
+    port: Number.isInteger(process.env.SQL_PORT) ? Number.parseInt(process.env.SQL_PORT!) : 3306,
+    database: process.env.SQL_DATABASE,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD
   }
 });
 
