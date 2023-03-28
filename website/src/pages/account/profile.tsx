@@ -7,13 +7,13 @@ const AccountProfile = () => {
   const { data, error, mutate } = useCurrentUser();
   const router: NextRouter = useRouter();
   useEffect(() => {
-    if (!data && !error) return;
-    if (!data.user) router.replace('account/login');
-  }, [router, data, error])
+    if (!(data || error)) return;
+    if (!data.user) router.replace('login');
+  }, [router, data, error]);
 
   return (
     <>
-      <p>{data}</p>
+      {data?.user ? <p className="text-light">You are signed in as: {data.user.username}</p> : null }
     </>
   )
 }
