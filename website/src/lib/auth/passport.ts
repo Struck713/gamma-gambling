@@ -23,7 +23,7 @@ passport.use(
     { usernameField: 'email', passReqToCallback: true },
     async (req, email, password, done) => {
       const [ user ]: Account[] = await execute<Account>("SELECT * FROM accounts WHERE email=?", email);
-      if (user && await bcrypt.compare(password, user.password_hash)) done(null, { ...user, password_hash: undefined });
+      if (user && await bcrypt.compare(password, user.password_hash!)) done(null, { ...user, password_hash: undefined });
       else done(null, false, { message: 'Email or password is incorrect' });
     }
   )
