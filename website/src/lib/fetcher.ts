@@ -1,5 +1,4 @@
-export const fetcher = (...args: any[]) => {
-  const [ url, options, ...rest ]: any[] = args;
+export const fetcher = (url: string, options?: any) => {
   return fetch(url, options).then(async (res) => {
     let payload;
     try {
@@ -8,6 +7,7 @@ export const fetcher = (...args: any[]) => {
     } catch (e) {
       /* noop */
     }
+
     if (res.ok) {
       return payload;
     } else {

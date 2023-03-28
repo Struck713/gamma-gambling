@@ -32,11 +32,12 @@ const AccountRegister = () => {
               }),
             });
 
+            console.log(response);
             mutate({ user: response.user }, false);
-            router.replace('/profile');
+            router.replace('/account/profile');
 
           } catch (e: any) {
-            console.log(e.message);
+            console.log(e);
             //toast.error(e.message);
           } finally {
             setIsLoading(false);
