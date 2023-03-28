@@ -22,7 +22,7 @@ const TopNavbar = () => {
               <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
               <NavDropdown title="Profile" id="profile-dropdown">
                 <NavDropdown.Item as={Link} href="/account/login">Login</NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/account/signup">Sign Up</NavDropdown.Item>
+                <NavDropdown.Item as={Link} href="/account/register">Sign Up</NavDropdown.Item>
               </NavDropdown>
           </Nav>
         </Navbar.Collapse>

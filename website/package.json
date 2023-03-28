@@ -14,18 +14,32 @@
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
+    "ajv": "^8.12.0",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.2.3",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
+    "express-mysql-session": "^3.0.0",
     "next": "13.1.6",
+    "next-connect": "^0.13.0",
+    "next-session": "^4.0.5",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "react": "18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "18.2.0",
     "sass": "^1.58.3",
     "serverless-mysql": "^1.5.4",
-    "typescript": "4.9.5"
+    "swr": "^2.1.1",
+    "typescript": "4.9.5",
+    "validator": "^13.9.0"
   },
   "devDependencies": {
-    "@types/react-bootstrap": "^0.32.32"
+    "@types/bcrypt": "^5.0.0",
+    "@types/passport": "^1.0.12",
+    "@types/passport-local": "^1.0.35",
+    "@types/react-bootstrap": "^0.32.32",
+    "@types/validator": "^13.7.14"
   }
 }

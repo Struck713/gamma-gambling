@@ -1,8 +1,19 @@
 
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
 // The login page, you know what it does
 const AccountLogin = () => {
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const router = useRouter();
+
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+    })
+
     return (
       <div className="jumbotron text-light" >
         <Form className="bg-primary rounded border border-secondary" style={{ padding: "3rem" }}>
