@@ -1,11 +1,11 @@
 import { SessionStore } from "next-session";
 import { SessionData, SessionRecord } from "next-session/lib/types";
-import execute from "../db";
+import { execute } from "../db";
 
 interface Options {
 
-    clearExpired: boolean = true;
-    checkExpirationInterval: number = 900000;
+    clearExpired: boolean;
+    checkExpirationInterval: number;
     expiration: number;
 
 }
