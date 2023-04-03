@@ -1,8 +1,10 @@
 import nc from 'next-connect';
-import auths from '@/lib/auth'
 import { NextApiResponse } from 'next';
 
-const handler = nc();
+import auths from '@/lib/auth'
+import { ncOpts } from '@/lib/constants';
+
+const handler = nc(ncOpts);
 handler.use(...auths);
 handler.get<any, NextApiResponse>(async (req, res) => res.json({ user: req.user }));
 

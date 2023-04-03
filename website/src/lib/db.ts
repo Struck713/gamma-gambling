@@ -10,14 +10,15 @@ const db = mysql({
   }
 });
 
-const execute = async <T>(query: string, ...values:any): Promise<T[] | any | null> => {
+const execute = async <T>(query: string, ...values:any): Promise<T[] | undefined> => {
   try {
     const results: any[] = await db.query(query, values);
     await db.end();
-    if (results.length == 0) return null;
+    if (!results.length) return undefined;
     return results;
   } catch (error) {
-    return { error };
+    console.log(error);
+    return [];
   }
 }
 

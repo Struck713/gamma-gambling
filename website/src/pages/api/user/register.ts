@@ -1,5 +1,5 @@
 import auths from '@/lib/auth';
-import { ValidateProps } from '@/lib/constants';
+import { ValidateProps, ncOpts } from '@/lib/constants';
 import { execute } from '@/lib/db';
 import Account from '@/lib/models';
 import { validateBody } from '@/lib/user/ajv';
@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 
-const handler = nc();
+const handler = nc(ncOpts);
 
 handler.post(
   validateBody({
@@ -43,15 +43,15 @@ handler.post(
       return;
     }
 
-    if (await execute("SELECT * FROM account WHERE username=?", email)) {
+    if (await execute("SELECT * FROM account WHERE username=?", username)) {
       res
         .status(403)
-        .json({ error: { message: 'The username has already been taken.' } });
+        .json({ error: { message: 'The username has already been used.' } });
       return;
     }
 
     password = await bcrypt.hash(password, 10);
-    const queryResponse: any = await execute("INSERT INTO account VALUES (null, ?, ?, ?)", email, username, password);
+    const queryResponse: any = await execute("INSERT INTO account VALUES (null, ?, ?, ?)", username, email, password);
     if (!queryResponse.insertId) {
       res
         .status(403)

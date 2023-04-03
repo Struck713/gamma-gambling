@@ -1,10 +1,12 @@
 import nextSession from "next-session";
 import { ServerlessSQLStore } from "./store";
+import { IncomingMessage, ServerResponse } from "http";
+import { promisifyStore } from 'next-session/lib/compat'
 
 const connectStore = new ServerlessSQLStore({
     clearExpired: true,
     checkExpirationInterval: 900000,
-    expiration: 86400000
+    expiration: 2 * 7 * 24 * 60 * 60
 });
 
 const getSession = nextSession({
@@ -19,7 +21,7 @@ const getSession = nextSession({
   touchAfter: 1 * 7 * 24 * 60 * 60
 });
 
-const session = async (req: any, res: any, next: any) => {
+const session = async (req: IncomingMessage, res: ServerResponse<IncomingMessage>, next: () => {}) => {
   await getSession(req, res);
   next();
 }

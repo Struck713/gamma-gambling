@@ -32,7 +32,6 @@ const AccountRegister = () => {
               }),
             });
 
-            console.log(response);
             mutate({ user: response.user }, false);
             router.replace('/account/profile');
 
@@ -66,7 +65,7 @@ const AccountRegister = () => {
                 <Form.Label>Password</Form.Label>
                 <Form.Control ref={passwordRef} type="password" placeholder="Password" />
             </Form.Group>
-            <Form.Group as={Col} controlId="passwordField">
+            <Form.Group as={Col} controlId="confirmPasswordField">
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control type="password" placeholder="Confirm Password" />
             </Form.Group>
