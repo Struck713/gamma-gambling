@@ -15,3 +15,5 @@ handler.delete(async (req: any, res: NextApiResponse) => {
     await req.session.destroy();
     res.status(204).end();
 })
+
+export default handler;

@@ -43,15 +43,15 @@ handler.post(
       return;
     }
 
-    if (await execute("SELECT * FROM account WHERE username=?", email)) {
+    if (await execute("SELECT * FROM account WHERE username=?", username)) {
       res
         .status(403)
-        .json({ error: { message: 'The username has already been taken.' } });
+        .json({ error: { message: 'The username has already been used.' } });
       return;
     }
 
     password = await bcrypt.hash(password, 10);
-    const queryResponse: any = await execute("INSERT INTO account VALUES (null, ?, ?, ?)", email, username, password);
+    const queryResponse: any = await execute("INSERT INTO account VALUES (null, ?, ?, ?)", username, email, password);
     if (!queryResponse.insertId) {
       res
         .status(403)

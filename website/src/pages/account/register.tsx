@@ -32,7 +32,6 @@ const AccountRegister = () => {
               }),
             });
 
-            console.log(response);
             mutate({ user: response.user }, false);
             router.replace('/account/profile');
 
