@@ -25,7 +25,7 @@ const AccountLogin = () => {
         e.preventDefault();
         
         try {
-          const response = await fetcher('/api/auth', {
+          const response = await fetcher('/api/user/auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -33,6 +33,8 @@ const AccountLogin = () => {
               password: passwordRef.current.value,
             }),
           });
+
+          console.log(response);
 
           mutate({ user: response.user }, false);
           console.log('You have been logged in.');

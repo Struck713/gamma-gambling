@@ -17,6 +17,7 @@ const execute = async <T>(query: string, ...values:any): Promise<T[] | undefined
     if (!results.length) return undefined;
     return results;
   } catch (error) {
+    console.log(error);
     return [];
   }
 }

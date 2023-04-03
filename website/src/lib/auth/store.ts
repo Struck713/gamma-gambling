@@ -10,12 +10,6 @@ interface Options {
 
 }
 
-interface Session {
-
-
-
-}
-
 class ServerlessSQLStore implements SessionStore {
 
     private options: Options;
@@ -32,7 +26,7 @@ class ServerlessSQLStore implements SessionStore {
 
     async get(session_id: string): Promise<SessionData<SessionRecord> | null | undefined> {
         const sql: string = "SELECT data, expires FROM session WHERE session_id = ?";
-        let [ row ]: any = await execute(sql, session_id);
+        let [ row ]: any = await execute(sql, session_id) ?? [];
         if (!row) return null;
 
         const now = Math.round(Date.now() / 1000);
@@ -48,7 +42,7 @@ class ServerlessSQLStore implements SessionStore {
 		if (!(expires instanceof Date)) expires = new Date(expires);
         expires = Math.round(expires.getTime() / 1000); // use seconds
         const sql: string = "INSERT INTO session VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE expires = VALUES(expires), data = VALUES(data)";
-        await execute(sql, session_id, expires, record);
+        await execute(sql, session_id, expires, JSON.stringify(record));
     }
 
     async destroy(session_id: string): Promise<void> {

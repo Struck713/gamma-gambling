@@ -2,9 +2,11 @@ import passport from '@/lib/auth/passport';
 import auths from '@/lib/auth';
 
 import { NextApiResponse } from 'next';
-import nc from 'next-connect';
 
-const handler = nc();
+import nc from 'next-connect';
+import { ncOpts } from '@/lib/constants';
+
+const handler = nc(ncOpts);
 handler.use(...auths);
 
 handler.post(passport.authenticate('local'), (req: any, res: NextApiResponse) => {

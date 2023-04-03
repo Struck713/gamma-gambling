@@ -14,8 +14,8 @@ passport.serializeUser<any>((user: User, done) => {
 });
 
 passport.deserializeUser<Account>(async (user, done) => {
-  const [ account ]: Account[] = await execute<Account>("SELECT * FROM account WHERE id=?", user.id) ?? [];
-  done(null, account);
+  const [ account ]: Account[] = await execute<Account>("SELECT * FROM account WHERE id=?", user) ?? [];
+  done(null, { ...account, password_hash: undefined });
 });
 
 passport.use(
