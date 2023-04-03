@@ -4,6 +4,7 @@ import { useCurrentUser } from "@/lib/user";
 import { NextRouter, useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 // The login page, you know what it does
 const AccountLogin = () => {
@@ -34,12 +35,11 @@ const AccountLogin = () => {
             }),
           });
 
-          console.log(response);
-
           mutate({ user: response.user }, false);
-          console.log('You have been logged in.');
+          toast.success('You have been logged in.');
+          
         } catch (error: any) {
-          console.log(error.message);
+          toast.error(error.message);
         } finally {
           setLoading(false);
         }

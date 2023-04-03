@@ -5,6 +5,9 @@ import { useCallback, useRef, useState } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 
 
+import toast from 'react-hot-toast';
+
+
 // The login page, you know what it does
 const AccountRegister = () => {
     const emailRef: any = useRef(null);
@@ -39,8 +42,7 @@ const AccountRegister = () => {
             router.replace('/account/profile');
 
           } catch (e: any) {
-            console.log(e);
-            //toast.error(e.message);
+            toast.error(e.message);
           } finally {
             setIsLoading(false);
           }
