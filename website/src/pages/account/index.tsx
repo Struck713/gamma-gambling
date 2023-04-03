@@ -11,11 +11,9 @@ const AccountProfile = () => {
     if (!data.user) router.replace('login');
   }, [router, data, error]);
 
-console.log(data);
-
   return (
     <>
-      {data?.user ? <p className="text-light">You are signed in as: {data.user.username}</p> : null }
+      <p className="text-light">{data?.user ? `You are signed in as: ${data.user.username}`: ""}</p>
     </>
   )
 }

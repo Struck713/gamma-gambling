@@ -8,8 +8,9 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 // The login page, you know what it does
 const AccountRegister = () => {
     const emailRef: any = useRef(null);
-    const passwordRef: any = useRef(null);
     const usernameRef: any = useRef(null);
+    const passwordRef: any = useRef(null);
+    const confirmPasswordRef: any = useRef(null);
 
     const { mutate } = useCurrentUser();
 
@@ -19,6 +20,8 @@ const AccountRegister = () => {
     const onSubmit = useCallback(
         async (e: any) => {
           e.preventDefault();
+
+          if (passwordRef.current.value !== confirmPasswordRef.current.value) return;
 
           try {
             setIsLoading(true);
@@ -67,7 +70,7 @@ const AccountRegister = () => {
             </Form.Group>
             <Form.Group as={Col} controlId="confirmPasswordField">
                 <Form.Label>Confirm Password</Form.Label>
-                <Form.Control type="password" placeholder="Confirm Password" />
+                <Form.Control ref={confirmPasswordRef} type="password" placeholder="Confirm Password" />
             </Form.Group>
           </Row>
           <br />
