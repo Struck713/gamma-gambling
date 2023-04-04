@@ -1,4 +1,5 @@
 
+import { LoadingSpinner } from "@/components/loading";
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
 import { NextRouter, useRouter } from "next/router";
@@ -12,13 +13,13 @@ const AccountLogin = () => {
     const passwordRef: any = useRef();
     const router: NextRouter = useRouter();
 
+    // useEffect(() => {
+    //   if (isValidating) return;
+    //   if (user) router.replace('/account');
+    // }, [user, router, isValidating]);
+
     const [isLoading, setLoading] = useState(false);
     const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
-    
-    useEffect(() => {
-      if (isValidating) return;
-      if (user) router.replace('/account');
-    }, [user, router, isValidating]);
 
     const onSubmit = useCallback(
       async (e: any) => {
@@ -46,6 +47,12 @@ const AccountLogin = () => {
       },
       [mutate]
     );
+
+    if (isValidating) return <LoadingSpinner />;
+    if (user) {
+      router.replace('/account');
+      return <LoadingSpinner />;
+    }
 
     return (
       <div className="jumbotron text-light" >

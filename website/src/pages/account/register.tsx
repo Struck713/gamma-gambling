@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/loading";
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
 import { useRouter } from "next/router";
@@ -15,7 +16,7 @@ const AccountRegister = () => {
     const passwordRef: any = useRef(null);
     const confirmPasswordRef: any = useRef(null);
 
-    const { mutate } = useCurrentUser();
+    const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
 
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -48,7 +49,13 @@ const AccountRegister = () => {
           }
         },
         [mutate, router]
-      );
+    );
+
+    if (isValidating) return <LoadingSpinner />;
+    if (user) {
+      router.replace('/account');
+      return <LoadingSpinner />;
+    }
 
     return (
       <div className="jumbotron text-light" >
