@@ -1,9 +1,11 @@
 
+import { LoadingSpinner } from "@/components/loading";
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
 import { NextRouter, useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 // The login page, you know what it does
 const AccountLogin = () => {
@@ -11,13 +13,13 @@ const AccountLogin = () => {
     const passwordRef: any = useRef();
     const router: NextRouter = useRouter();
 
+    // useEffect(() => {
+    //   if (isValidating) return;
+    //   if (user) router.replace('/account');
+    // }, [user, router, isValidating]);
+
     const [isLoading, setLoading] = useState(false);
     const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
-    
-    useEffect(() => {
-      if (isValidating) return;
-      if (user) router.replace('/account');
-    }, [user, router, isValidating]);
 
     const onSubmit = useCallback(
       async (e: any) => {
@@ -34,18 +36,23 @@ const AccountLogin = () => {
             }),
           });
 
-          console.log(response);
-
           mutate({ user: response.user }, false);
-          console.log('You have been logged in.');
+          toast.success('You have been logged in.');
+          
         } catch (error: any) {
-          console.log(error.message);
+          toast.error(error.message);
         } finally {
           setLoading(false);
         }
       },
       [mutate]
     );
+
+    if (isValidating) return <LoadingSpinner />;
+    if (user) {
+      router.replace('/account');
+      return <LoadingSpinner />;
+    }
 
     return (
       <div className="jumbotron text-light" >

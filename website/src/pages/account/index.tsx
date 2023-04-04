@@ -8,14 +8,12 @@ const AccountProfile = () => {
   const router: NextRouter = useRouter();
   useEffect(() => {
     if (!(data || error)) return;
-    if (!data.user) router.replace('login');
+    if (!data.user) router.replace('/account/profile');
   }, [router, data, error]);
-
-console.log(data);
 
   return (
     <>
-      {data?.user ? <p className="text-light">You are signed in as: {data.user.username}</p> : null }
+      <p className="text-light">{data?.user ? `You are signed in as: ${data.user.username}`: ""}</p>
     </>
   )
 }

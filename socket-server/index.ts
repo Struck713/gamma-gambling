@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 import env from './env.json';
 
@@ -8,9 +8,11 @@ const io = new Server({
     }
 });
 
-io.on("connection", (socket) => {
-  console.log(`${socket.id} connected!`)
-  io.emit('update', { info: "connection" })
+io.on("connection", (socket: Socket) => {
+  socket.emit("requestdata", {});
+  socket.on("userdata", data => {
+    console.log(data.name);
+  })
 });
 
 io.listen(env.port);
