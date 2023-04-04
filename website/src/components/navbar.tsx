@@ -9,7 +9,7 @@ const TopNavbar = () => {
   return (
     <Navbar bg="primary" variant="dark" expand="sm">
       <Container>
-        <Navbar.Brand href="#home">GAMMA GAMBLING</Navbar.Brand>
+        <Navbar.Brand as={Link} href="/">GAMMA GAMBLING</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
