@@ -12,7 +12,7 @@ const setup = (p5: p5Types, canvasParentRef: Element) => {
 let x = 50;
 const y = 50;
 const draw = (p5: p5Types) => {
-  p5.clear();
+  p5.clear(); // you need to clear at the draw of each frame since the background is transparent, otherwise traces appear
   p5.ellipse(x, y, 70, 70);
   x++;
 };
