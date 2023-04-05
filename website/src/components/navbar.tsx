@@ -31,7 +31,7 @@ const DropdownUser = ({user, mutate} : any) => {
   }, [mutate]);
   return(
   <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
-    <NavDropdown.Item onClick={onSignOut}>Logout</NavDropdown.Item>
+    <NavDropdown.Item as={Link} href="/" onClick={onSignOut}>Logout</NavDropdown.Item>
   </NavDropdown>
   )
 }
