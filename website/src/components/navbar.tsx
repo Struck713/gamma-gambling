@@ -33,7 +33,7 @@ const TopNavbar = () => {
           <Nav className="container-fluid justify-content-end">
               <Nav.Link as={Link} href="/">Home</Nav.Link>
               <NavDropdown title="Games" id="games-dropdown">
-                <NavDropdown.Item as={Link} href="/games/roulette">Roulette</NavDropdown.Item>
+                <NavDropdown.Item as={Link} href="/games/slots">Slots</NavDropdown.Item>
                 <NavDropdown.Item as={Link} href="/games/plinko">Plinko</NavDropdown.Item>
                 <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
               </NavDropdown>
