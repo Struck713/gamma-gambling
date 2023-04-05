@@ -1,8 +1,8 @@
 import React, { ComponentProps } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5";
-// The roulette game
 
+// The slots game
 // See annotations in JS for more information
 const setup = (p5: p5Types, canvasParentRef: Element) => {
   p5.createCanvas(600, 700).parent(canvasParentRef);
@@ -12,13 +12,15 @@ const setup = (p5: p5Types, canvasParentRef: Element) => {
 let x = 50;
 const y = 50;
 const draw = (p5: p5Types) => {
+  p5.clear();
   p5.ellipse(x, y, 70, 70);
   x++;
 };
 
 const Slots = () => {
     return(
-      <div style={{
+      <div style={{ //center items
+        paddingTop: 20, //adjust distance from bottom of navbar
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
