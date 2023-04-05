@@ -4,6 +4,9 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { fetcher } from '@/lib/fetcher';
+import { useCallback } from 'react';
+import toast from 'react-hot-toast';
 
 const DropdownGuest = () => {
   return(
@@ -14,10 +17,21 @@ const DropdownGuest = () => {
   )
 }
 
-const DropdownUser = ({user} : any) => {
+const DropdownUser = ({user, mutate} : any) => {
+  const onSignOut = useCallback(async () => {
+    try {
+      await fetcher('/api/user/auth', {
+        method: 'DELETE',
+      });
+      toast.success('You have been signed out');
+      mutate({ user: null });
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  }, [mutate]);
   return(
   <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
-    <NavDropdown.Item as={Link} href="/account/logout">Logout</NavDropdown.Item>
+    <NavDropdown.Item onClick={onSignOut}>Logout</NavDropdown.Item>
   </NavDropdown>
   )
 }
@@ -38,7 +52,7 @@ const TopNavbar = () => {
                 <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
               </NavDropdown>
               <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
-              {user ? <DropdownUser user={user}/> : <DropdownGuest/>}
+              {user ? <DropdownUser user={user} mutate={mutate}/> : <DropdownGuest/>}
           </Nav>
         </Navbar.Collapse>
       </Container>
