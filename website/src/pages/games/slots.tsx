@@ -1,7 +1,6 @@
 import React, { ComponentProps } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { clear } from "console";
 // The roulette game
 
 // See annotations in JS for more information
