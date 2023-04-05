@@ -1,11 +1,29 @@
 import Link from 'next/link';
-
+import { useCurrentUser } from "@/lib/user";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
+const DropdownGuest = () => {
+  return(
+  <NavDropdown title="Profile" id="profile-dropdown">
+    <NavDropdown.Item as={Link} href="/account/login">Login</NavDropdown.Item>
+    <NavDropdown.Item as={Link} href="/account/register">Sign Up</NavDropdown.Item>
+  </NavDropdown>
+  )
+}
+
+const DropdownUser = ({user} : any) => {
+  return(
+  <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
+    <NavDropdown.Item as={Link} href="/account/logout">Logout</NavDropdown.Item>
+  </NavDropdown>
+  )
+}
+
 const TopNavbar = () => {
+  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   return (
     <Navbar bg="primary" variant="dark" expand="sm">
       <Container>
@@ -20,10 +38,7 @@ const TopNavbar = () => {
                 <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
               </NavDropdown>
               <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
-              <NavDropdown title="Profile" id="profile-dropdown">
-                <NavDropdown.Item as={Link} href="/account/login">Login</NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/account/register">Sign Up</NavDropdown.Item>
-              </NavDropdown>
+              {user ? <DropdownUser user={user}/> : <DropdownGuest/>}
           </Nav>
         </Navbar.Collapse>
       </Container>
