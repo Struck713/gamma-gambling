@@ -4,7 +4,7 @@ import p5Types from "p5";
 
 let distancex = 0;
 let heightz = 0;
-let curviness = 1500;
+let curviness = 0;
 const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(600, 600).parent(canvasParentRef);
     p5.background(0,0,0,0);
@@ -17,10 +17,16 @@ const draw = (p5: p5Types) => {
   drawCurve(p5, curviness, distancex, heightz);
   if (curviness < 1500) //Set max curviness during growth
   {
-    curviness+= 10;
+    curviness += 50;
   }
-  distancex++;
-  heightz--;
+  if (distancex < p5.width - 50)
+  {
+    distancex++;
+  }
+  if (heightz > 30)
+  {
+    heightz--;
+  }
 };
 
 const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
@@ -28,7 +34,8 @@ const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
   p5.noFill();
   p5.bezier(-curviness, p5.height, 0, p5.height, distance, ht, distance, ht);
   p5.fill(255);
-  p5.ellipse(distance, ht, 7);
+  p5.textSize(32);
+  p5.text("🚀", distance, ht);
 }
 
 const Slots = () => {
