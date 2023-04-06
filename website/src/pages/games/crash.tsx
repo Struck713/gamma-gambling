@@ -2,9 +2,13 @@ import React, { ComponentProps } from "react";
 import dynamic from "next/dynamic";
 import p5Types from "p5";
 
+const maxMult = 8;
+const paddingtop = 30;
+const paddingright = 50;
 let distancex = 0;
 let heightz = 0;
 let curviness = 0;
+let multiplier = 0;
 const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(600, 600).parent(canvasParentRef);
     p5.background(0,0,0,0);
@@ -20,11 +24,11 @@ const draw = (p5: p5Types) => {
     curviness += 50;
   }
   //Set
-  if (distancex < p5.width - 50)
+  if (distancex < p5.width - paddingright)
   {
     distancex++;
   }
-  if (heightz > 30)
+  if (heightz > paddingtop)
   {
     heightz--;
   }
@@ -37,6 +41,12 @@ const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
   p5.bezier(-curviness, p5.height, 0, p5.height, distance, ht, distance, ht);
   p5.textSize(32);
   p5.text("🚀", distance, ht);
+  p5.textSize(20);
+  p5.stroke(0);
+  multiplier = (maxMult * (1 - (heightz-paddingtop)/p5.height));
+  p5.fill(255);
+  p5.text(`Multiplier = ${multiplier.toFixed(2)}x`, 20, 20);
+  
 }
 
 const Slots = () => {
