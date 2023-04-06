@@ -4,7 +4,7 @@ import p5Types from "p5";
 
 let distancex = 0;
 let heightz = 0;
-let curviness = 0;
+let curviness = 1500;
 const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(600, 600).parent(canvasParentRef);
     p5.background(0,0,0,0);
@@ -26,7 +26,7 @@ const draw = (p5: p5Types) => {
 const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
 {
   p5.noFill();
-  p5.curve(-curviness, p5.height, 0, p5.height, distance, ht, distance, ht);
+  p5.bezier(-curviness, p5.height, 0, p5.height, distance, ht, distance, ht);
   p5.fill(255);
   p5.ellipse(distance, ht, 7);
 }

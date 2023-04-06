@@ -25,7 +25,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <SSRProvider>
-      <TopNavbar />
+        <TopNavbar />
       </SSRProvider>
       <Component {...pageProps} />
     </>
