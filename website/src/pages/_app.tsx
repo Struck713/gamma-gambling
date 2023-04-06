@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import TopNavbar from '@/components/navbar';
-
+import { SSRProvider } from 'react-bootstrap';
 import '@/style/main.scss'
 
 // import LocalFont from 'next/font/local'
@@ -25,7 +25,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <TopNavbar />
-      <Component {...pageProps} />
+      <SSRProvider>
+        <Component {...pageProps} />
+      </SSRProvider>
     </>
   )
 }
