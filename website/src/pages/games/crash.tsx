@@ -9,7 +9,7 @@ const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(600, 600).parent(canvasParentRef);
     p5.background(0,0,0,0);
     heightz = 500;
-    distancex = p5.width/3;
+    distancex = p5.width/2;
 };
 
 const draw = (p5: p5Types) => {
