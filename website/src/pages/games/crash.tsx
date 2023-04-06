@@ -2,18 +2,32 @@ import React, { ComponentProps } from "react";
 import dynamic from "next/dynamic";
 import p5Types from "p5";
 
-const maxMult = 8;
+const maxMult = 8; //The maximum multiplier for the game
 const paddingtop = 30;
 const paddingright = 50;
 let distancex = 0;
 let heightz = 0;
 let curviness = 0;
 let multiplier = 0;
+let inputAmount, inputMultiplier, buttonBet, textAm, textIM;
+
 const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(600, 600).parent(canvasParentRef);
     p5.background(0,0,0,0);
-    heightz = 500;
+    heightz = p5.height-100;
     distancex = p5.width/2;
+
+    //inputs
+    inputAmount = p5.createInput();
+    inputAmount.position(300, 300);
+    inputMultiplier = p5.createInput();
+    inputMultiplier.position(300, 240);
+    buttonBet = p5.createButton("Bet!");
+    buttonBet.position(inputAmount.x + inputAmount.width, 300);
+    textAm = p5.createElement('p', "Enter the amount you want to bet:");
+    textAm.position(300, 270);
+    textIM = p5.createElement('p', "Enter the multiplier you'd like to stop at:");
+    textIM.position(300, 210);
 };
 
 const draw = (p5: p5Types) => {
@@ -46,7 +60,6 @@ const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
   multiplier = (maxMult * (1 - (heightz-paddingtop)/p5.height));
   p5.fill(255);
   p5.text(`Multiplier = ${multiplier.toFixed(2)}x`, 20, 20);
-  
 }
 
 const Slots = () => {
