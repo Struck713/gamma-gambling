@@ -19,6 +19,7 @@ const draw = (p5: p5Types) => {
   {
     curviness += 50;
   }
+  //Set
   if (distancex < p5.width - 50)
   {
     distancex++;
@@ -32,8 +33,8 @@ const draw = (p5: p5Types) => {
 const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
 {
   p5.noFill();
+  p5.stroke(255, 0, 0);
   p5.bezier(-curviness, p5.height, 0, p5.height, distance, ht, distance, ht);
-  p5.fill(255);
   p5.textSize(32);
   p5.text("🚀", distance, ht);
 }
