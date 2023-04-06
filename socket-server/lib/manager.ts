@@ -5,7 +5,7 @@ import { Nullable, Undefineable } from "../utils";
 
 import env from '../env.json';
 import jwt from "jsonwebtoken";
-import { gameManager } from "..";
+import { gameManager, io, playerManager } from "..";
 
 /**
  * GameManager
@@ -34,18 +34,16 @@ class GameManager {
      * @param name the name of the Game
      * @returns
      */
-    join = (player: Player, name: Games): Nullable<Game> => {
+    join = (socket: Socket, name: Games): Nullable<Game> => {
+        let player: Player = playerManager.get(socket);
         for (let game of this.games) {
-            if (game.type == name) {
-                game.join(player);
-                return game;
-            }
+            if (game.type == name && game.join(socket, player)) return game;
         }
         
         let createdGame: Nullable<Game> = this.create(name);
         if (!createdGame) return null;
 
-        createdGame.join(player);
+        createdGame.join(socket, player);
         this.games.push(createdGame);
         return createdGame;
     }
@@ -106,17 +104,18 @@ class PlayerManager {
 
     // setup socket listeners
     register = (socket: Socket, player: Player): void => { 
-        socket.on("status", () => {
-            let game: Nullable<Game> = gameManager.find(player);
-            if (game) socket.emit("status", { players: game.players.map(player => player.username), max: game.max });
-        });
+        // socket.on("status", () => {
+        //     let game: Nullable<Game> = gameManager.find(player);
+        //     if (game) game.status();
+        // });
+
         this.players.set(socket, player) 
     };
 
     deregister = (socket: Socket): void => {
         let player: Player = this.get(socket);
         let game: Nullable<Game> = gameManager.find(player);
-        if (game) game.leave(player);
+        if (game) game.leave(socket, player);
         this.players.delete(socket);
     }
 

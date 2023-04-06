@@ -25,9 +25,8 @@ io.use(async (socket: Socket, next: Function) => {
 io.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => playerManager.deregister(socket));
 
-  let player: Player = playerManager.get(socket);
   let gameType: any = socket.handshake.query.game;
-  let game: Nullable<Game> = gameManager.join(player, gameType as Games);
+  let game: Nullable<Game> = gameManager.join(socket, gameType as Games);
   if (!game) socket.disconnect();
 });
 
