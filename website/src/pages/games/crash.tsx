@@ -57,7 +57,7 @@ const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
   p5.text("🚀", distance, ht);
   p5.textSize(20);
   p5.stroke(0);
-  multiplier = (maxMult * (1 - (heightz-paddingtop)/p5.height));
+  multiplier = (maxMult * (1 - (heightz-paddingtop)/(p5.height-100)));
   p5.fill(255);
   p5.text(`Multiplier = ${multiplier.toFixed(2)}x`, 20, 20);
 }
