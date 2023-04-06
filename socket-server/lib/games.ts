@@ -8,8 +8,8 @@ import { Game } from './models'
  */
 class Roulette extends Game {
 
-    constructor() {
-        super(Games.Roulette, 2, 16);
+    constructor(id: number) {
+        super(id, Games.Roulette, 2, 16);
     }
 
     update() {
@@ -30,8 +30,8 @@ class Roulette extends Game {
  */
 class Slots extends Game {
 
-    constructor() {
-        super(Games.Slots, 2, 16);
+    constructor(id: number) {
+        super(id, Games.Slots, 2, 16);
     }
 
     update() {
@@ -52,8 +52,8 @@ class Slots extends Game {
  */
 class Crash extends Game {
 
-    constructor() {
-        super(Games.Crash, 2, 16);
+    constructor(id: number) {
+        super(id, Games.Crash, 2, 16);
     }
 
     update() {
@@ -74,9 +74,9 @@ class Crash extends Game {
  */
 enum Games {
 
-    Roulette,
-    Slots,
-    Crash
+    Roulette = "Roulette",
+    Slots = "Slots",
+    Crash = "Crash"
 
 }
 
