@@ -8,7 +8,9 @@ import '@/style/main.scss'
 //import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import type { AppProps } from 'next/app'
-
+import { Toaster } from 'react-hot-toast';
+import Notifications from '@/components/notifications';
+import { SSRProvider } from 'react-bootstrap';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -24,8 +26,14 @@ const App = ({ Component, pageProps }: AppProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <TopNavbar />
+
+      <SSRProvider>
+        <TopNavbar />
+      </SSRProvider>
+      
       <Component {...pageProps} />
+      
+      <Notifications />
     </>
   )
 }
