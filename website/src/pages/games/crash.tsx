@@ -37,10 +37,9 @@ const draw = (p5: p5Types) => {
   {
     curviness += 50;
   }
-  //Set
   if (distancex < p5.width - paddingright)
   {
-    distancex++;
+    distancex += 0.55;
   }
   if (heightz > paddingtop)
   {
