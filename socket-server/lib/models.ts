@@ -1,3 +1,4 @@
+import { Socket } from "socket.io";
 import { io } from "..";
 import { Games } from "./games";
 
@@ -38,9 +39,14 @@ class Game {
      * @returns true if the player successfully joins
      *          false if the lobby is full
      */
-    join(player: Player) {
+    join(socket: Socket, player: Player) {
+        if (this.players.length >= this.max) return false;
+        
         this.players.push(player);
-        console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} joined.`)
+
+        socket.join(this.getName());
+        this.status();
+        console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} joined.`);
         return true;
     }
 
@@ -52,10 +58,13 @@ class Game {
      * @returns true if the player successfully leaves
      *          false if the player was not in the lobby
      */
-    leave(player: Player) {
+    leave(socket: Socket, player: Player) {
         let found: number = this.players.indexOf(player);
         if (found == -1) return false;
         this.players.splice(found, 1);
+
+        socket.leave(this.getName());
+        this.status();
         console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} left.`)
         return true;
     }
@@ -89,6 +98,7 @@ class Game {
      */
     end() {}
 
+    status = () => this.broadcast("status", { players: this.players.map(player => player.username), max: this.max });
     broadcast = (event: string, data: any) => io.in(this.getName()).emit(event, data);
     getName = () => `${this.type}-${this.id}`
 

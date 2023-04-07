@@ -34,7 +34,7 @@ const Slots = () => {
   const socketInitializer = async () => {
     let res = await fetch('/api/user/auth');
     let { token }: any = await res.json();
-    socket = io("localhost:3030", { 
+    socket = io("10.22.18.26:3030", { 
       query: { game: "Slots" }, 
       auth: { token }
     });
@@ -43,7 +43,10 @@ const Slots = () => {
     socket.emit("status");
 
     socket.on("status", data => setStatus(data));
-    socket.on("connect_error", (err) => toast.error(err.message));
+    socket.on("connect_error", (err) => {
+      console.log(err);
+      toast.error(err.message);
+    });
 
   }
 
