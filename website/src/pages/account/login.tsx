@@ -3,8 +3,8 @@ import { LoadingSpinner } from "@/components/loading";
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
 import { NextRouter, useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { useCallback, useRef, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 
 // The login page, you know what it does
@@ -12,11 +12,6 @@ const AccountLogin = () => {
     const emailRef: any = useRef();
     const passwordRef: any = useRef();
     const router: NextRouter = useRouter();
-
-    // useEffect(() => {
-    //   if (isValidating) return;
-    //   if (user) router.replace('/account');
-    // }, [user, router, isValidating]);
 
     const [isLoading, setLoading] = useState(false);
     const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
@@ -72,9 +67,7 @@ const AccountLogin = () => {
           <Form.Group className="mb-3" controlId="staySignedInCheckbox">
             <Form.Check type="checkbox" label="Stay signed in?" />
           </Form.Group>
-          <Button variant="secondary" type="submit">
-            Login
-          </Button>
+          <Button disabled={isLoading} variant="secondary" type="submit">Login</Button>
         </Form>
       </div>
     )

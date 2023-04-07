@@ -3,7 +3,7 @@ import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
 import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Button } from "react-bootstrap";
 
 
 import toast from 'react-hot-toast';
@@ -16,10 +16,15 @@ const AccountRegister = () => {
     const passwordRef: any = useRef(null);
     const confirmPasswordRef: any = useRef(null);
 
+    const router = useRouter();
     const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+    if (isValidating) return <LoadingSpinner />;
+    if (user) {
+      router.replace('/account');
+      return <LoadingSpinner />;
+    }
 
     const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
 
     const onSubmit = useCallback(
         async (e: any) => {
@@ -40,22 +45,16 @@ const AccountRegister = () => {
             });
 
             mutate({ user: response.user }, false);
-            router.replace('/account/profile');
+            router.replace('/account');
 
           } catch (e: any) {
-            toast.error(e.message);
+            toast.error("Invalid email or password.");
           } finally {
             setIsLoading(false);
           }
         },
         [mutate, router]
     );
-
-    if (isValidating) return <LoadingSpinner />;
-    if (user) {
-      router.replace('/account');
-      return <LoadingSpinner />;
-    }
 
     return (
       <div className="jumbotron text-light" >
@@ -85,7 +84,7 @@ const AccountRegister = () => {
           <br />
           <Row>
             <Col>
-                <Button variant="secondary" type="submit">Create an account</Button>
+              <Button disabled={isLoading} variant="secondary" type="submit">Create an account</Button>
             </Col>
           </Row>
         </Form>

@@ -1,18 +1,31 @@
 import { Card, ListGroup } from "react-bootstrap"
 
-const PlayersList = ({ players, max }: GameStatus) => {
-    if (!players || !max) return <></>;
+const PlayersList = (status: GameStatus) => {
+    let { players, max } = status;
+    if (!(players && max)) return <DefaultCard title="Waiting for players..." subtitle="Loading players list.." />;
     return (
-        <Card style={{ width: '18rem' }}>
-            <Card.Body>
-            <Card.Title>Waiting for players...</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">{players.length} out of {max}</Card.Subtitle>
-            <ListGroup variant="list-group-flush">
-                {players.map((player: string) => <ListGroup.Item key={player}>{player}</ListGroup.Item>)}
-            </ListGroup>
+        <Card>
+            <Card.Header>Waiting for players...</Card.Header>
+            <Card.Body  style={{ width: '18rem' }}>
+                <Card.Subtitle className="mb-2 text-muted">{players.length} out of {max}</Card.Subtitle>
+                <ListGroup variant="list-group-flush">
+                    {players.map((player: string) => <ListGroup.Item key={player}>{player}</ListGroup.Item>)}
+                </ListGroup>
             </Card.Body>
         </Card>
     )
+}
+
+// easy creation of a functional component
+const DefaultCard: React.FC<{title: string, subtitle: string}> = ({ title, subtitle }) => {
+    return (
+        <Card>
+            <Card.Body style={{ width: '18rem' }}>
+                <Card.Header>{title}</Card.Header>
+                <Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
+            </Card.Body>
+        </Card>
+    );
 }
 
 interface GameStatus {
