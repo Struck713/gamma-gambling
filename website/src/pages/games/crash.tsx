@@ -1,6 +1,34 @@
 import React, { ComponentProps } from "react";
 import dynamic from "next/dynamic";
 import p5Types from "p5";
+import Container from 'react-bootstrap/Container';
+import { Row } from "react-bootstrap";
+import { Col } from "react-bootstrap";
+
+const Slots = () => {
+
+  const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
+    ssr: false,
+  });
+
+  return(
+    <Container id="container">
+      <Row>
+        <Col xl id="textHere"><div id="ref"></div></Col>
+        <Col xl id="gameHere">
+          <div style={{ //center items
+            paddingTop: 20, //adjust distance from bottom of navbar
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <Sketch setup={setup} draw={draw} />
+        </div>
+      </Col>
+    </Row>
+  </Container>
+  )
+}
 
 const maxMult = 8; //The maximum multiplier for the game
 const paddingtop = 30;
@@ -10,24 +38,39 @@ let heightz = 0;
 let curviness = 0;
 let multiplier = 0;
 let inputAmount, inputMultiplier, buttonBet, textAm, textIM;
-
+let doc: any;
 const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(600, 600).parent(canvasParentRef);
     p5.background(0,0,0,0);
     heightz = p5.height-100;
     distancex = p5.width/2;
-
+    
     //inputs
-    inputAmount = p5.createInput();
-    inputAmount.position(300, 300);
-    inputMultiplier = p5.createInput();
-    inputMultiplier.position(300, 240);
-    buttonBet = p5.createButton("Bet!");
-    buttonBet.position(inputAmount.x + inputAmount.width, 300);
-    textAm = p5.createElement('p', "Enter the amount you want to bet:");
-    textAm.position(300, 270);
-    textIM = p5.createElement('p', "Enter the multiplier you'd like to stop at:");
-    textIM.position(300, 210);
+    inputAmount = p5.createInput().parent("textHere");
+    inputAmount.attribute("id", "inputAmount")
+    //inputAmount.position(300, 300);
+    inputMultiplier = p5.createInput().parent("textHere");
+    //inputMultiplier.position(300, 240);
+    inputMultiplier.attribute("id", "inputMultiplier");
+    buttonBet = p5.createButton("Bet!").parent("textHere");
+    //buttonBet.position(inputAmount.x + inputAmount.width, 300);
+    buttonBet.attribute("id", "buttonBet");
+    textAm = p5.createElement('p', "Enter the amount you want to bet:").parent("textHere");
+    //textAm.position(300, 270);
+    textAm.attribute("id", "textAm");
+    textIM = p5.createElement('p', "Enter the multiplier you'd like to stop at:").parent("textHere");
+    //textIM.position(300, 210);
+    textIM.attribute("id", "textIM");
+    let IAM = document.querySelector("#inputAmount");
+    let IM = document.querySelector("#inputMultiplier")
+    let BB = document.querySelector("#buttonBet")
+    let TAM = document.querySelector("#textAm");
+    let TIM = document.querySelector("#textIM");
+    TAM?.parentNode?.insertBefore(TAM, document.getElementById("ref").nextSibling);
+    IM?.parentNode?.insertBefore(IM, TAM.nextSibling);
+    BB?.parentNode?.insertBefore(BB, IM.nextSibling);
+    TIM?.parentNode?.insertBefore(TIM, BB.nextSibling);
+    IAM?.parentNode?.insertBefore(IAM, TIM.nextSibling);
 };
 
 const draw = (p5: p5Types) => {
@@ -61,22 +104,6 @@ const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) =>
   p5.text(`Multiplier = ${multiplier.toFixed(2)}x`, 20, 20);
 }
 
-const Slots = () => {
 
-  const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
-    ssr: false,
-  });
-
-  return(
-    <div style={{ //center items
-      paddingTop: 20, //adjust distance from bottom of navbar
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-  }}>
-      <Sketch setup={setup} draw={draw} />
-  </div>
-  )
-}
   
 export default Slots;
