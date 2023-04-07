@@ -8,11 +8,6 @@ const io = new Server({
     }
 });
 
-io.on("connection", (socket: Socket) => {
-  socket.emit("requestdata", {});
-  socket.on("userdata", data => {
-    console.log(data.name);
-  })
-});
+io.listen(env.port);
 
 io.listen(env.port);
