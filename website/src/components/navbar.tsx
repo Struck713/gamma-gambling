@@ -42,7 +42,7 @@ const TopNavbar = () => {
     <Navbar bg="primary" variant="dark" expand="sm">
       <Container>
         <Navbar.Brand as={Link} href="/">GAMMA GAMBLING</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
               <Nav.Link as={Link} href="/">Home</Nav.Link>
