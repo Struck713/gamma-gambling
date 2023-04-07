@@ -10,7 +10,6 @@ import '@/style/main.scss'
 import type { AppProps } from 'next/app'
 import { Toaster } from 'react-hot-toast';
 import Notifications from '@/components/notifications';
-import { SSRProvider } from 'react-bootstrap';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
