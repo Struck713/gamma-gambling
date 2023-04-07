@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import TopNavbar from '@/components/navbar';
-
+import { SSRProvider } from 'react-bootstrap';
 import '@/style/main.scss'
 
 // import LocalFont from 'next/font/local'
