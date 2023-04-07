@@ -8,16 +8,17 @@ import { fetcher } from '@/lib/fetcher';
 import { useCallback } from 'react';
 import toast from 'react-hot-toast';
 
-const DropdownGuest = () => {
+const GuestNavbar = () => {
   return(
-  <NavDropdown title="Profile" id="profile-dropdown">
-    <NavDropdown.Item as={Link} href="/account/login">Login</NavDropdown.Item>
-    <NavDropdown.Item as={Link} href="/account/register">Sign Up</NavDropdown.Item>
-  </NavDropdown>
+    <>
+      <Nav.Link as={Link} href="/account/login">Login</Nav.Link>
+      <span className="navbar-text">or</span>
+      <Nav.Link as={Link} href="/account/register">Sign up</Nav.Link>
+    </>
   )
 }
 
-const DropdownUser = ({user, mutate} : any) => {
+const UserNavbar = ({user, mutate} : any) => {
   const onSignOut = useCallback(async () => {
     try {
       await fetcher('/api/user/auth', {
@@ -29,14 +30,24 @@ const DropdownUser = ({user, mutate} : any) => {
       toast.error(e.message);
     }
   }, [mutate]);
+
   return(
-  <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
-    <NavDropdown.Item as={Link} href="/" onClick={onSignOut}>Logout</NavDropdown.Item>
-  </NavDropdown>
+    <>
+      <NavDropdown title="Games" id="games-dropdown">
+        <NavDropdown.Item as={Link} href="/games/crash">Crash</NavDropdown.Item>
+        <NavDropdown.Item as={Link} href="/games/plinko">Plinko</NavDropdown.Item>
+        <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
+      </NavDropdown>
+      <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
+      <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
+        <NavDropdown.Item as={Link} href="/account">Settings</NavDropdown.Item>
+        <NavDropdown.Item as={Link} href="/" onClick={onSignOut}>Logout</NavDropdown.Item>
+      </NavDropdown>
+    </>
   )
 }
 
-const TopNavbar = () => {
+const FullNavbar = () => {
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   return (
     <Navbar bg="primary" variant="dark" expand="sm">
@@ -45,14 +56,7 @@ const TopNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
-              <Nav.Link as={Link} href="/">Home</Nav.Link>
-              <NavDropdown title="Games" id="games-dropdown">
-                <NavDropdown.Item as={Link} href="/games/crash">Crash</NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/games/plinko">Plinko</NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
-              {user ? <DropdownUser user={user} mutate={mutate}/> : <DropdownGuest/>}
+              {user ? <UserNavbar user={user} mutate={mutate}/> : <GuestNavbar />}
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -60,4 +64,4 @@ const TopNavbar = () => {
   );
 }
 
-export default TopNavbar;
+export default FullNavbar;

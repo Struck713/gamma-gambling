@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import TopNavbar from '@/components/navbar';
+import FullNavbar from '@/components/navbar';
 import Notifications from '@/components/notifications';
 
 import type { AppProps } from 'next/app';
@@ -23,7 +23,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
 
       <SSRProvider>
-        <TopNavbar />
+        <FullNavbar />
       </SSRProvider>
       
       <Component {...pageProps} />

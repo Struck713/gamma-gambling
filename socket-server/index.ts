@@ -31,5 +31,6 @@ io.on("connection", (socket: Socket) => {
 });
 
 io.listen(env.port);
+console.log(`Socket server started on ${env.port}.`);
 
 export { io, gameManager, playerManager };
