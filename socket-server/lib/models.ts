@@ -1,3 +1,5 @@
+import { Socket } from "socket.io";
+import { io } from "..";
 import { Games } from "./games";
 
 /**
@@ -13,14 +15,15 @@ import { Games } from "./games";
  */
 class Game {
 
+    id: number;
     type: Games;
     min: number;
     max: number;
-
     players: Player[];
     state: GameState;
 
-    constructor(type: Games, min: number, max: number) {
+    constructor(id: number, type: Games, min: number, max: number) {
+        this.id = id;
         this.type = type;
         this.min = min;
         this.max = max;
@@ -36,9 +39,14 @@ class Game {
      * @returns true if the player successfully joins
      *          false if the lobby is full
      */
-    join(player: Player) {
-        if (this.players.length + 1 > this.max) return false;
+    join(socket: Socket, player: Player) {
+        if (this.players.length >= this.max) return false;
+        
         this.players.push(player);
+
+        socket.join(this.getName());
+        this.status();
+        console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} joined.`);
         return true;
     }
 
@@ -50,10 +58,14 @@ class Game {
      * @returns true if the player successfully leaves
      *          false if the player was not in the lobby
      */
-    leave(player: Player) {
+    leave(socket: Socket, player: Player) {
         let found: number = this.players.indexOf(player);
         if (found == -1) return false;
         this.players.splice(found, 1);
+
+        socket.leave(this.getName());
+        this.status();
+        console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} left.`)
         return true;
     }
 
@@ -86,6 +98,10 @@ class Game {
      */
     end() {}
 
+    status = () => this.broadcast("status", { players: this.players.map(player => player.username), max: this.max });
+    broadcast = (event: string, data: any) => io.in(this.getName()).emit(event, data);
+    getName = () => `${this.type}-${this.id}`
+
 }
 
 /**
@@ -99,15 +115,12 @@ class Game {
  * All operations for Player should be done
  * using ID.
  */
-class Player {
+interface Player {
 
     id: string;
-    name: string;
-
-    constructor(id: string, name: string) {
-        this.id = id;
-        this.name = name;
-    }
+    username: string;
+    iat: number;
+    exp: number;
 
 }
 
