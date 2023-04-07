@@ -1,16 +1,11 @@
 import Head from 'next/head'
 import TopNavbar from '@/components/navbar';
-import { SSRProvider } from 'react-bootstrap';
-import '@/style/main.scss'
-
-// import LocalFont from 'next/font/local'
-// const font = LocalFont({ src: '' });
-//import "bootstrap/dist/js/bootstrap.bundle.min";
-
-import type { AppProps } from 'next/app'
-import { Toaster } from 'react-hot-toast';
 import Notifications from '@/components/notifications';
+
+import type { AppProps } from 'next/app';
 import { SSRProvider } from 'react-bootstrap';
+
+import '@/style/main.scss'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
