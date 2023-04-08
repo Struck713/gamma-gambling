@@ -11,9 +11,9 @@ import toast from 'react-hot-toast';
 const GuestNavbar = () => {
   return(
     <>
-      <Nav.Link as={Link} href="/account/login">Login</Nav.Link>
+      <Nav.Link as={Link} href="/user/login">Login</Nav.Link>
       <span className="navbar-text">or</span>
-      <Nav.Link as={Link} href="/account/register">Sign up</Nav.Link>
+      <Nav.Link as={Link} href="/user/register">Sign up</Nav.Link>
     </>
   )
 }
@@ -38,9 +38,9 @@ const UserNavbar = ({user, mutate} : any) => {
         <NavDropdown.Item as={Link} href="/games/plinko">Plinko</NavDropdown.Item>
         <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
       </NavDropdown>
-      <Nav.Link as={Link} href="/stats">Stats</Nav.Link>
       <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
-        <NavDropdown.Item as={Link} href="/account">Settings</NavDropdown.Item>
+        <NavDropdown.Item as={Link} href="/user">Account</NavDropdown.Item>
+        <NavDropdown.Item as={Link} href="/statistics">Statistics</NavDropdown.Item>
         <NavDropdown.Item as={Link} href="/" onClick={onSignOut}>Logout</NavDropdown.Item>
       </NavDropdown>
     </>
@@ -56,6 +56,7 @@ const FullNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
+              <Nav.Link as={Link} href="/leaderboards">Leaderboards</Nav.Link>
               {user ? <UserNavbar user={user} mutate={mutate}/> : <GuestNavbar />}
           </Nav>
         </Navbar.Collapse>
