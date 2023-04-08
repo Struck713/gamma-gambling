@@ -2,33 +2,8 @@ import React, { ComponentProps, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import p5Types from "p5";
 import Container from 'react-bootstrap/Container';
-import { Row } from "react-bootstrap";
+import { Card, Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
-
-const Slots = () => {
-
-  const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
-    ssr: false,
-  });
-
-  return(
-    <Container id="container">
-      <Row>
-        <Col xl id="textHere"><div id="ref"></div></Col>
-        <Col xl id="gameHere">
-          <div style={{ //center items
-            paddingTop: 20, //adjust distance from bottom of navbar
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-            <Sketch setup={setup} draw={draw} />
-        </div>
-      </Col>
-    </Row>
-  </Container>
-  )
-}
 
 const maxMult = 8; //The maximum multiplier for the game
 const paddingtop = 30;
@@ -101,38 +76,9 @@ const Crash = () => {
     ssr: false,
   });
 
-  const [ status, setStatus ] = useState<GameStatus>();
-
-  useEffect(() => {
-    socketInitializer()
-  }, []);
-
-  let socket: Socket;
-  const socketInitializer = async () => {
-    let res = await fetch('/api/user/auth');
-    let { token }: any = await res.json();
-    socket = io("localhost:3030", { 
-      query: { game: "Slots" }, 
-      auth: { token }
-    });
-
-    // request the game status
-    socket.emit("status");
-
-    socket.on("status", data => setStatus(data));
-    socket.on("connect_error", (err) => {
-      console.log(err);
-      toast.error(err.message);
-    });
-
-  }
-
   return(
     <Container style={{ margin: "1rem"}}>
       <Row>
-        <Col style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
-          <PlayersList players={status?.players} max={status?.max} />
-        </Col>
         <Col>
           <Card>
             <Card.Header>Crash</Card.Header>

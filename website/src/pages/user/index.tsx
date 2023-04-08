@@ -6,9 +6,10 @@ import { useCurrentUser } from "@/lib/user";
 const AccountProfile = () => {
   const { data, error, mutate } = useCurrentUser();
   const router: NextRouter = useRouter();
+  
   useEffect(() => {
     if (!(data || error)) return;
-    if (!data.user) router.replace('/account/login');
+    if (!data.user) router.replace('/user/login');
   }, [router, data, error]);
 
   return (

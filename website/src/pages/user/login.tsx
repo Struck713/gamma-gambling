@@ -35,7 +35,7 @@ const AccountLogin = () => {
           toast.success('You have been logged in.');
           
         } catch (error: any) {
-          toast.error(error.message);
+          toast.error("Invalid username or password.");
         } finally {
           setLoading(false);
         }
@@ -45,7 +45,7 @@ const AccountLogin = () => {
 
     if (isValidating) return <LoadingSpinner />;
     if (user) {
-      router.replace('/account');
+      router.replace('/user');
       return <LoadingSpinner />;
     }
 

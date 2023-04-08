@@ -20,7 +20,7 @@ const AccountRegister = () => {
     const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
     if (isValidating) return <LoadingSpinner />;
     if (user) {
-      router.replace('/account');
+      router.replace('/user');
       return <LoadingSpinner />;
     }
 
@@ -45,7 +45,7 @@ const AccountRegister = () => {
             });
 
             mutate({ user: response.user }, false);
-            router.replace('/account');
+            router.replace('/user');
 
           } catch (e: any) {
             toast.error("Invalid email or password.");
