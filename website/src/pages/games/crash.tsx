@@ -42,11 +42,11 @@ const setup = (p5: p5Types, canvasParentRef: Element) => {
     let BB = document.querySelector("#buttonBet")
     let TAM = document.querySelector("#textAm");
     let TIM = document.querySelector("#textIM");
-    TAM?.parentNode?.insertBefore(TAM, document.getElementById("ref").nextSibling);
-    IM?.parentNode?.insertBefore(IM, TAM.nextSibling);
-    BB?.parentNode?.insertBefore(BB, IM.nextSibling);
-    TIM?.parentNode?.insertBefore(TIM, BB.nextSibling);
-    IAM?.parentNode?.insertBefore(IAM, TIM.nextSibling);
+    // TAM?.parentNode?.insertBefore(TAM, document.getElementById("ref").nextSibling);
+    // IM?.parentNode?.insertBefore(IM, TAM.nextSibling);
+    // BB?.parentNode?.insertBefore(BB, IM.nextSibling);
+    // TIM?.parentNode?.insertBefore(TIM, BB.nextSibling);
+    // IAM?.parentNode?.insertBefore(IAM, TIM.nextSibling);
 };
 
 const draw = (p5: p5Types) => {

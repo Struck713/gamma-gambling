@@ -18,12 +18,6 @@ const AccountRegister = () => {
 
     const router = useRouter();
     const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
-    if (isValidating) return <LoadingSpinner />;
-    if (user) {
-      router.replace('/user');
-      return <LoadingSpinner />;
-    }
-
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = useCallback(
@@ -55,6 +49,12 @@ const AccountRegister = () => {
         },
         [mutate, router]
     );
+
+    if (isValidating) return <LoadingSpinner />;
+    if (user) {
+      router.replace('/user');
+      return <LoadingSpinner />;
+    }
 
     return (
       <div className="jumbotron text-light" >

@@ -19,7 +19,7 @@ handler.get<any, NextApiResponse>(async (req, res) => {
     let user = req.user;
     if (!user) res.json({ "status": 500, "message": "You must be signed in to obtain an auth token!"});
 
-    let token = await jwt.sign({ id: user.id, username: user.username }, process.env.TOKEN, { expiresIn: 900 });
+    let token = await jwt.sign({ id: user.id, username: user.username }, process.env.TOKEN!, { expiresIn: 900 });
     res.json({ token });
 }) 
 

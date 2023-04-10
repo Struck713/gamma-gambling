@@ -1,8 +1,7 @@
 import { GameStatus, PlayersList } from '@/components/games';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
-import { Container } from 'react-bootstrap/lib/Tab';
+import { Container, Card, Col, Row } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
 import { io, Socket } from 'socket.io-client';
 
