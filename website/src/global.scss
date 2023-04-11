@@ -9,7 +9,7 @@ $font-family-base: Koho;
 
 // set the font and global backgroun
 body {
-    background: url(../../public/assets/images/background.svg) no-repeat center center fixed; 
+    background: url(../public/assets/images/background.svg) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -47,4 +47,4 @@ p {
     height: 100vh;
 }
 
-@import '~bootstrap/scss/bootstrap.scss'
+@import '~bootstrap/scss/bootstrap.scss';

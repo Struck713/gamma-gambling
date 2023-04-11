@@ -18,15 +18,24 @@ handler.post(
     properties: {
       username: ValidateProps.user.username,
       password: ValidateProps.user.password,
+      confirmPassword: ValidateProps.user.password,
       email: ValidateProps.user.email,
     },
-    required: ['username', 'password', 'email'],
+    required: ['username', 'password', 'email', 'confirmPassword'],
     additionalProperties: false,
   }),
   ...auths,
   async (req: any, res: any, next: any) => {
 
-    let { username, email, password } = req.body;
+    let { username, email, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      res
+        .status(403)
+        .json({ error: { message: 'Password and confirm password do not match.'}})
+      return;
+    }
+
     //username = slugUsername(req.body.username);
     email = normalizeEmail(req.body.email);
     if (!isEmail(email)) {

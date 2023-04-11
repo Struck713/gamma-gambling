@@ -1,10 +1,9 @@
-export const LoadingSpinner = () => {
-    return <p>Loading...</p>;
-}
+import { useState } from "react"
+import { Button, Spinner } from "react-bootstrap"
 
-// interface LoadingButtonProps { children: string; loading: boolean; }
-// export const LoadingButton = ({ children, loading, variant, type } : LoadingButtonProps & ButtonProps) => {
-//     return (
-//       <Button disabled={loading} variant={variant} type={type} className={loading ? styles.loading : ""}>{children}</Button>
-//     );
-// };
+export const LoadingSpinner = () => {
+
+    const [triggered, setTriggered] = useState(false);
+
+    return <Spinner size="sm" role="status" variant="light"></Spinner>;
+}
