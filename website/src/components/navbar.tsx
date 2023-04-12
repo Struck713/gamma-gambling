@@ -7,9 +7,12 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { fetcher } from '@/lib/fetcher';
 import { useCallback } from 'react';
 import toast from 'react-hot-toast';
+import Logo from "../../public/assets/images/logo.svg";
+import Image from "next/image"
+import styles from "../style/navbar.module.css"
 
 const GuestNavbar = () => {
-  return(
+  return (
     <>
       <Nav.Link as={Link} href="/user/login">Login</Nav.Link>
       <span className="navbar-text">or</span>
@@ -18,7 +21,7 @@ const GuestNavbar = () => {
   )
 }
 
-const UserNavbar = ({user, mutate} : any) => {
+const UserNavbar = ({ user, mutate }: any) => {
   const onSignOut = useCallback(async () => {
     try {
       await fetcher('/api/user/auth', {
@@ -31,7 +34,7 @@ const UserNavbar = ({user, mutate} : any) => {
     }
   }, [mutate]);
 
-  return(
+  return (
     <>
       <NavDropdown title="Games" id="games-dropdown">
         <NavDropdown.Item as={Link} href="/games/crash">Crash</NavDropdown.Item>
@@ -50,14 +53,17 @@ const UserNavbar = ({user, mutate} : any) => {
 const FullNavbar = () => {
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   return (
-    <Navbar bg="primary" variant="dark" expand="sm">
+    <Navbar className={styles.navbar} bg="primary" variant="dark" expand="sm">
       <Container>
-        <Navbar.Brand as={Link} href="/">GAMMA GAMBLING</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+        <Navbar.Brand as={Link} href="/">
+          <Image className={styles.logo} src={Logo} alt={"Gamma Gambling Logo"} />
+          GAMMA GAMBLING
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
-              <Nav.Link as={Link} href="/leaderboards">Leaderboards</Nav.Link>
-              {user ? <UserNavbar user={user} mutate={mutate}/> : <GuestNavbar />}
+            <Nav.Link as={Link} href="/leaderboards">Leaderboards</Nav.Link>
+            {user ? <UserNavbar user={user} mutate={mutate} /> : <GuestNavbar />}
           </Nav>
         </Navbar.Collapse>
       </Container>
