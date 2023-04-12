@@ -66,6 +66,22 @@ class Crash extends Game {
 
 }
 
+class Test extends Game {
+
+    constructor(id: number) {
+        super(id, Games.Test, 2, 16);
+    }
+
+    update() {
+
+    }
+
+    end() {
+        
+    }
+
+}
+
 /**
  * Games
  * 
@@ -76,8 +92,9 @@ enum Games {
 
     Roulette = "Roulette",
     Slots = "Slots",
-    Crash = "Crash"
+    Crash = "Crash",
+    Test = "Test"
 
 }
 
-export { Games, Roulette, Slots, Crash };
+export { Games, Roulette, Slots, Crash, Test };

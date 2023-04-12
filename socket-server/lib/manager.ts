@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Crash, Games, Roulette, Slots } from "./games";
+import { Crash, Games, Roulette, Slots, Test } from "./games";
 import { Game, Player } from "./models";
 import { Nullable, Undefineable } from "../utils";
 
@@ -75,6 +75,7 @@ class GameManager {
             case Games.Roulette: return new Roulette(nextId);
             case Games.Crash: return new Crash(nextId);
             case Games.Slots: return new Slots(nextId);
+            case Games.Test: return new Test(nextId);
         }
     } 
 
@@ -103,11 +104,21 @@ class PlayerManager {
     }
 
     // setup socket listeners
-    register = (socket: Socket, player: Player): void => { 
+    register = (socket: Socket, player: Player): void => {
         // socket.on("status", () => {
         //     let game: Nullable<Game> = gameManager.find(player);
         //     if (game) game.status();
         // });
+
+        socket.on("bet", (amount: number) => {
+            let game: Nullable<Game> = gameManager.find(player);
+            if (!game || !amount) {
+                socket.emit("bet", { confirmed: false });
+                return;
+            }
+            game.bet(player, amount);
+            socket.emit("bet", { confirmed: true, amount });
+        });
 
         this.players.set(socket, player) 
     };

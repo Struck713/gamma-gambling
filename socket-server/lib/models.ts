@@ -19,8 +19,10 @@ class Game {
     type: Games;
     min: number;
     max: number;
-    players: Player[];
     state: GameState;
+
+    players: Player[];
+    bets: Map<Player, number>;
 
     constructor(id: number, type: Games, min: number, max: number) {
         this.id = id;
@@ -28,6 +30,7 @@ class Game {
         this.min = min;
         this.max = max;
         this.players = [];
+        this.bets = new Map<Player, number>;
         this.state = GameState.Waiting;
     }
 
@@ -45,8 +48,9 @@ class Game {
         this.players.push(player);
 
         socket.join(this.getName());
-        this.status();
-        console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} joined.`);
+        this.broadcastStatus();
+
+        this.log(`${player.username} joined.`);
         return true;
     }
 
@@ -61,12 +65,20 @@ class Game {
     leave(socket: Socket, player: Player) {
         let found: number = this.players.indexOf(player);
         if (found == -1) return false;
+
         this.players.splice(found, 1);
+        this.bets.delete(player);
 
         socket.leave(this.getName());
-        this.status();
-        console.log(`[${this.type}] [Lobby ${this.id}] ${player.username} left.`)
+        this.broadcastStatus();
+
+        this.log(`${player.username} left.`);
         return true;
+    }
+
+    bet(player: Player, amount: number) {
+        this.bets.set(player, amount);
+        this.log(`${player.username} bet ${amount}.`);
     }
 
     /**
@@ -96,10 +108,14 @@ class Game {
      * 
      * @returns
      */
-    end() {}
+    end() {
+        this.bets.clear();
+    }
 
-    status = () => this.broadcast("status", { players: this.players.map(player => player.username), max: this.max });
+    broadcastStatus = () => this.broadcast("status", { players: this.players.map(player => player.username), max: this.max });
     broadcast = (event: string, data: any) => io.in(this.getName()).emit(event, data);
+
+    log = (message: string) => console.log(`[${this.type}] [Lobby ${this.id}] ${message}`);
     getName = () => `${this.type}-${this.id}`
 
 }
