@@ -1,11 +1,11 @@
 import { Socket } from "socket.io";
 import { Crash, Games, Roulette, Slots, Test } from "./games";
-import { Game, Player } from "./models";
-import { Nullable, Undefineable } from "../utils";
+import { Game, GameState, Player } from "./models";
+import { Nullable } from "../utils";
 
 import env from '../env.json';
 import jwt from "jsonwebtoken";
-import { gameManager, io, playerManager } from "..";
+import { gameManager, playerManager } from "..";
 
 /**
  * GameManager
@@ -19,9 +19,11 @@ import { gameManager, io, playerManager } from "..";
 class GameManager {
 
     games: Game[];
+    tasks: NodeJS.Timer[];
 
     constructor() {
         this.games = [];
+        this.tasks = [];
     }
 
     /**
@@ -71,13 +73,66 @@ class GameManager {
      */
     create = (name: Games): Nullable<Game> => {
         let nextId = this.games.length + 1;
+        let game: Game;
         switch (name) {
-            case Games.Roulette: return new Roulette(nextId);
-            case Games.Crash: return new Crash(nextId);
-            case Games.Slots: return new Slots(nextId);
-            case Games.Test: return new Test(nextId);
+            case Games.Roulette: game = new Roulette(nextId);
+            case Games.Crash: game = new Crash(nextId);
+            case Games.Slots: game = new Slots(nextId);
+            case Games.Test: game = new Test(nextId);
         }
+
+        this.tasks.push(setInterval(gameManager.update, 100, game));
+        return game;
     } 
+
+    update(game: Game) {
+
+        if (game.state != GameState.Started) {
+
+            if (game.state == GameState.Waiting) {
+                // ensure player count is met
+                game.time = 150;
+                if (game.players.length >= game.min) game.setState(GameState.Lobby);
+            }
+    
+            if (game.state == GameState.Lobby) {
+                // ensure player count is met
+                if (game.players.length < game.min) {
+                    game.setState(GameState.Waiting);
+                    return;
+                }
+    
+                game.broadcastTick({ time: (game.time / 10) });
+                game.time--;
+                if (game.time <= 0) {
+                    game.setState(GameState.Started);
+                    game.start();
+                }
+            }
+    
+            if (game.state == GameState.Ended) {
+                game.broadcastTick({ time: (game.time / 10) });
+                game.end();
+                game.setState(GameState.Post);
+                game.time = 100; 
+            }
+    
+            if (game.state == GameState.Post) {
+                game.time--;
+                if (game.time <= 0) {
+                    game.time = 150;
+                    game.setState(GameState.Lobby);
+                    game.reset();
+
+                    game.broadcastStatus();
+                }
+            }
+
+            return;
+        }
+
+        game.update();
+    }
 
 }
 
@@ -110,14 +165,15 @@ class PlayerManager {
         //     if (game) game.status();
         // });
 
-        socket.on("bet", (amount: number) => {
+        socket.on("opt", (amount: number) => {
             let game: Nullable<Game> = gameManager.find(player);
             if (!game || !amount) {
-                socket.emit("bet", { confirmed: false });
+                socket.emit("opt", { confirmed: false });
+                game?.optOut(player);
                 return;
             }
-            game.bet(player, amount);
-            socket.emit("bet", { confirmed: true, amount });
+            game.optIn(player, amount);
+            socket.emit("opt", { confirmed: true, amount });
         });
 
         this.players.set(socket, player) 

@@ -15,14 +15,14 @@ import { Games } from "./games";
  */
 class Game {
 
-    id: number;
-    type: Games;
-    min: number;
-    max: number;
+    readonly id: number;
+    readonly type: Games;
+    readonly min: number;
+    readonly max: number;
     state: GameState;
 
+    time: number;
     players: Player[];
-    bets: Map<Player, number>;
 
     constructor(id: number, type: Games, min: number, max: number) {
         this.id = id;
@@ -30,8 +30,9 @@ class Game {
         this.min = min;
         this.max = max;
         this.players = [];
-        this.bets = new Map<Player, number>;
         this.state = GameState.Waiting;
+
+        this.time = 150;
     }
 
     /**
@@ -67,7 +68,6 @@ class Game {
         if (found == -1) return false;
 
         this.players.splice(found, 1);
-        this.bets.delete(player);
 
         socket.leave(this.getName());
         this.broadcastStatus();
@@ -76,9 +76,20 @@ class Game {
         return true;
     }
 
-    bet(player: Player, amount: number) {
-        this.bets.set(player, amount);
-        this.log(`${player.username} bet ${amount}.`);
+    optIn(player: Player, amount: number) {
+        if (this.state == GameState.Started) return;
+
+        player.bet = amount;
+        this.log(`${player.username} opted-in for ${amount}.`);
+        this.broadcastStatus();
+    }
+
+    optOut(player: Player) {
+        if (this.state == GameState.Started) return;
+
+        player.bet = 0;
+        this.log(`${player.username} opted-out.`);
+        this.broadcastStatus();
     }
 
     /**
@@ -108,13 +119,21 @@ class Game {
      * 
      * @returns
      */
-    end() {
-        this.bets.clear();
+    end() {}
+
+    reset = () => {
+        // reset bets
+        this.players.forEach(player => player.bet = 0);
+        this.broadcast("opt", { confirmed: false });
+        this.broadcastStatus();
+        this.log("Reset all players.");
     }
 
-    broadcastStatus = () => this.broadcast("status", { players: this.players.map(player => player.username), max: this.max });
-    broadcast = (event: string, data: any) => io.in(this.getName()).emit(event, data);
-
+    broadcastTick = (data: any) => this.broadcast("tick", { data, state: this.state });
+    broadcastStatus = () => this.broadcast("status", { players: this.players.map(player => { return { id: player.id, username: player.username, bet: player.bet ?? 0 } }), max: this.max });
+    broadcast = (event: string, data: any): boolean => io.in(this.getName()).emit(event, data);
+    
+    setState = (state: GameState) => { this.state = state; this.log(`Changed state to '${state}'`);}
     log = (message: string) => console.log(`[${this.type}] [Lobby ${this.id}] ${message}`);
     getName = () => `${this.type}-${this.id}`
 
@@ -133,8 +152,9 @@ class Game {
  */
 interface Player {
 
-    id: string;
+    id: number;
     username: string;
+    bet: number;
     iat: number;
     exp: number;
 
@@ -153,9 +173,11 @@ interface Player {
  */
 enum GameState {
 
-    Started,
-    Ended,
-    Waiting,
+    Waiting = "Waiting",
+    Started = "Started",
+    Lobby = "Lobby",
+    Ended = "Ended",
+    Post = "Post"
 
 }
 
