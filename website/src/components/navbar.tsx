@@ -6,6 +6,9 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useCurrentUser } from "@/lib/user";
 import { fetcher } from '@/lib/fetcher';
 
+import Logo from '../../public/assets/images/logo.svg';
+import Image from 'next/image';
+
 const GuestNavbar = () => {
   return(
     <>
@@ -48,9 +51,12 @@ const UserNavbar = ({user, mutate} : any) => {
 const FullNavbar = () => {
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   return (
-    <Navbar bg="primary" variant="dark" expand="sm">
+    <Navbar style={{ height: '100px' }}bg="primary" variant="dark" expand="sm">
       <Container>
-        <Navbar.Brand as={Link} href="/">GAMMA GAMBLING</Navbar.Brand>
+        <Navbar.Brand as={Link} href="/">
+          <Image style={{ marginRight: '15px', width: '50px', height: '50px' }} src={Logo} alt={"Gamma Gambling Logo"} />
+          GAMMA GAMBLING
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
