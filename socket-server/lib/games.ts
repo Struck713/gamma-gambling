@@ -1,4 +1,4 @@
-import { Game } from './models'
+import { Game, GameState } from './models'
 
 /**
  * Roulette
@@ -66,6 +66,36 @@ class Crash extends Game {
 
 }
 
+class Test extends Game {
+
+    crashed: number;
+
+    constructor(id: number) {
+        super(id, Games.Test, 1, 16);
+        this.crashed = 0;
+    }
+
+    start() {
+        this.time = 0;
+        this.crashed = 0;
+    }
+
+    update() {
+        this.time++;
+        if (Math.random() <= 0.02) {
+            this.crashed = this.time;
+            this.time = -1;
+            this.state = GameState.Ended;
+        }
+        this.broadcastTick({ multiplier: this.time });
+    }
+
+    end() {
+        this.log(`The multiplier crashed at: ${this.crashed / 10}`);
+    }
+
+}
+
 /**
  * Games
  * 
@@ -76,8 +106,9 @@ enum Games {
 
     Roulette = "Roulette",
     Slots = "Slots",
-    Crash = "Crash"
+    Crash = "Crash",
+    Test = "Test"
 
 }
 
-export { Games, Roulette, Slots, Crash };
+export { Games, Roulette, Slots, Crash, Test };
