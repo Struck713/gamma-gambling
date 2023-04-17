@@ -1,11 +1,12 @@
+import toast from "react-hot-toast";
 
-import { LoadingSpinner } from "@/components/loading";
-import { fetcher } from "@/lib/fetcher";
-import { useCurrentUser } from "@/lib/user";
 import { NextRouter, useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
-import { Button, Form } from "react-bootstrap";
-import toast from "react-hot-toast";
+import { Button, Form, Spinner } from "react-bootstrap";
+
+import { fetcher } from "@/lib/fetcher";
+import { useCurrentUser } from "@/lib/user";
+import { LoadingSpinner } from "@/components/loading";
 
 // The login page, you know what it does
 const AccountLogin = () => {
@@ -51,7 +52,7 @@ const AccountLogin = () => {
 
     return (
       <div className="jumbotron text-light" >
-        <Form onSubmit={onSubmit} className="bg-primary rounded border border-secondary" style={{ padding: "3rem" }}>
+        <Form onSubmit={onSubmit} className="bg-primary rounded border border-secondary p-5">
           <Form.Group className="mb-3" controlId="emailField">
             <Form.Label>Email address</Form.Label>
             <Form.Control ref={emailRef} type="email" placeholder="Enter email" />
@@ -67,7 +68,7 @@ const AccountLogin = () => {
           <Form.Group className="mb-3" controlId="staySignedInCheckbox">
             <Form.Check type="checkbox" label="Stay signed in?" />
           </Form.Group>
-          <Button disabled={isLoading} variant="secondary" type="submit">Login</Button>
+          <Button style={{width: '4rem'}} disabled={isLoading} variant="secondary" type="submit">{isLoading ? <LoadingSpinner /> : "Login"}</Button>
         </Form>
       </div>
     )

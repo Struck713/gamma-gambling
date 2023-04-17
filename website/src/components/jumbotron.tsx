@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Container, Row, Col } from "react-bootstrap";
 
+import Styles from "../styles/jumbotron.module.css"
+
 interface JumbotronProps {
     title: string,
     children: string
@@ -18,10 +20,10 @@ const Jumbotron = ({ title, children } : JumbotronProps) => {
                         <h1 className="display-4">{title}</h1>
                         <p className="lead">{children}</p>
                     </Col>
-                    <Col style={{ verticalAlign: 'middle' }}>
-                        <Row style={{paddingBottom: "5px"}}><Image src={Images.Crash} alt="Crash" style={{height: "auto", width:"50%"}} /></Row>
-                        <Row style={{paddingBottom: "5px"}}><Image src={Images.Slots} alt="Slots" style={{height: "auto", width:"50%"}} /></Row>
-                        <Row style={{paddingBottom: "5px"}}><Image src={Images.Roulette} alt="Roulette" style={{height: "auto", width:"50%"}} /></Row>
+                    <Col className="justify-contents-center">
+                        <Row><Image className={Styles.image} src={Images.Crash} alt="Crash" /></Row>
+                        <Row><Image className={Styles.image} src={Images.Slots} alt="Roulette" /></Row>
+                        <Row><Image className={Styles.image} src={Images.Roulette} alt="Blackjack" /></Row>
                     </Col>
                 </Row>
             </Container>

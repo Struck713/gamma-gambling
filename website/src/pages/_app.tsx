@@ -5,7 +5,7 @@ import Notifications from '@/components/notifications';
 import type { AppProps } from 'next/app';
 import { SSRProvider } from 'react-bootstrap';
 
-import '@/style/main.scss'
+import '@/global.scss'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
