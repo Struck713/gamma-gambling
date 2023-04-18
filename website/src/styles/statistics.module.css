@@ -1,0 +1,13 @@
+.h1{
+    margin: 1.5rem;
+    text-align: center;
+}
+
+.table {
+    overflow-y: scroll;
+    height: 10rem;
+    margin-left: 7rem;
+    margin-right: 7rem;
+    border-radius: 1rem;
+    scrollbar-width: none;
+}
