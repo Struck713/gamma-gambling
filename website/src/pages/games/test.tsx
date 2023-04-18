@@ -1,4 +1,5 @@
-import { GameStatus, GameTick, PlayersList } from '@/components/games';
+import { PlayersList } from '@/components/games';
+import { Game } from '@/lib/game';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Container, Card, Col, Row, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
@@ -13,8 +14,8 @@ const Crash = () => {
     const [ loading, setLoading ] = useState<boolean>(false);
     const [ joined, setJoined ] = useState<boolean>(false);
     const [ bet, setBet ] = useState<number>();
-    const [ status, setStatus ] = useState<GameStatus>();
-    const [ tick, setTick ] = useState<GameTick>();
+    const [ status, setStatus ] = useState<Game.Status>();
+    const [ tick, setTick ] = useState<Game.Tick>();
 
     useEffect(() => {
       init();
@@ -34,7 +35,7 @@ const Crash = () => {
 
       let res = await fetch('/api/user/auth');
       let { token }: any = await res.json();
-      socket.current = io("localhost:3001", { 
+      socket.current = io("10.22.18.152:3001", { 
         query: { game: "Test" }, 
         auth: { token }
       });
@@ -63,9 +64,9 @@ const Crash = () => {
           </Col>
           <Col sm={8}>
             <Card>
-              <Card.Header>Coin Flip</Card.Header>
+              <Card.Header>Rocket Ride</Card.Header>
               <Card.Body style={{ padding: "1rem" }}>
-                Flip a coin, heads or tails my friend.
+                WE&apos;RE GOING TO THE MOON!
               </Card.Body>
             </Card>
           </Col>
