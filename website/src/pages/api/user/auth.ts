@@ -17,7 +17,10 @@ handler.post<any, NextApiResponse>(passport.authenticate('local'), (req, res) =>
 
 handler.get<any, NextApiResponse>(async (req, res) => {
     let user = req.user;
-    if (!user) res.json(401).end();
+    if (!user) {
+        res.status(401).end();
+        return;
+    }
 
     let token = await jwt.sign({ id: user.id, username: user.username }, process.env.TOKEN!, { expiresIn: 900 });
     res.json({ token });

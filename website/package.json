@@ -24,6 +24,7 @@
     "express-mysql-session": "^3.0.0",
     "express-passport-logout": "^0.1.0",
     "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
     "net": "^1.0.2",
     "next": "13.1.6",
     "next-auth": "^4.21.1",
