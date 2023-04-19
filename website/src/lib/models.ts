@@ -21,4 +21,11 @@ interface Transaction {
 
 }
 
-export type { Account, Transaction };
+interface Leader {
+
+    username: string;
+    total: number;
+
+}
+
+export type { Account, Leader, Transaction };
