@@ -21,7 +21,7 @@ const Leaderboards = () => {
     loadLeaderboard();
     setLoading(false);
 
-  })
+  }, []);
 
   if (loading) return <LoadingSpinner />
 
