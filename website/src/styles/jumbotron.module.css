@@ -1,6 +1,10 @@
+.main{
+    margin-top: 0rem;
+}
+
 .image{
     margin-left: auto;
-    padding-bottom: 5px;
+    padding-bottom: .5rem;
     height: auto;
-    width: 50%;
+    width: 22rem;
 }

@@ -1,5 +1,6 @@
 .navbar{
     height: 100px;
+    position: fixed;
 }
 
 .logo{

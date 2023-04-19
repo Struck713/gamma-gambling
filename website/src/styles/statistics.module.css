@@ -3,11 +3,13 @@
     text-align: center;
 }
 
-.table {
-    overflow-y: scroll;
-    height: 10rem;
-    margin-left: 7rem;
-    margin-right: 7rem;
-    border-radius: 1rem;
-    scrollbar-width: none;
+.coin{
+    height: 5rem;
+    width: 5rem;
+}
+
+.balance {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 5rem;
 }
