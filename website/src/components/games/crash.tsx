@@ -14,6 +14,6 @@ const draw = (p5: p5, tick: Game.Tick) => {
 }
 
 export const CrashCanvas = ({ tick } : { tick?: Game.Tick }) => {
-    if (!tick) return;
+    if (!tick) return <></>;
     return <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />
 }
