@@ -10,6 +10,7 @@ import { LoadingSpinner } from '@/components/loading';
 
 // The login page, you know what it does
 const AccountRegister = () => {
+  
     const emailRef: any = useRef(null);
     const usernameRef: any = useRef(null);
     const passwordRef: any = useRef(null);

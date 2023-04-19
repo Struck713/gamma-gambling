@@ -21,7 +21,7 @@ handler.get<any, NextApiResponse>(async (req, res) => {
         return;
     }
 
-    let all: Transaction[] | undefined = await execute<Transaction>("SELECT * FROM transaction WHERE account_id=? ORDER BY id DESC", [ user.id ]);
+    let all: Transaction[] | undefined = await execute<Transaction>("SELECT * FROM user_transaction WHERE account_id=? ORDER BY id DESC", [ user.id ]);
     res.status(200).json({
         recent: all ? all[0] : {},
         all: all ?? []

@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 
 import { Strategy as LocalStrategy } from 'passport-local';
 import { execute } from '../db';
-import Account from '../models';
+import { Account } from '../models';
 
 type User = {
   id?: number;

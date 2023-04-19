@@ -13,12 +13,18 @@ interface Transaction {
     id: number, 
     total: number, 
     bet_amt: number, 
-    win_amt: number, 
-    loss_amt: number, 
+    return_amt: number,  
     reason: string, 
     game_id: number, 
     date_changed: Date
 
 }
 
-export type { Account, Transaction };
+interface Leader {
+
+    username: string;
+    total: number;
+
+}
+
+export type { Account, Leader, Transaction };
