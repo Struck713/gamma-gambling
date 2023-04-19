@@ -1,5 +1,4 @@
 import Jumbotron from "@/components/jumbotron";
-import { Container } from "react-bootstrap";
 
 const Home = () => {
   return (

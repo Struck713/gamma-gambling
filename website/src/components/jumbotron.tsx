@@ -1,29 +1,23 @@
 import Image from "next/image";
 import { Container, Row, Col } from "react-bootstrap";
 
-import Styles from "../styles/jumbotron.module.css"
-
-interface JumbotronProps {
-    title: string,
-    children: string
-}
-
+import styles from "../styles/jumbotron.module.css"
 import { Images } from "./images";
 
-const Jumbotron = ({ title, children } : JumbotronProps) => {
+const Jumbotron = ({ title, children } : {title: string, children: string }) => {
 
     return (
-        <div className="jumbotron text-light">
+        <div className={`jumbotron text-light ${styles.main}`}>
             <Container>
                 <Row>
-                    <Col>
+                    <Col className="my-auto">
                         <h1 className="display-4">{title}</h1>
                         <p className="lead">{children}</p>
                     </Col>
-                    <Col className="justify-contents-center">
-                        <Row><Image className={Styles.image} src={Images.Crash} alt="Crash" /></Row>
-                        <Row><Image className={Styles.image} src={Images.Slots} alt="Roulette" /></Row>
-                        <Row><Image className={Styles.image} src={Images.Roulette} alt="Blackjack" /></Row>
+                    <Col className="justify-contents-center my-auto">
+                        <Row><Image className={styles.image} src={Images.Crash} alt="Crash" /></Row>
+                        <Row><Image className={styles.image} src={Images.Roulette} alt="Roulette" /></Row>
+                        <Row><Image className={styles.image} src={Images.Blackjack} alt="Blackjack" /></Row>
                     </Col>
                 </Row>
             </Container>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 549.45">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        font-family: YuGothic-Bold, 'Yu Gothic';
+        font-size: 330px;
+        font-weight: 700;
+        letter-spacing: -.09em;
+      }
+
+      .cls-2 {
+        fill: #f2cd72;
+      }
+
+      .cls-3 {
+        fill: #f2be72;
+      }
+    </style>
+  </defs>
+  <circle class="cls-3" cx="250" cy="304.45" r="245"/>
+  <circle class="cls-2" cx="250" cy="304.45" r="197.5"/>
+  <text class="cls-1" transform="translate(84.76 380.02)"><tspan x="0" y="0">γ</tspan></text>
+</svg>
