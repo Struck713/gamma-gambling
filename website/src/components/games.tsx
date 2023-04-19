@@ -1,16 +1,25 @@
+import { PlayerStatus, Game } from "@/lib/game";
 import { Card, ListGroup, Badge } from "react-bootstrap";
 
 const PlayerListItem: React.FC<{username: string, bet: number}> = ({ username, bet }) => <ListGroup.Item>{username} <BetBadge bet={bet}/></ListGroup.Item>;
 const BetBadge: React.FC<{bet: number}> = ({ bet }) => <Badge className="float-end" bg={bet ? "secondary" : "danger"}>{bet ? bet : "No bet"}</Badge>;
 
-const PlayersList: React.FC<{tick: GameTick, status: GameStatus}> = ({ tick, status }) => {
-    if (!status) return <DefaultCard title="Waiting for players..." subtitle="Loading players list.." />;
-    
-    let { players, max } = status;
+const decodeTick = (tick: Game.Tick) => {
+    if (!tick) return "Loading...";
+    switch (tick?.state) {
+        case Game.State.Lobby: return `Game will start in ${tick.data.time}s.`;
+        case Game.State.Waiting: return "Waiting for players...";
+        case Game.State.Started: return "Game started."
+        case Game.State.Ended: return "Game ended.";
+    }
+}
 
+const PlayersList: React.FC<{ tick: Game.Tick, status: Game.Status }> = ({ tick, status }) => {
+    if (!status) return <DefaultCard title="Waiting for players..." subtitle="Loading players list.." />;
+    let { players, max } = status;
     return (
         <Card>
-            <Card.Header>{tick ? `${tick.state} - ${JSON.stringify(tick.data)}` : "Error"}</Card.Header>
+            <Card.Header>{decodeTick(tick)}</Card.Header>
             <Card.Body  style={{ width: '18rem' }}>
                 <Card.Subtitle className="mb-2 text-muted">{players?.length} out of {max}</Card.Subtitle>
                 <ListGroup variant="list-group-flush">{players?.map((player: PlayerStatus) => <PlayerListItem key={player.username} username={player.username} bet={player.bet} />)}</ListGroup>
@@ -31,37 +40,4 @@ const DefaultCard: React.FC<{title: string, subtitle: string}> = ({ title, subti
     );
 }
 
-interface GameStatus {
-
-    players?: PlayerStatus[];
-    max?: number;
-
-}
-
-interface GameTick {
-
-    data?: any;
-    state?: GameState;
-
-}
-
-enum GameState {
-
-    Waiting = "Waiting",
-    Started = "Started",
-    Lobby = "Lobby",
-    Ended = "Ended",
-    Post = "Post"
-
-}
-
-interface PlayerStatus {
-
-    id: number;
-    username: string;
-    bet: number;
-
-}
-
-export type { GameStatus, GameTick, PlayerStatus };
 export { PlayersList };

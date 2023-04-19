@@ -59,8 +59,8 @@ const Statistics = () => {
             </tr>
           </thead>
           <tbody>
-            {statistics?.all.map(tran => 
-              <tr>
+            {statistics?.all.map((tran, index) => 
+              <tr key={index}>
                 <td>{tran.game_id ?? "NONE"}</td>
                 <td>{tran.bet_amt}</td>
                 <td>{tran.reason}</td>

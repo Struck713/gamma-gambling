@@ -64,7 +64,7 @@ const FullNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
-            <Nav.Link as={Link} href="/leaderboards">Leaderboards</Nav.Link>
+            <Nav.Link as={Link} href="/leaderboard">Leaderboard</Nav.Link>
             {user ? <UserNavbar user={user} mutate={mutate} /> : <GuestNavbar />}
           </Nav>
         </Navbar.Collapse>

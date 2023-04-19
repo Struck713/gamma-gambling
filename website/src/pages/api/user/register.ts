@@ -1,7 +1,7 @@
 import auths from '@/lib/auth';
 import { ValidateProps, ncOpts } from '@/lib/constants';
 import { execute } from '@/lib/db';
-import Account from '@/lib/models';
+import { Account } from '@/lib/models';
 import { validateBody } from '@/lib/user/ajv';
 
 import nc from 'next-connect';
