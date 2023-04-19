@@ -30,7 +30,7 @@ const Leaderboards = () => {
       <Table className="text-light bg-primary border-primary p-5" bordered>
         <tbody>
           {leaderboard.map((leader, index) => 
-            <tr>
+            <tr key={index}>
               <td>#{index + 1}</td>
               <td>{leader.username}</td>
               <td>{leader.total}</td>
