@@ -1,95 +1,162 @@
-import React, { ComponentProps, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import p5Types from "p5";
-import Container from 'react-bootstrap/Container';
-import { Card, Row } from "react-bootstrap";
-import { Col } from "react-bootstrap";
+import { DynamicSketch, PlayersList } from '@/components/games';
+import { PageLoadingSpinner } from '@/components/loading';
+import { Game } from '@/lib/game';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { Container, Card, Col, Row, Form, Button } from 'react-bootstrap';
+import { toast } from 'react-hot-toast';
+import { io, Socket } from 'socket.io-client';
 
-const maxMult = 8; //The maximum multiplier for the game
-const paddingtop = 30;
-const paddingright = 50;
-let distancex = 0;
-let heightz = 0;
-let curviness = 0;
-let multiplier = 0;
-let inputAmount, inputMultiplier, buttonBet, textAm, textIM;
-let doc: any;
-const setup = (p5: p5Types, canvasParentRef: Element) => {
-    p5.frameRate(25);
-    p5.createCanvas(600, 600).parent(canvasParentRef);
-    p5.background(0,0,0,0);
-    heightz = p5.height-100;
-    distancex = p5.width/2;
-    
-    //inputs
-    inputAmount = p5.createInput().parent("textHere");
-    inputAmount.attribute("id", "inputAmount")
-    //inputAmount.position(300, 300);
-    inputMultiplier = p5.createInput().parent("textHere");
-    //inputMultiplier.position(300, 240);
-    inputMultiplier.attribute("id", "inputMultiplier");
-    buttonBet = p5.createButton("Bet!").parent("textHere");
-    //buttonBet.position(inputAmount.x + inputAmount.width, 300);
-    buttonBet.attribute("id", "buttonBet");
-    textAm = p5.createElement('p', "Enter the amount you want to bet:").parent("textHere");
-    //textAm.position(300, 270);
-    textAm.attribute("id", "textAm");
-    textIM = p5.createElement('p', "Enter the multiplier you'd like to stop at:").parent("textHere");
-    //textIM.position(300, 210);
-    textIM.attribute("id", "textIM");
-    let IAM = document.querySelector("#inputAmount");
-    let IM = document.querySelector("#inputMultiplier")
-    let BB = document.querySelector("#buttonBet")
-    let TAM = document.querySelector("#textAm");
-    let TIM = document.querySelector("#textIM");
-    // TAM?.parentNode?.insertBefore(TAM, document.getElementById("ref").nextSibling);
-    // IM?.parentNode?.insertBefore(IM, TAM.nextSibling);
-    // BB?.parentNode?.insertBefore(BB, IM.nextSibling);
-    // TIM?.parentNode?.insertBefore(TIM, BB.nextSibling);
-    // IAM?.parentNode?.insertBefore(IAM, TIM.nextSibling);
-};
-
-const draw = (p5: p5Types) => {
-  p5.clear(); // you need to clear at the draw of each frame since the background is transparent, otherwise traces appear
-  drawCurve(p5, curviness, distancex, heightz);
-  if (curviness < 1500) curviness += 50; //Set max curviness during growth
-  if (distancex < p5.width - paddingright) distancex += 0.55;
-  if (heightz > paddingtop) heightz--;
-};
-
-const drawCurve = (p5: p5Types, curviness: any, distance:any, ht:any) => {
-  p5.noFill();
-  p5.stroke(255, 0, 0);
-  p5.bezier(-curviness, p5.height, 0, p5.height, distance, ht, distance, ht);
-  p5.textSize(32);
-  p5.text("🚀", distance, ht);
-  p5.textSize(20);
-  p5.stroke(0);
-  multiplier = (maxMult * (1 - (heightz-paddingtop)/(p5.height-100)));
-  p5.fill(0);
-  p5.text(`Multiplier = ${multiplier.toFixed(2)}x`, 20, 20);
-}
+import p5 from "p5";
+import { Nullable, Undefineable } from "@/lib/utils";
 
 const Crash = () => {
 
-  const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
-    ssr: false,
-  });
+    const socket = useRef<Socket | null>(null);
 
-  return(
-    <Container style={{ margin: "1rem"}}>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Header>Crash</Card.Header>
-            <Card.Body style={{ padding: "1rem" }}>
-                <Sketch setup={setup} draw={draw} />
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-  )
-}
+    const [ loading, setLoading ] = useState<boolean>(false);
+    const [ status, setStatus ] = useState<Game.Status>();
+    const [ tick, setTick ] = useState<Game.Tick>();
+
+    useEffect(() => {
+    
+      const loadSocket = async () => {
+        let res = await fetch('/api/user/auth');
+        let { token }: any = await res.json();
+        socket.current = io("localhost:3001", { 
+          query: { game: "Crash" }, 
+          auth: { token }
+        });
   
+        socket.current.on("tick", data => setTick(data));
+        socket.current.on("status", data => setStatus(data));
+        socket.current.on("game_error", (message) => toast.error(message ?? "Something went wrong."));
+        socket.current.on("connect_error", (err) => toast.error(err.message ?? "Something went wrong."));
+  
+        setLoading(false);
+      }
+
+      const unloadSocket = () => {
+        socket.current?.disconnect();
+      }
+
+      setLoading(true);
+      loadSocket();
+      return () => unloadSocket();
+    }, []);
+
+    if (loading) return <PageLoadingSpinner />
+  
+    return(
+      <Container className="p-2">
+        <Row>
+          <Col style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+            <PlayersList tick={tick!} status={status!} />
+          </Col>
+          <Col>
+            <Card>
+              <Card.Header>Rocket Ride</Card.Header>
+              <Card.Body style={{ padding: "1rem" }}>
+                WE&apos;RE GOING TO THE MOON!
+                <CrashCanvas tick={tick} />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+            <CrashBetBox socket={socket.current} tick={tick} />
+          </Col>
+        </Row>
+      </Container>
+    )
+}
+
+const setup = (p5: p5, canvasParentRef: Element) => {
+    p5.frameRate(25);
+    p5.createCanvas(600, 600).parent(canvasParentRef);
+    p5.background(0,0,0,0);
+    p5.textAlign(p5.CENTER, p5.CENTER);
+}
+
+// let x = 0;
+// let y = 0;
+// let yValues: any = [];
+
+const draw = (p5: p5, tick: Game.Tick) => {
+    if (!tick || tick.state != Game.State.Started) return;
+    p5.clear();
+ 
+    p5.text(tick.data.multiplier, p5.width / 2, p5.height / 2)
+
+    // let yValue = 100 * p5.log(x / 2) / p5.log(5);
+    // yValues.push(tick.data.multiplier);
+
+    // p5.noStroke();
+    // p5.fill(200);
+    // p5.beginShape();
+    // p5.vertex(0, p5.height);
+    // for (let i = 0; i < yValues.length; i++) p5.vertex(i, p5.height - yValues[i]);
+    // p5.vertex((yValues.length - 1), p5.height);
+    // p5.endShape(p5.CLOSE);
+
+    // x = p5.constrain(x, 0, p5.width);
+    // y = p5.constrain(p5.height - yValue, 0, p5.height - 48);
+
+    // p5.text(":rocket:", x, y);
+
+    // x += 1;
+}
+
+const CrashCanvas = ({ tick } : { tick?: Game.Tick }) => {
+    if (!tick) return <></>;
+    return <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />
+}
+
+const CrashBetBox = ({ socket, tick } : { socket: Nullable<Socket>, tick: Undefineable<Game.Tick>}) => {
+
+    const betRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+    const [ bet, setBet ] = useState<number>(0);
+    const [ pull, setPull ] = useState<number>(0);
+    const [ joined, setJoined ] = useState<boolean>(false);
+
+    const handleButton = () => {
+        if (tick?.state == Game.State.Lobby) socket?.emit("opt", joined ? 0 : betRef.current?.value);
+        if (tick?.state == Game.State.Started) socket?.emit("pull");
+    }
+
+    const displayButton = () => {
+        if (tick?.state == Game.State.Lobby) return joined ? "Leave queue" : "Queue for game";
+        if (joined) return !pull ? "Pull out" : `Pulled out at ${pull}x`; 
+        return "Waiting for next round..";
+    }
+
+    const displayVariant = () => {
+        if (tick?.state == Game.State.Lobby) return joined ? "danger" : "success";
+        return joined ? "success" : "muted";
+    }
+
+    const toggleButton = () => {
+        if (tick?.state == Game.State.Lobby) return false;
+        if (tick?.state == Game.State.Ended) return true;
+        return !joined;
+    }
+
+    socket?.on("reset", () => { setPull(0); setBet(0); setJoined(false); });
+    socket?.on("pull", data => setPull(data));
+    socket?.on("opt", data => { setBet(data.amount ?? 0); setJoined(data.confirmed); });
+
+    return (
+        <Card style={{ width: '18rem' }}>
+            <Card.Header>Bet</Card.Header>
+            <Card.Body>
+                <Form>
+                    <Form.Group className="mb-3" controlId="betAmount">
+                        <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
+                        <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.`: "Place a bet to enter the game."}</Form.Text>
+                    </Form.Group>
+                    <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className="w-2">{displayButton()}</Button>
+                </Form>
+            </Card.Body>
+        </Card>
+    )
+}
+
 export default Crash;

@@ -1,21 +1,12 @@
 .h1{
     margin: 1.5rem;
     text-align: center;
-}
-
-.coin{
-    height: 5rem;
-    width: 5rem;
-}
-
-.balance {
-    display: inline-block;
     vertical-align: middle;
-    font-size: 5rem;
+    font-size: 3rem;
 }
 
 .table{
-    border-radius: 1em;
+    border-radius: 1rem;
     border-color: transparent;
 }
 

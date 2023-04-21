@@ -5,12 +5,14 @@
   "main": "index.js",
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.1",
+    "@types/mysql": "^2.15.21",
     "@types/node": "^18.15.3",
     "typescript": "^5.0.2"
   },
   "dependencies": {
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
+    "mysql": "^2.18.1",
     "socket.io": "^4.6.1"
   },
   "scripts": {

@@ -60,7 +60,7 @@ handler.post(
     }
 
     password = await bcrypt.hash(password, 10);
-    const queryResponse: any = await execute("INSERT INTO account VALUES (null, ?, ?, ?)", username, email, password);
+    const queryResponse: any = await execute("INSERT INTO account (username, email, password_hash) VALUES (?, ?, ?)", username, email, password);
     if (!queryResponse.insertId) {
       res
         .status(403)

@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Crash, Games, Roulette, Slots, Test } from "./games";
+import { Crash, Games, Roulette, Slots } from "./games";
 import { Game, GameState, Player } from "./models";
 import { Nullable } from "../utils";
 
@@ -75,10 +75,9 @@ class GameManager {
         let nextId = this.games.length + 1;
         let game: Game;
         switch (name) {
-            case Games.Roulette: game = new Roulette(nextId);
-            case Games.Crash: game = new Crash(nextId);
-            case Games.Slots: game = new Slots(nextId);
-            case Games.Test: game = new Test(nextId);
+            case Games.Roulette: game = new Roulette(nextId); break;
+            case Games.Crash: game = new Crash(nextId); break;
+            case Games.Slots: game = new Slots(nextId); break;
         }
 
         this.tasks.push(setInterval(gameManager.update, 100, game));
@@ -113,6 +112,7 @@ class GameManager {
             if (game.state == GameState.Ended) {
                 game.broadcastTick({ time: (game.time / 10) });
                 game.end();
+                game.payout();
                 game.setState(GameState.Post);
                 game.time = 100; 
             }
@@ -160,22 +160,6 @@ class PlayerManager {
 
     // setup socket listeners
     register = (socket: Socket, player: Player): void => {
-        // socket.on("status", () => {
-        //     let game: Nullable<Game> = gameManager.find(player);
-        //     if (game) game.status();
-        // });
-
-        socket.on("opt", (amount: number) => {
-            let game: Nullable<Game> = gameManager.find(player);
-            if (!game || !amount) {
-                socket.emit("opt", { confirmed: false });
-                game?.optOut(player);
-                return;
-            }
-            game.optIn(player, amount);
-            socket.emit("opt", { confirmed: true, amount });
-        });
-
         this.players.set(socket, player) 
     };
 

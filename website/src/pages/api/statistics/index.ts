@@ -21,10 +21,21 @@ handler.get<any, NextApiResponse>(async (req, res) => {
         return;
     }
 
-    let all: Transaction[] | undefined = await execute<Transaction>("SELECT * FROM user_transaction WHERE account_id=? ORDER BY id DESC", [ user.id ]);
+    let { page } = req.query;
+    if (!page) {
+        res.status(301).json({ message: "No page specified." });
+        return;
+    }
+
+    let pageIndex = (page - 1) * 20;
+    let mostRecent: Transaction[] | undefined = await execute<Transaction>("SELECT * FROM user_transaction_recent WHERE account_id=?", user.id);
+    let pageRows: Transaction[] | undefined = await execute<Transaction>("SELECT * FROM user_transaction WHERE account_id=? ORDER BY id DESC LIMIT ?, ?", user.id, pageIndex, (pageIndex + 19));
     res.status(200).json({
-        recent: all ? all[0] : {},
-        all: all ?? []
+        recent: mostRecent ? mostRecent[0] : {},
+        page: {
+            index: page,
+            pageRows: pageRows ?? []
+        }
     });
 }) 
 
