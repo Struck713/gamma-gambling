@@ -3,7 +3,7 @@ import { useRouter, NextRouter } from "next/router";
 import { useCurrentUser } from "@/lib/user";
 
 import styles from "../../styles/statistics.module.css"
-import { LoadingSpinner } from "@/components/loading";
+import { LoadingSpinner, PageLoadingSpinner } from "@/components/loading";
 import { Transaction } from "@/lib/models";
 import { toast } from "react-hot-toast";
 import { Container, Table, ButtonGroup, Button } from 'react-bootstrap';
@@ -37,14 +37,14 @@ const Statistics = () => {
       const data = await res.json();
       if (data) setStatistics(data as Statistics);
       else toast.error("Something went wrong when loading your statistics..")
+      setLoading(false);
     }
 
     setLoading(true);
     loadTransations();
-    setLoading(false);
   }, [router, data, error]);
 
-  if (isValidating || loading || !data.user) return <LoadingSpinner />;
+  if (isValidating || loading || !data.user) return <PageLoadingSpinner />;
 
   return (
     <>

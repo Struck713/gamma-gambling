@@ -1,0 +1,56 @@
+.main{
+    margin-top: 100px;
+}
+
+.image {
+    margin-left: auto;
+    padding-bottom: .5rem;
+    height: 11rem;
+    width: 22rem;
+    border: 300px;
+    border-color: var(--bs-secondary);
+}
+
+.coin {
+    margin-left: auto;
+    height: 11rem;
+    width: 11rem;
+    transition: all 0.3s ease-in-out 0s; 
+    display: inline-block;
+}
+
+.coin:hover {
+    cursor: default;
+    transition: all 3s ease-in-out 3s;
+    animation-name: spinner;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@-webkit-keyframes spinner {
+    0% { -webkit-transform: rotateY(0deg); }
+    50% { -webkit-transform: rotateY(-90deg); }
+    100% { -webkit-transform: rotateY(0deg); }
+}
+
+@keyframes spinner {
+    0% {
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+    50% {
+        -moz-transform: rotateY(-90deg);
+        -ms-transform: rotateY(-90deg);
+        transform: rotateY(-90deg);
+    }
+    51% {
+
+    }
+    100% {
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+}
