@@ -6,7 +6,7 @@ import { Form, Row, Col, Button, Spinner } from "react-bootstrap";
 
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
-import { LoadingSpinner } from '@/components/loading';
+import { PageLoadingSpinner, LoadingSpinner } from "@/components/loading";
 
 // The login page, you know what it does
 const AccountRegister = () => {
@@ -17,15 +17,15 @@ const AccountRegister = () => {
     const confirmPasswordRef: any = useRef(null);
 
     const router = useRouter();
-    const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
-    const [isLoading, setIsLoading] = useState(false);
+    const { data: { user } = {}, mutate } = useCurrentUser();
+    const [ loading, setLoading ] = useState(false);
 
     const onSubmit = useCallback(
         async (e: any) => {
           e.preventDefault();
 
           try {
-            setIsLoading(true);
+            setLoading(true);
             const response = await fetcher('/api/user/register', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -44,16 +44,15 @@ const AccountRegister = () => {
             if (e.message) toast.error(e.message);
             else toast.error("Invalid email or password.");
           } finally {
-            setIsLoading(false);
+            setLoading(false);
           }
         },
         [mutate, router]
     );
 
-    if (isValidating) return <LoadingSpinner />;
     if (user) {
       router.replace('/user');
-      return <LoadingSpinner />;
+      return <PageLoadingSpinner />;
     }
 
     return (
@@ -84,7 +83,7 @@ const AccountRegister = () => {
           <br />
           <Row>
             <Col>
-              <Button style={{width: '6rem'}} disabled={isLoading} variant="secondary" type="submit">{isLoading ? <LoadingSpinner /> : "Register"}</Button>
+              <Button style={{width: '6rem'}} disabled={loading} variant="secondary" type="submit">{loading ? <LoadingSpinner /> : "Register"}</Button>
             </Col>
           </Row>
         </Form>

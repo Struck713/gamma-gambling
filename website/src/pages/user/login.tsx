@@ -6,7 +6,7 @@ import { Button, Form, Spinner } from "react-bootstrap";
 
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/lib/user";
-import { LoadingSpinner } from "@/components/loading";
+import { PageLoadingSpinner, LoadingSpinner } from "@/components/loading";
 
 // The login page, you know what it does
 const AccountLogin = () => {
@@ -15,7 +15,7 @@ const AccountLogin = () => {
     const router: NextRouter = useRouter();
 
     const [isLoading, setLoading] = useState(false);
-    const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+    const { data: { user } = {}, mutate } = useCurrentUser();
 
     const onSubmit = useCallback(
       async (e: any) => {
@@ -44,10 +44,9 @@ const AccountLogin = () => {
       [mutate]
     );
 
-    if (isValidating) return <LoadingSpinner />;
     if (user) {
       router.replace('/user');
-      return <LoadingSpinner />;
+      return <PageLoadingSpinner />;
     }
 
     return (
