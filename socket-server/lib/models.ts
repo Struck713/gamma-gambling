@@ -1,6 +1,8 @@
 import { Socket } from "socket.io";
 import { io } from "..";
 import { Games } from "./games";
+import { Callback, Undefineable } from "../utils";
+import { execute } from "./db";
 
 /**
  * Game
@@ -13,7 +15,7 @@ import { Games } from "./games";
  * of players. 
  * These values are all for the GameManager.
  */
-class Game {
+abstract class Game {
 
     readonly id: number;
     readonly type: Games;
@@ -23,13 +25,19 @@ class Game {
 
     time: number;
     players: Player[];
+    winners: Winner[];
+
+    listeners: Map<string, Callback<Socket, Player, any>>;
 
     constructor(id: number, type: Games, min: number, max: number) {
         this.id = id;
         this.type = type;
         this.min = min;
         this.max = max;
+
+        this.listeners = new Map;
         this.players = [];
+        this.winners = [];
         this.state = GameState.Waiting;
 
         this.time = 150;
@@ -45,12 +53,18 @@ class Game {
      */
     join(socket: Socket, player: Player) {
         if (this.players.length >= this.max) return false;
-        
+
+        for (let listener of this.listeners.keys()) {
+            socket.on(listener, (data: any) => {
+                let callback = this.listeners.get(listener);
+                if (callback) callback(socket, player, data);
+            })
+        }
+
         this.players.push(player);
 
         socket.join(this.getName());
         this.broadcastStatus();
-
         this.log(`${player.username} joined.`);
         return true;
     }
@@ -66,30 +80,12 @@ class Game {
     leave(socket: Socket, player: Player) {
         let found: number = this.players.indexOf(player);
         if (found == -1) return false;
-
         this.players.splice(found, 1);
 
         socket.leave(this.getName());
         this.broadcastStatus();
-
         this.log(`${player.username} left.`);
         return true;
-    }
-
-    optIn(player: Player, amount: number) {
-        if (this.state == GameState.Started) return;
-
-        player.bet = amount;
-        this.log(`${player.username} opted-in for ${amount}.`);
-        this.broadcastStatus();
-    }
-
-    optOut(player: Player) {
-        if (this.state == GameState.Started) return;
-
-        player.bet = 0;
-        this.log(`${player.username} opted-out.`);
-        this.broadcastStatus();
     }
 
     /**
@@ -100,7 +96,7 @@ class Game {
      * 
      * @returns
      */
-    start() {}
+    abstract start(): void;
 
     /**
      * This function is called for each second
@@ -110,7 +106,7 @@ class Game {
      * 
      * @returns
      */
-    update() {}
+    abstract update(): void;
 
     /**
      * This function is called when the game ends.
@@ -119,19 +115,38 @@ class Game {
      * 
      * @returns
      */
-    end() {}
+    abstract end(): void;
 
-    reset = () => {
+    payout() {
+        let payout: Payout[] = [];
+        this.players.forEach(player => {
+            if (player.bet == 0) return;
+            
+            let winner = this.winners.find(value => value.id == player.id);
+            let returnAmount = winner ? winner.value : -player.bet;
+            player.total = player.total + returnAmount;
+            payout.push({ id: player.id, bet: player.bet, total: player.total, returnAmount, reason: this.type.toUpperCase() });
+        });
+        payout.forEach(payout => this.createTransaction(payout));
+    }
+
+    reset() {
         // reset bets
         this.players.forEach(player => player.bet = 0);
-        this.broadcast("opt", { confirmed: false });
+        this.winners = [];
+
+        this.broadcast("reset");
         this.broadcastStatus();
         this.log("Reset all players.");
     }
 
+    private createTransaction = async (payout: Payout) => await execute("INSERT INTO user_transaction (account_id, total, bet_amt, return_amt, reason) VALUES (?, ?, ?, ?, ?)", payout.id, payout.total, payout.bet, payout.returnAmount, payout.reason);
+    private createGameHistory = async () => {};
+
     broadcastTick = (data: any) => this.broadcast("tick", { data, state: this.state });
     broadcastStatus = () => this.broadcast("status", { players: this.players.map(player => { return { id: player.id, username: player.username, bet: player.bet ?? 0 } }), max: this.max });
-    broadcast = (event: string, data: any): boolean => io.in(this.getName()).emit(event, data);
+    broadcast = (event: string, data?: any): boolean => io.in(this.getName()).emit(event, data);
+    error = (socket: Socket, message: string): boolean => socket.emit("game_error", message);
     
     setState = (state: GameState) => { this.state = state; this.log(`Changed state to '${state}'`);}
     log = (message: string) => console.log(`[${this.type}] [Lobby ${this.id}] ${message}`);
@@ -154,9 +169,28 @@ interface Player {
 
     id: number;
     username: string;
+    total: number;
     bet: number;
     iat: number;
     exp: number;
+
+}
+
+interface Winner {
+
+    id: number;
+    username: string;
+    value: number;
+
+}
+
+interface Payout {
+
+    id: number;
+    bet: number;
+    total: number;
+    returnAmount: number;
+    reason: string;
 
 }
 

@@ -3,4 +3,6 @@
 type Nullable<G> = (G | null)
 type Undefineable<G> = (G | undefined)
 
-export { Nullable, Undefineable };
+type Callback<T, G, D> = (a: T, b: G, c?: D) => void;
+
+export { Nullable, Undefineable, Callback };

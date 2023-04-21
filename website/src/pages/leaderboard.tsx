@@ -2,6 +2,7 @@ import { LoadingSpinner } from "@/components/loading";
 import { Leader } from "@/lib/models";
 import { useEffect, useState } from "react";
 import { Table, Container } from "react-bootstrap";
+import styles from "../styles/leaderboard.module.css"
 
 // The Leaderboard
 const Leaderboards = () => {
@@ -27,8 +28,8 @@ const Leaderboards = () => {
 
   return (
     <Container className="jumbotron">
-      <Table className="text-light bg-primary border-primary p-5" bordered>
-        <thead>
+      <Table className={`text-light bg-primary border-primary p-5 ${styles.table}`}>
+        <thead className={styles.thead}>
           <tr>
             <th>POSITION</th>
             <th>USERNAME</th>
@@ -43,6 +44,11 @@ const Leaderboards = () => {
               <td>{leader.total}</td>
             </tr>
           )}
+          <tr className="bg-info">
+              <td>#user_id</td>
+              <td>username</td>
+              <td>total</td>
+            </tr>
         </tbody>
       </Table>
     </Container>
