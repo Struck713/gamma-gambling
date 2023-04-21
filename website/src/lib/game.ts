@@ -27,6 +27,8 @@ namespace Game {
     
     }
 
+    export const SERVER_URL = "vps-d05fd874.vps.ovh.us:3001";
+
 }
 
 interface PlayerStatus {
