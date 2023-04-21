@@ -22,7 +22,7 @@ const Crash = () => {
       const loadSocket = async () => {
         let res = await fetch('/api/user/auth');
         let { token }: any = await res.json();
-        socket.current = io("localhost:3001", { 
+        socket.current = io(Game.SERVER_URL, { 
           query: { game: "Crash" }, 
           auth: { token }
         });
