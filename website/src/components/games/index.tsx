@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { PlayerStatus, Game } from "@/lib/game";
 import { Card, ListGroup, Badge } from "react-bootstrap";
 
@@ -14,20 +15,6 @@ const decodeTick = (tick: Game.Tick) => {
     }
 }
 
-const PlayersList: React.FC<{ tick: Game.Tick, status: Game.Status }> = ({ tick, status }) => {
-    if (!status) return <DefaultCard title="Waiting for players..." subtitle="Loading players list.." />;
-    let { players, max } = status;
-    return (
-        <Card>
-            <Card.Header>{decodeTick(tick)}</Card.Header>
-            <Card.Body  style={{ width: '18rem' }}>
-                <Card.Subtitle className="mb-2 text-muted">{players?.length} out of {max}</Card.Subtitle>
-                <ListGroup variant="list-group-flush">{players?.map((player: PlayerStatus) => <PlayerListItem key={player.username} username={player.username} bet={player.bet} />)}</ListGroup>
-            </Card.Body>
-        </Card>
-    )
-}
-
 // easy creation of a functional component
 const DefaultCard: React.FC<{title: string, subtitle: string}> = ({ title, subtitle }) => {
     return (
@@ -40,4 +27,17 @@ const DefaultCard: React.FC<{title: string, subtitle: string}> = ({ title, subti
     );
 }
 
-export { PlayersList };
+export const DynamicSketch = dynamic(() => import('react-p5').then((mod) => mod.default), { ssr: false });
+export const PlayersList: React.FC<{ tick: Game.Tick, status: Game.Status }> = ({ tick, status }) => {
+    if (!status) return <DefaultCard title="Waiting for players..." subtitle="Loading players list.." />;
+    let { players, max } = status;
+    return (
+        <Card>
+            <Card.Header>{decodeTick(tick)}</Card.Header>
+            <Card.Body  style={{ width: '18rem' }}>
+                <Card.Subtitle className="mb-2 text-muted">{players?.length} out of {max}</Card.Subtitle>
+                <ListGroup variant="list-group-flush">{players?.map((player: PlayerStatus) => <PlayerListItem key={player.username} username={player.username} bet={player.bet} />)}</ListGroup>
+            </Card.Body>
+        </Card>
+    )
+}

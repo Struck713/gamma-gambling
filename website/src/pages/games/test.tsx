@@ -1,4 +1,5 @@
 import { PlayersList } from '@/components/games';
+import { CrashCanvas } from '@/components/games/crash';
 import { Game } from '@/lib/game';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Container, Card, Col, Row, Form, Button } from 'react-bootstrap';
@@ -35,7 +36,7 @@ const Crash = () => {
 
       let res = await fetch('/api/user/auth');
       let { token }: any = await res.json();
-      socket.current = io("10.22.18.152:3001", { 
+      socket.current = io("10.22.17.247:3001", { 
         query: { game: "Test" }, 
         auth: { token }
       });
@@ -67,6 +68,7 @@ const Crash = () => {
               <Card.Header>Rocket Ride</Card.Header>
               <Card.Body style={{ padding: "1rem" }}>
                 WE&apos;RE GOING TO THE MOON!
+                <CrashCanvas tick={tick} />
               </Card.Body>
             </Card>
           </Col>
