@@ -6,8 +6,17 @@ import { Game, Player } from "./lib/models";
 import { Nullable } from "./utils";
 import { Games } from "./lib/games";
 import { execute } from "./lib/db";
+import { createServer } from "https";
+import { readFileSync } from "fs";
+import { Webhook } from "./lib/webhook";
 
-const io = new Server({ cors: { origin: env.cors.origin } });
+const httpsServer = env.production ? createServer({
+  key: readFileSync("certs/privkey.pem"),
+  cert: readFileSync("certs/cert.pem"),
+  ca: readFileSync("certs/chain.pem")
+}) : undefined;
+const io = new Server(httpsServer, { cors: { origin: env.cors.origin } });
+
 const playerManager: PlayerManager = new PlayerManager;
 const gameManager: GameManager = new GameManager;
 

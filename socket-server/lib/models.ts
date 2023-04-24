@@ -3,6 +3,7 @@ import { io } from "..";
 import { Games } from "./games";
 import { Callback, Undefineable } from "../utils";
 import { execute } from "./db";
+import { Webhook } from "./webhook";
 
 /**
  * Game
@@ -118,16 +119,21 @@ abstract class Game {
     abstract end(): void;
 
     payout() {
+        let fields: Webhook.Field[] = [];
         let payout: Payout[] = [];
         this.players.forEach(player => {
-            if (player.bet == 0) return;
-            
+            fields.push({ name: player.username, value: !player.bet ? "NONE" : player.bet.toString(), inline: true });
+
+            if (player.bet == 0) { fields.push({ name: player.username, value: "NONE", inline: true }); return; }
+
             let winner = this.winners.find(value => value.id == player.id);
             let returnAmount = winner ? winner.value : -player.bet;
             player.total = player.total + returnAmount;
             payout.push({ id: player.id, bet: player.bet, total: player.total, returnAmount, reason: this.type.toUpperCase() });
+            fields.push({ name: player.username, value: returnAmount.toString(), inline: true });
         });
         payout.forEach(payout => this.createTransaction(payout));
+        Webhook.sendStatusMessage(this.getName(), this.id, Date.now().toString(), fields);
     }
 
     reset() {
