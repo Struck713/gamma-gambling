@@ -46,12 +46,12 @@ export namespace Webhook {
             "embeds": [
               {
                 "description": `A game of ${name} ended.\nHere is a list of players and their payout:`,
-                "url": "https://database-project-ebon.vercel.app/",
+                "url": "https://www.gammagambling.com/",
                 "color": 7021740,
                 "fields": players,
                 "author": {
                   "name": "Game Status Notification",
-                  "url": `https://database-project-ebon.vercel.app/games/${id}`
+                  "url": `https://www.gammagambling.com/games/${id}`
                 },
                 "footer": {
                   "text": "CRASH"
