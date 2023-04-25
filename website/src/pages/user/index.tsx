@@ -63,7 +63,7 @@ const Statistics = () => {
   }
 
   const handlePageChange = (page: number) => {
-    if (page < 1) setPage(1);
+    if (page < 0) setPage(0);
     else setPage(page);
 
     setLoading(true);
