@@ -125,7 +125,7 @@ const CrashBetBox = ({ socket, tick } : { socket: Nullable<Socket>, tick: Undefi
 
     const displayButton = () => {
         if (tick?.state == Game.State.Lobby) return joined ? "Leave queue" : "Queue for game";
-        if (joined) return !pull ? "Pull out" : `Pulled out at ${pull}x`; 
+        if (joined) return !pull ? "Eject" : `Ejected at ${pull}x`; 
         return "Waiting for next round..";
     }
 

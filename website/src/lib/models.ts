@@ -22,9 +22,11 @@ interface Transaction {
 
 interface Leader {
 
+    id: number;
     username: string;
     total: number;
 
 }
+
 
 export type { Account, Leader, Transaction };
