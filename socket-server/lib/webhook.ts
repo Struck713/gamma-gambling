@@ -1,4 +1,6 @@
 import Axios from "axios";
+import { Game } from "./models";
+import { Games } from "./games";
 
 export namespace Webhook {
 
@@ -40,32 +42,39 @@ export namespace Webhook {
     }
 
 
-    export const sendStatusMessage = async (name: string, id: number, timestamp: string, players: Field[]) => {
+    export const sendStatusMessage = async (game: Games, name: string, id: number, fields: Field[]) => {
         let message: Message = {
-            "content": null,
-            "embeds": [
+            content: null,
+            embeds: [
               {
-                "description": `A game of ${name} ended.\nHere is a list of players and their payout:`,
-                "url": "https://database-project-ebon.vercel.app/",
-                "color": 7021740,
-                "fields": players,
-                "author": {
-                  "name": "Game Status Notification",
-                  "url": `https://database-project-ebon.vercel.app/games/${id}`
+                description: `A game of ${name} ended.\nHere is a list of players and their payout:`,
+                url: "https://www.gammagambling.com/",
+                color: 7021740,
+                fields,
+                author: {
+                  name: "Game Status Notification",
+                  url: `https://www.gammagambling.com/games/${id}`
                 },
-                "footer": {
-                  "text": "CRASH"
+                footer: {
+                  text: game
                 },
-                "timestamp": timestamp
+                timestamp: new Date().toISOString()
               }
             ],
-            "username": "Gamma Gambling",
-            "avatar_url": "https://media.discordapp.net/attachments/1084882564373815456/1100189975225581619/logo.png",
-            "attachments": []
+            username: "Gamma Gambling",
+            avatar_url: "https://media.discordapp.net/attachments/1084882564373815456/1100189975225581619/logo.png",
+            attachments: []
         };
         await send(message);
     }
 
-    export const send = async (message: Message) => await Axios.post(WEBHOOK_URL, message);
+    export const send = async (message: Message) => {
+      const res = await Axios.post(WEBHOOK_URL, JSON.stringify(message), { 
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return res.data;
+    }
 
 }

@@ -1,5 +1,4 @@
-import socketio, { Server, Socket } from "socket.io";
-import express from "express";
+import { Server, Socket } from "socket.io";
 import env from './env.json';
 
 import { PlayerManager, GameManager } from "./lib/manager";
@@ -9,14 +8,17 @@ import { Games } from "./lib/games";
 import { execute } from "./lib/db";
 import { createServer } from "https";
 import { readFileSync } from "fs";
+import { Webhook } from "./lib/webhook";
 
 console.log(`Running enviroment in ${env.production ? "PRODUCTION" : "DEV"}.`);
-const httpsServer = env.production ? createServer({
+
+let options = env.production ? {
   key: readFileSync(`${env.certDir}privkey.pem`, "utf8"),
   cert: readFileSync(`${env.certDir}fullchain.pem`, "utf8"),
-}) : undefined;
-const io = new Server(httpsServer, { cors: { origin: env.cors.origin } });
+} : undefined;
 
+const httpsServer = options ? createServer(options) : createServer();
+const io = new Server({ cors: { origin: env.cors.origin } });
 const playerManager: PlayerManager = new PlayerManager;
 const gameManager: GameManager = new GameManager;
 
@@ -46,7 +48,13 @@ io.on("connection", (socket: Socket) => {
   if (!game) socket.disconnect();
 });
 
-io.listen(env.port);
-console.log(`Socket server started on ${env.port}.`);
+httpsServer.listen(env.port);
+io.listen(httpsServer);
 
+// Webhook.sendStatusMessage(Games.Crash, "Lobby-1", 100, new Date().toISOString(), [
+//   { name: "Struck713", value: "1500", inline: true },
+//   { name: "hey", value: "-300", inline: true }
+// ]);
+
+console.log(`Socket server started on ${env.port}.`);
 export { io, gameManager, playerManager };
