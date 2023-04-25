@@ -24,7 +24,9 @@ const Crash = () => {
         let { token }: any = await res.json();
         socket.current = io(Game.SERVER_URL, { 
           query: { game: "Crash" }, 
-          auth: { token }
+          auth: { token },
+          transports: [ "websocket" ],
+          rejectUnauthorized: false
         });
   
         socket.current.on("tick", data => setTick(data));
