@@ -25,7 +25,7 @@ handler.get<any, NextApiResponse>(async (req, res) => {
 
     let pageIndex = page * AMOUNT_PER_PAGE;
     let totalCount: { total: number }[] | undefined = await execute<any>("SELECT COUNT(*) as total FROM user_transaction WHERE account_id=?", user.id);
-    let totalPages = totalCount ? (Math.ceil(totalCount[0].total / AMOUNT_PER_PAGE) - 1) : 1;
+    let totalPages = totalCount ? Math.ceil(totalCount[0].total / AMOUNT_PER_PAGE) : 1;
     let pageRows: Transaction[] | undefined = await execute<Transaction>("SELECT * FROM user_transaction WHERE account_id=? ORDER BY id DESC LIMIT ?, ?", user.id, pageIndex, AMOUNT_PER_PAGE);
     res.status(200).json({
         totalPages,

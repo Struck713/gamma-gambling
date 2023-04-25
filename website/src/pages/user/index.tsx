@@ -43,14 +43,16 @@ const Statistics = () => {
     if (!user) { router.replace('/user/login'); return; }
 
     loadTotal();
-    handlePageChange(1);
+    handlePageChange(0);
   }, [router, user, error]);
 
   const loadTransations = async (page: number) => {
     const res = await fetch(`/api/statistics?page=${page}`);
     const data = await res.json();
     if (data) setStatistics(data as Statistics);
-    else toast.error("Something went wrong when loading your statistics..")
+    else toast.error("Something went wrong when loading your statistics..");
+    console.log(page);
+    console.log(data);
     setLoading(false);
   }
 
@@ -101,7 +103,7 @@ const Statistics = () => {
           </tbody>
         </Table>
         <ButtonGroup className="me-2" aria-label="First group">
-          {Array.from(Array(statistics?.totalPages).keys()).map(index => <Button key={index} onClick={() => handlePageChange(index + 1)}>{index + 1}</Button>)}
+          {Array.from(Array(statistics?.totalPages).keys()).map(index => <Button key={index} active={page == index} onClick={() => handlePageChange(index)}>{index + 1}</Button>)}
         </ButtonGroup>
       </Container>
     </>
