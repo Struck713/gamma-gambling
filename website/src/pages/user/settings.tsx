@@ -16,8 +16,8 @@ const AccountProfile = () => {
   return (
     <Container className="jumbotron">
       <hgroup className="text-light text-center">
-        <h1>Hello, {data?.user ? data.user.username : ""}!</h1>
-        <h2>You are sexy</h2>
+        <h1>Hello, {data?.user ? data.user.username : "user"}!</h1>
+        <h2>You can change your settings from this page.</h2>
       </hgroup>
     </Container>
   )

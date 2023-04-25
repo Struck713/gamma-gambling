@@ -133,7 +133,7 @@ abstract class Game {
             fields.push({ name: player.username, value: returnAmount.toString(), inline: true });
         });
         payout.forEach(payout => this.createTransaction(payout));
-        Webhook.sendStatusMessage(this.getName(), this.id, Date.now().toString(), fields);
+        Webhook.sendStatusMessage(this.type, this.getName(), this.id, new Date().toISOString(), fields);
     }
 
     reset() {

@@ -57,7 +57,6 @@ const Statistics = () => {
   const loadTotal = async () => {
     const res = await fetch(`/api/statistics/recent`);
     const data = await res.json();
-    console.log(data);
     if (data) setTotal(data as Transaction);
     else toast.error("Something went wrong when loading your total..")
     setLoading(false);

@@ -9,7 +9,7 @@ import { io, Socket } from 'socket.io-client';
 import p5 from "p5";
 import { Nullable, Undefineable } from "@/lib/utils";
 
-const Crash = () => {
+const RocketRide = () => {
 
     const socket = useRef<Socket | null>(null);
 
@@ -160,4 +160,4 @@ const CrashBetBox = ({ socket, tick } : { socket: Nullable<Socket>, tick: Undefi
     )
 }
 
-export default Crash;
+export default RocketRide;
