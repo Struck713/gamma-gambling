@@ -122,10 +122,7 @@ abstract class Game {
         let fields: Webhook.Field[] = [];
         let payout: Payout[] = [];
         this.players.forEach(player => {
-            fields.push({ name: player.username, value: !player.bet ? "NONE" : player.bet.toString(), inline: true });
-
             if (player.bet == 0) { fields.push({ name: player.username, value: "NONE", inline: true }); return; }
-
             let winner = this.winners.find(value => value.id == player.id);
             let returnAmount = winner ? winner.value : -player.bet;
             player.total = player.total + returnAmount;
