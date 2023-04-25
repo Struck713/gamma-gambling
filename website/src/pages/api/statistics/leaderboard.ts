@@ -2,8 +2,8 @@
 import auths from "@/lib/auth";
 import { ncOpts } from "@/lib/constants";
 import { execute } from "@/lib/db";
-import { Leader, Transaction } from "@/lib/models";
-import { NextApiRequest, NextApiResponse } from "next";
+import { Leader } from "@/lib/models";
+import { NextApiResponse } from "next";
 import nc from "next-connect";
 
 const handler = nc(ncOpts);
