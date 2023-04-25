@@ -8,12 +8,12 @@ import { Games } from "./lib/games";
 import { execute } from "./lib/db";
 import { createServer } from "https";
 import { readFileSync } from "fs";
-import { Webhook } from "./lib/webhook";
 
+console.log(`Running enviroment in ${env.production ? "PRODUCTION" : "DEV"}.`);
 const httpsServer = env.production ? createServer({
-  key: readFileSync("certs/privkey.pem"),
-  cert: readFileSync("certs/cert.pem"),
-  ca: readFileSync("certs/chain.pem")
+  key: readFileSync("certs/privkey.pem", "utf8"),
+  cert: readFileSync("certs/cert.pem", "utf8"),
+  ca: readFileSync("certs/chain.pem", "utf8")
 }) : undefined;
 const io = new Server(httpsServer, { cors: { origin: env.cors.origin } });
 
