@@ -27,7 +27,7 @@ namespace Game {
     
     }
 
-    export const SERVER_URL = "http://vps-d05fd874.vps.ovh.us:3001";
+    export const SERVER_URL = "https://vps-d05fd874.vps.ovh.us:3001";
 
 }
 
