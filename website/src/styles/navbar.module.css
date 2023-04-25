@@ -1,10 +1,10 @@
 .navbar{
-    height: 100px;
+    height: 6rem;
     position: fixed;
 }
 
 .logo{
-    height: 50px;
-    width: 50px;
+    height: 3rem;
+    width: 3rem;
     margin-right: 18px;
 }

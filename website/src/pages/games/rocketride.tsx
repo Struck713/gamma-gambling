@@ -9,6 +9,8 @@ import { io, Socket } from 'socket.io-client';
 import p5 from "p5";
 import { Nullable, Undefineable } from "@/lib/utils";
 
+import styles from "../../styles/rocketride.module.css"
+
 const RocketRide = () => {
 
     const socket = useRef<Socket | null>(null);
@@ -48,21 +50,21 @@ const RocketRide = () => {
     if (loading) return <PageLoadingSpinner />
   
     return(
-      <Container className="p-2">
+      <Container className={`p-2 ${styles.container}`}>
         <Row>
-          <Col style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+          <Col className={styles.col}>
             <PlayersList tick={tick!} status={status!} />
           </Col>
           <Col>
             <Card>
               <Card.Header>Rocket Ride</Card.Header>
-              <Card.Body style={{ padding: "1rem" }}>
+              <Card.Body className={styles.cardBody}>
                 WE&apos;RE GOING TO THE MOON!
                 <CrashCanvas tick={tick} />
               </Card.Body>
             </Card>
           </Col>
-          <Col style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+          <Col className={styles.col}>
             <CrashBetBox socket={socket.current} tick={tick} />
           </Col>
         </Row>
@@ -153,7 +155,7 @@ const CrashBetBox = ({ socket, tick } : { socket: Nullable<Socket>, tick: Undefi
                         <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
                         <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.`: "Place a bet to enter the game."}</Form.Text>
                     </Form.Group>
-                    <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className="w-2">{displayButton()}</Button>
+                    <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
                 </Form>
             </Card.Body>
         </Card>

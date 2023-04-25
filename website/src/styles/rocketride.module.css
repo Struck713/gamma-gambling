@@ -1,0 +1,17 @@
+.container{
+    margin-top: 1rem;
+}
+
+.col{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.cardBody{
+    padding: 1rem;
+}
+
+.button{
+    width: 100%;
+}
