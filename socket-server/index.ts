@@ -1,6 +1,7 @@
-import { Server, Socket } from "socket.io";
-
+import socketio, { Server, Socket } from "socket.io";
+import express from "express";
 import env from './env.json';
+
 import { PlayerManager, GameManager } from "./lib/manager";
 import { Game, Player } from "./lib/models";
 import { Nullable } from "./utils";
@@ -11,9 +12,8 @@ import { readFileSync } from "fs";
 
 console.log(`Running enviroment in ${env.production ? "PRODUCTION" : "DEV"}.`);
 const httpsServer = env.production ? createServer({
-  key: readFileSync("certs/privkey.pem", "utf8"),
-  cert: readFileSync("certs/cert.pem", "utf8"),
-  ca: readFileSync("certs/chain.pem", "utf8")
+  key: readFileSync(`${env.certDir}privkey.pem`, "utf8"),
+  cert: readFileSync(`${env.certDir}fullchain.pem`, "utf8"),
 }) : undefined;
 const io = new Server(httpsServer, { cors: { origin: env.cors.origin } });
 

@@ -25,7 +25,6 @@ const Crash = () => {
         socket.current = io(Game.SERVER_URL, { 
           query: { game: "Crash" }, 
           auth: { token },
-          transports: [ "websocket" ],
           rejectUnauthorized: false
         });
   
