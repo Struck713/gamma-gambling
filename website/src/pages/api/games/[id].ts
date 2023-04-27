@@ -16,8 +16,8 @@ handler.get<any, NextApiResponse>(async (req, res) => {
         return;
     }
 
-    const gameHistoryPlayers = await execute("SELECT account.username, ut.bet_amt, ut.return_amt FROM game_history_players AS ghp WHERE game_history_id=? JOIN user_transaction AS ut ON ut.id=ghp.user_transaction_id JOIN account ON ghp.account_id=account.id", gameHistory.id);
-    res.status(200).json({ name: gameHistory.game, players: gameHistoryPlayers });
+    const gameHistoryPlayers = await execute("SELECT account.username, ut.bet_amt as bet, ut.return_amt as return FROM game_history_players AS ghp JOIN user_transaction AS ut ON ut.id=ghp.user_transaction_id JOIN account ON ut.account_id=account.id WHERE game_history_id=?", gameHistory.id);
+    res.status(200).json({ name: gameHistory.game, date: gameHistory.date_of, players: gameHistoryPlayers });
 }) 
 
 export default handler;
