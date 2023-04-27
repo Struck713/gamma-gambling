@@ -13,6 +13,7 @@ import { Transaction } from '@/lib/models';
 import { Utils } from '@/lib/utils';
 import { InlineCoin } from './coin';
 import { LoadingSpinner } from './loading';
+import useSWR from 'swr';
 
 const GuestNavbar = () => {
   return (
@@ -31,21 +32,7 @@ const GuestNavbar = () => {
 
 const UserNavbar = ({ user, mutate }: any) => {
 
-  const [ loading, setLoading ] = useState<boolean>(false);
-  const [ total, setTotal ] = useState<Transaction>();
-
-  useEffect(() => {
-
-    const loadTotal = async () => {
-      const data = await fetcher(`/api/transactions/recent`);
-      if (data) setTotal(data as Transaction);
-      else toast.error("Something went wrong when loading your total..")
-      setLoading(false);
-    }
-
-    setLoading(true);
-    loadTotal();
-  }, []);
+  const { data, isLoading } = useSWR<Transaction>('/api/transactions/recent', fetcher, { refreshInterval: 7500 });
 
   const onSignOut = useCallback(async () => {
     try {
@@ -62,7 +49,7 @@ const UserNavbar = ({ user, mutate }: any) => {
   return (
     <>
       <div className={`text-light d-flex align-items-center container-fluid justify-content-center ${styles.balance}`}>
-          {total ? <InlineCoin amount={total.total}/> : <LoadingSpinner />}
+          {data ? <InlineCoin amount={data.total}/> : <LoadingSpinner />}
       </div>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="container-fluid justify-content-end">
