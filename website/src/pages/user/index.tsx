@@ -12,15 +12,15 @@ import moment from "moment";
 import Image from 'next/image';
 import { Images } from "@/components/images";
 
-interface Account {
+interface Transactions {
 
   recent: Transaction;
-  page: AccountPage;
+  page: TransactionsPage;
   totalPages: number;
 
 }
 
-interface AccountPage {
+interface TransactionsPage {
 
   index: Transaction;
   rows: Transaction[];
@@ -33,7 +33,7 @@ const Account = () => {
   const [ loading, setLoading ] = useState<boolean>();
   const [ page, setPage ] = useState<number>(0);
   const [ total, setTotal ] = useState<Transaction>();
-  const [ account, setAccount ] = useState<Account>();
+  const [ account, setAccount ] = useState<Transactions>();
 
   const { data: user, error, isValidating } = useCurrentUser();
   const router: NextRouter = useRouter();
@@ -47,15 +47,15 @@ const Account = () => {
   }, [router, user, error]);
 
   const loadTransations = async (page: number) => {
-    const res = await fetch(`/api/account?page=${page}`);
+    const res = await fetch(`/api/transactions?page=${page}`);
     const data = await res.json();
-    if (data) setAccount(data as Account);
+    if (data) setAccount(data as Transactions);
     else toast.error("Something went wrong when loading your account..")
     setLoading(false);
   }
 
   const loadTotal = async () => {
-    const res = await fetch(`/api/account/recent`);
+    const res = await fetch(`/api/transactions/recent`);
     const data = await res.json();
     if (data) setTotal(data as Transaction);
     else toast.error("Something went wrong when loading your total..")
@@ -95,13 +95,13 @@ const Account = () => {
                 <td>{tran.bet_amt}</td>
                 <StatisticChange transaction={tran} />
                 <td>{tran.total}</td>
-                <td>{moment(tran.date_changed).format("MM/DD/YYYY HH:mm A")}</td>
+                <td>{moment(tran.date_changed).format("MM/DD/YYYY hh:mm A")}</td>
               </tr>
             ) : <PageLoadingSpinner />}
           </tbody>
         </Table>
-        <ButtonGroup className="me-2" aria-label="First group">
-          {Array.from(Array(account?.totalPages).keys()).map(index => <Button key={index} onClick={() => handlePageChange(index + 1)}>{index + 1}</Button>)}
+        <ButtonGroup className="me-2" aria-label="Page Buttons Group">
+          {Array.from(Array(account?.totalPages).keys()).map(index => <Button key={index} active={index == page} onClick={() => handlePageChange(index)}>{index + 1}</Button>)}
         </ButtonGroup>
       </Container>
     </>

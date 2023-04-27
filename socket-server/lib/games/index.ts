@@ -13,7 +13,7 @@ enum Games {
 
     Roulette = "Roulette",
     Slots = "Slots",
-    RocketRide = "RocketRide",
+    RocketRide = "Rocket Ride",
 
 }
 
