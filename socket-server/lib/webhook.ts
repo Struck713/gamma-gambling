@@ -47,7 +47,7 @@ export namespace Webhook {
             content: null,
             embeds: [
               {
-                description: `A game of ${name} ended.\nHere is a list of players and their payout:`,
+                description: `${name} ended. Here is a list of players and their payout:`,
                 url: "https://www.gammagambling.com/",
                 color: 7021740,
                 fields,

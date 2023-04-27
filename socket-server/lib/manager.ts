@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Crash, Games, Roulette, Slots } from "./games";
+import { RocketRide, Games, Roulette, Slots } from "./games";
 import { Game, GameState, Player } from "./models";
 import { Nullable } from "../utils";
 
@@ -76,7 +76,7 @@ class GameManager {
         let game: Game;
         switch (name) {
             case Games.Roulette: game = new Roulette(nextId); break;
-            case Games.Crash: game = new Crash(nextId); break;
+            case Games.RocketRide: game = new RocketRide(nextId); break;
             case Games.Slots: game = new Slots(nextId); break;
         }
 

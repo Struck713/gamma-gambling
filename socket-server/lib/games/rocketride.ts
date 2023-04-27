@@ -9,12 +9,12 @@ import { Games } from '.';
  * game type.
  *
  */
-export default class Crash extends Game {
+export default class RocketRide extends Game {
 
     crashed: number;
 
     constructor(id: number) {
-        super(id, Games.Crash, 1, 16);
+        super(id, Games.RocketRide, 1, 16);
         this.crashed = 0;
 
         this.listeners.set("opt", (socket: Socket, player: Player, amount: number) => {
