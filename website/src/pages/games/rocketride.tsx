@@ -5,78 +5,80 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Container, Card, Col, Row, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
 import { io, Socket } from 'socket.io-client';
+import Image from 'next/image';
 
 import p5 from "p5";
 import { Nullable, Undefineable } from "@/lib/utils";
 
 import styles from "../../styles/rocketride.module.css"
+import { Images } from "@/components/images"
 
 const RocketRide = () => {
 
-    const socket = useRef<Socket | null>(null);
+  const socket = useRef<Socket | null>(null);
 
-    const [ loading, setLoading ] = useState<boolean>(false);
-    const [ status, setStatus ] = useState<Game.Status>();
-    const [ tick, setTick ] = useState<Game.Tick>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [status, setStatus] = useState<Game.Status>();
+  const [tick, setTick] = useState<Game.Tick>();
 
-    useEffect(() => {
-    
-      const loadSocket = async () => {
-        let res = await fetch('/api/user/auth');
-        let { token }: any = await res.json();
-        socket.current = io(Game.SERVER_URL, { 
-          query: { game: "Crash" }, 
-          auth: { token },
-          rejectUnauthorized: false
-        });
-  
-        socket.current.on("tick", data => setTick(data));
-        socket.current.on("status", data => setStatus(data));
-        socket.current.on("game_error", (message) => toast.error(message ?? "Something went wrong."));
-        socket.current.on("connect_error", (err) => toast.error(err.message ?? "Something went wrong."));
-  
-        setLoading(false);
-      }
+  useEffect(() => {
 
-      const unloadSocket = () => {
-        socket.current?.disconnect();
-      }
+    const loadSocket = async () => {
+      let res = await fetch('/api/user/auth');
+      let { token }: any = await res.json();
+      socket.current = io(Game.SERVER_URL, {
+        query: { game: "Rocket Ride" },
+        auth: { token },
+        rejectUnauthorized: false
+      });
 
-      setLoading(true);
-      loadSocket();
-      return () => unloadSocket();
-    }, []);
+      socket.current.on("tick", data => setTick(data));
+      socket.current.on("status", data => setStatus(data));
+      socket.current.on("game_error", (message) => toast.error(message ?? "Something went wrong."));
+      socket.current.on("connect_error", (err) => toast.error(err.message ?? "Something went wrong."));
 
-    if (loading) return <PageLoadingSpinner />
-  
-    return(
-      <Container className={`p-2 ${styles.container}`}>
-        <Row>
-          <Col className={styles.col}>
-            <PlayersList tick={tick!} status={status!} />
-          </Col>
-          <Col>
-            <Card>
-              <Card.Header>Rocket Ride</Card.Header>
-              <Card.Body className={styles.cardBody}>
-                WE&apos;RE GOING TO THE MOON!
-                <CrashCanvas tick={tick} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col className={styles.col}>
-            <CrashBetBox socket={socket.current} tick={tick} />
-          </Col>
-        </Row>
-      </Container>
-    )
+      setLoading(false);
+    }
+
+    const unloadSocket = () => {
+      socket.current?.disconnect();
+    }
+
+    setLoading(true);
+    loadSocket();
+    return () => unloadSocket();
+  }, []);
+
+  if (loading) return <PageLoadingSpinner />
+
+  return (
+    <Container className={`p-2 ${styles.container}`}>
+      <Row>
+        <Col className={styles.col}>
+          <PlayersList tick={tick!} status={status!} />
+        </Col>
+        <Col>
+          <Card>
+            <Card.Header>Rocket Ride</Card.Header>
+            <Card.Body className={styles.cardBody}>
+              WE&apos;RE GOING TO THE MOON!
+              <RocketRideCanvas tick={tick} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col className={styles.col}>
+          <RocketRideBetBox socket={socket.current} tick={tick} />
+        </Col>
+      </Row>
+    </Container>
+  )
 }
 
 const setup = (p5: p5, canvasParentRef: Element) => {
-    p5.frameRate(25);
-    p5.createCanvas(600, 600).parent(canvasParentRef);
-    p5.background(0,0,0,0);
-    p5.textAlign(p5.CENTER, p5.CENTER);
+  p5.frameRate(25);
+  p5.createCanvas(600, 600).parent(canvasParentRef);
+  p5.background(0, 0, 0, 0);
+  p5.textAlign(p5.CENTER, p5.CENTER);
 }
 
 // let x = 0;
@@ -84,82 +86,85 @@ const setup = (p5: p5, canvasParentRef: Element) => {
 // let yValues: any = [];
 
 const draw = (p5: p5, tick: Game.Tick) => {
-    if (!tick || tick.state != Game.State.Started) return;
-    p5.clear();
- 
-    p5.text(tick.data.multiplier, p5.width / 2, p5.height / 2)
+  if (!tick || tick.state != Game.State.Started) return;
+  p5.clear();
 
-    // let yValue = 100 * p5.log(x / 2) / p5.log(5);
-    // yValues.push(tick.data.multiplier);
+  p5.text(tick.data.multiplier, p5.width / 2, p5.height / 2)
 
-    // p5.noStroke();
-    // p5.fill(200);
-    // p5.beginShape();
-    // p5.vertex(0, p5.height);
-    // for (let i = 0; i < yValues.length; i++) p5.vertex(i, p5.height - yValues[i]);
-    // p5.vertex((yValues.length - 1), p5.height);
-    // p5.endShape(p5.CLOSE);
+  // let yValue = 100 * p5.log(x / 2) / p5.log(5);
+  // yValues.push(tick.data.multiplier);
 
-    // x = p5.constrain(x, 0, p5.width);
-    // y = p5.constrain(p5.height - yValue, 0, p5.height - 48);
+  // p5.noStroke();
+  // p5.fill(200);
+  // p5.beginShape();
+  // p5.vertex(0, p5.height);
+  // for (let i = 0; i < yValues.length; i++) p5.vertex(i, p5.height - yValues[i]);
+  // p5.vertex((yValues.length - 1), p5.height);
+  // p5.endShape(p5.CLOSE);
 
-    // p5.text(":rocket:", x, y);
+  // x = p5.constrain(x, 0, p5.width);
+  // y = p5.constrain(p5.height - yValue, 0, p5.height - 48);
 
-    // x += 1;
+  // p5.text(":rocket:", x, y);
+
+  // x += 1;
 }
 
-const CrashCanvas = ({ tick } : { tick?: Game.Tick }) => {
-    if (!tick) return <></>;
-    return <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />
+const RocketRideCanvas = ({ tick }: { tick?: Game.Tick }) => {
+  if (!tick) return <></>;
+  return <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />
 }
 
-const CrashBetBox = ({ socket, tick } : { socket: Nullable<Socket>, tick: Undefineable<Game.Tick>}) => {
+const RocketRideBetBox = ({ socket, tick }: { socket: Nullable<Socket>, tick: Undefineable<Game.Tick> }) => {
 
-    const betRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
-    const [ bet, setBet ] = useState<number>(0);
-    const [ pull, setPull ] = useState<number>(0);
-    const [ joined, setJoined ] = useState<boolean>(false);
+  const betRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const [bet, setBet] = useState<number>(0);
+  const [pull, setPull] = useState<number>(0);
+  const [joined, setJoined] = useState<boolean>(false);
 
-    const handleButton = () => {
-        if (tick?.state == Game.State.Lobby) socket?.emit("opt", joined ? 0 : betRef.current?.value);
-        if (tick?.state == Game.State.Started) socket?.emit("pull");
-    }
+  const handleButton = () => {
+    if (tick?.state == Game.State.Lobby) socket?.emit("opt", joined ? 0 : betRef.current?.value);
+    if (tick?.state == Game.State.Started) socket?.emit("pull");
+  }
 
-    const displayButton = () => {
-        if (tick?.state == Game.State.Lobby) return joined ? "Leave queue" : "Queue for game";
-        if (joined) return !pull ? "Eject" : `Ejected at ${pull}x`; 
-        return "Waiting for next round..";
-    }
+  const displayButton = () => {
+    if (tick?.state == Game.State.Lobby) return joined ? "Leave queue" : "Queue for game";
+    if (joined) return !pull ? "Eject" : `Ejected at ${pull}x`;
+    return "Waiting for next round..";
+  }
 
-    const displayVariant = () => {
-        if (tick?.state == Game.State.Lobby) return joined ? "danger" : "success";
-        return joined ? "success" : "muted";
-    }
+  const displayVariant = () => {
+    if (tick?.state == Game.State.Lobby) return joined ? "danger" : "success";
+    return joined ? "success" : "muted";
+  }
 
-    const toggleButton = () => {
-        if (tick?.state == Game.State.Lobby) return false;
-        if (tick?.state == Game.State.Ended) return true;
-        return !joined;
-    }
+  const toggleButton = () => {
+    if (tick?.state == Game.State.Lobby) return false;
+    if (tick?.state == Game.State.Ended) return true;
+    return !joined;
+  }
 
-    socket?.on("reset", () => { setPull(0); setBet(0); setJoined(false); });
-    socket?.on("pull", data => setPull(data));
-    socket?.on("opt", data => { setBet(data.amount ?? 0); setJoined(data.confirmed); });
+  socket?.on("reset", () => { setPull(0); setBet(0); setJoined(false); });
+  socket?.on("pull", data => setPull(data));
+  socket?.on("opt", data => { setBet(data.amount ?? 0); setJoined(data.confirmed); });
 
-    return (
-        <Card style={{ width: '18rem' }}>
-            <Card.Header>Bet</Card.Header>
-            <Card.Body>
-                <Form>
-                    <Form.Group className="mb-3" controlId="betAmount">
-                        <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
-                        <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.`: "Place a bet to enter the game."}</Form.Text>
-                    </Form.Group>
-                    <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
-                </Form>
-            </Card.Body>
-        </Card>
-    )
+  return (
+    <Card style={{ width: '18rem' }}>
+      <Card.Header>Bet</Card.Header>
+      <Card.Body>
+        <Form>
+          <Form.Group className="mb-3" controlId="betAmount">
+            <div className="d-flex align-items-center">
+              <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
+              <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
+            </div>
+            <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.` : "Place a bet to enter the game."}</Form.Text>
+          </Form.Group>
+          <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
+        </Form>
+      </Card.Body>
+    </Card>
+  )
 }
 
 export default RocketRide;
