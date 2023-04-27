@@ -6,9 +6,11 @@ import { Game, Player } from "./lib/models";
 import { Nullable } from "./utils";
 import { Games } from "./lib/games";
 import { execute } from "./lib/db";
-import { createServer } from "https";
+
+import https from "https";
+import http from "http";
+
 import { readFileSync } from "fs";
-import { OkPacket } from "mysql";
 
 console.log(`Running enviroment in ${env.production ? "PRODUCTION" : "DEV"}.`);
 
@@ -17,7 +19,7 @@ let options = env.production ? {
   cert: readFileSync(`${env.certDir}fullchain.pem`, "utf8"),
 } : undefined;
 
-const httpsServer = options ? createServer(options) : createServer();
+const httpsServer = options ? https.createServer(options) : http.createServer();
 const io = new Server({ cors: { origin: env.cors.origin } });
 const playerManager: PlayerManager = new PlayerManager;
 const gameManager: GameManager = new GameManager;

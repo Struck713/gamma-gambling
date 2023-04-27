@@ -1,7 +1,7 @@
 import { DynamicSketch, PlayersList } from '@/components/games';
 import { PageLoadingSpinner } from '@/components/loading';
 import { Game } from '@/lib/game';
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { MutableRefObject, createRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Container, Card, Col, Row, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
 import { io, Socket } from 'socket.io-client';
@@ -35,7 +35,7 @@ const RocketRide = () => {
       socket.current.on("tick", data => setTick(data));
       socket.current.on("status", data => setStatus(data));
       socket.current.on("game_error", (message) => toast.error(message ?? "Something went wrong."));
-      socket.current.on("connect_error", (err) => toast.error(err.message ?? "Something went wrong."));
+      socket.current.on("connect_error", (err) => toast.error("Could not connect to game servers. Are they down?"));
 
       setLoading(false);
     }
@@ -73,58 +73,14 @@ const RocketRide = () => {
   )
 }
 
-const setup = (p5: p5, canvasParentRef: Element) => {
-  let dimension = canvasParentRef.getBoundingClientRect();
-  p5.createCanvas(dimension.width, dimension.width - (dimension.width / 3)).parent(canvasParentRef);
-  p5.background(0, 0, 0, 0);
-  p5.textAlign(p5.CENTER, p5.CENTER);
-}
-
-const draw = (p5: p5, tick: Undefineable<Game.Tick>) => {
-  if (tick) {
-    if (tick.state == Game.State.Ended) {
-      p5.textSize(50);
-      p5.fill(0);
-      p5.text("CRASHED.", p5.width / 2, p5.height / 2);
-      return;
-    }
-    
-    if (tick.state == Game.State.Started) {
-      p5.clear();
-  
-      let multiplier = tick.data.multiplier;
-      let mappedMultiplier = p5.map(multiplier, 0, multiplier + (p5.height / 2), p5.height, 0);
-    
-      p5.stroke(0);
-      p5.strokeWeight(3);
-      p5.line(0, p5.height, multiplier, mappedMultiplier);
-      // p5.beginShape();
-  
-      // for (let x = 0; x < multiplier; x++) {
-      //   p5.vertex(x, mappedMultiplier - x);
-      // }
-  
-      // p5.endShape(p5.CLOSE);
-      p5.textSize(10);
-      p5.text(`${(multiplier / 10)}x`, multiplier, mappedMultiplier);
-      return;
-    }
-  }
-
-  p5.clear();
-  p5.textSize(25);
-  p5.fill(0);
-  p5.text(`Getting ready for takeoff..`, 150, p5.height - 20);
-}
-
 const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Undefineable<Game.Tick> }) => {
 
   const betRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+
   const [bet, setBet] = useState<number>(0);
   const [pull, setPull] = useState<number>(0);
   const [joined, setJoined] = useState<boolean>(false);
-  const canvas = useMemo(() => <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />, [ tick ]);
-
+  
   const handleButton = () => {
     if (tick?.state == Game.State.Lobby) socket?.emit("opt", joined ? 0 : betRef.current?.value);
     if (tick?.state == Game.State.Started) socket?.emit("pull");
@@ -147,24 +103,66 @@ const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Un
     return !joined;
   }
 
+  const setup = (p5: p5, canvasParentRef: Element) => {
+    let dimension = canvasParentRef.getBoundingClientRect();
+    p5.createCanvas(dimension.width, dimension.width - (dimension.width / 3)).parent(canvasParentRef);
+    p5.background(0, 0, 0, 0);
+    p5.textAlign(p5.CENTER, p5.CENTER);
+    console.log("setup called");
+  }
+  
+  const draw = (p5: p5, tick: Undefineable<Game.Tick>) => {
+    if (tick) {
+      if (tick.state == Game.State.Ended) {
+        p5.textSize(65);
+        p5.fill(255,54,60);
+        p5.text("CRASHED.", p5.width / 2, p5.height / 2);
+        return;
+      }
+      
+      if (tick.state == Game.State.Started) {
+        p5.clear();
+    
+        let multiplier = tick.data.multiplier;
+        let mappedMultiplier = p5.map(multiplier, 0, multiplier + (p5.height / 2), p5.height, 0);
+      
+        p5.stroke(0);
+        p5.strokeWeight(3);
+        p5.line(0, p5.height, multiplier, mappedMultiplier);
+        
+        p5.noStroke();
+        p5.textSize(20);
+        p5.text(`${(multiplier / 10)}x`, (multiplier + 10), (mappedMultiplier - 10));
+        return;
+      }
+    }
+  
+    p5.clear();
+    p5.textSize(25);
+    p5.fill(0);
+    p5.text(`Getting ready for takeoff..`, 150, p5.height - 20);
+  }
+
   socket?.on("reset", () => { setPull(0); setBet(0); setJoined(false); });
   socket?.on("pull", data => setPull(data));
   socket?.on("opt", data => { setBet(data.amount ?? 0); setJoined(data.confirmed); });
 
   if (!tick) return <></>;
-  return <>
-    {canvas}
-    <Form onSubmit={(e) => { e.preventDefault(); handleButton() }}>
-      <Form.Group className="mb-3" controlId="betAmount">
-        <div className="d-flex align-items-center">
-          <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
-          <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
-        </div>
-        <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.` : "Place a bet to enter the game."}</Form.Text>
-      </Form.Group>
-      <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
-    </Form>
-  </>
+  return (
+    <>
+      <DynamicSketch setup={setup} draw={(p5) => draw(p5, tick)}/>
+      <Form onSubmit={(e) => { e.preventDefault(); handleButton() }}>
+        <Form.Group className="mb-3" controlId="betAmount">
+          <div className="d-flex align-items-center">
+            <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
+            <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
+          </div>
+          <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.` : "Place a bet to enter the game."}</Form.Text>
+        </Form.Group>
+        <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
+      </Form>
+    </>
+  )
 }
 
 export default RocketRide;

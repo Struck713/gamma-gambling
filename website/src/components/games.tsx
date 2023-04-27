@@ -3,7 +3,7 @@ import { PlayerStatus, Game } from "@/lib/game";
 import { Card, ListGroup, Badge } from "react-bootstrap";
 
 const PlayerListItem: React.FC<{ username: string, data: any }> = ({ username, data }) => <ListGroup.Item>{username} <PlayerListItemBadge data={data}/></ListGroup.Item>;
-const PlayerListItemBadge: React.FC<{ data: any }> = ({ data }) => <Badge className="float-end" bg={data ? "secondary" : "danger"}>{data ? data : "None"}</Badge>;
+const PlayerListItemBadge: React.FC<{ data: any }> = ({ data }) => <Badge className="float-end" bg={data ? "secondary" : "danger"}>{data ? data : "WAITING.."}</Badge>;
 
 const decodeTick = (tick: Game.Tick) => {
     if (!tick) return "Loading...";
@@ -28,6 +28,7 @@ const DefaultCard: React.FC<{title: string, subtitle: string}> = ({ title, subti
 }
 
 export const DynamicSketch = dynamic(() => import('react-p5').then((mod) => mod.default), { ssr: false });
+
 export const PlayersList: React.FC<{ tick: Game.Tick, status: Game.Status }> = ({ tick, status }) => {
     if (!status) return <DefaultCard title="Waiting for players..." subtitle="Loading players list.." />;
     let { players, max } = status;

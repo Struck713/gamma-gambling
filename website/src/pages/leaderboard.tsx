@@ -1,14 +1,12 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Table, Container } from "react-bootstrap";
 
 import { PageLoadingSpinner } from "@/components/loading";
 import { Leader } from "@/lib/models";
-import { Images } from "@/components/images";
-import { Utils } from "@/lib/utils";
 import { fetcher } from "@/lib/fetcher";
 
 import styles from "../styles/leaderboard.module.css";
+import { InlineCoin } from "@/components/coin";
 
 interface Leaderboard {
 
@@ -39,7 +37,7 @@ const Leaderboards = () => {
 
   return (
     <Container className={styles.container}>
-      <Table className={`text-light bg-primary border-primary p-5 ${styles.table}`}>
+      <Table className={`text-light bg-primary p-5 ${styles.table}`}>
         <thead className={styles.thead}>
           <tr>
             <th>POSITION</th>
@@ -61,7 +59,7 @@ const LeaderboardPosition = ({ player, highlighted } : { player: Leader, highlig
     <tr className={highlighted ? "bg-info" : ""}>
         <td>#{player.position}</td>
         <td>{player.username}</td>
-        <td><span className="d-flex align-items-center"><Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />{Utils.format(player.total)}</span></td>
+        <td><InlineCoin amount={player.total} /></td>
     </tr>
   )
 }

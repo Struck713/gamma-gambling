@@ -8,16 +8,3 @@
     width: 3rem;
     margin-right: 15px;
 }
-
-.balance{
-    display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.coin{
-    width: 2em;
-    height: 2em;
-    margin-right: .3em;
-}
