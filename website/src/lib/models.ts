@@ -22,7 +22,7 @@ interface Transaction {
 
 interface Leader {
 
-    id: number;
+    position: number;
     username: string;
     total: number;
 

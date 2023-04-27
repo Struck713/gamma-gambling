@@ -11,6 +11,7 @@ import moment from "moment";
 
 import Image from 'next/image';
 import { Images } from "@/components/images";
+import { Utils } from "@/lib/utils";
 
 interface Transactions {
 
@@ -75,7 +76,7 @@ const Account = () => {
   return (
     <>
       <h1 className={`text-light align-items-center ${styles.h1}`}>
-        <span className={styles.balance}>{total?.total}</span> <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
+      <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" /> <span className={styles.balance}>{total?.total.toLocaleString()}</span>
       </h1>
       <Container style={{ minHeight: "10rem" }}>
         <Table className={`text-light bg-primary ${styles.table}`} >
@@ -92,9 +93,9 @@ const Account = () => {
             {!loading && account ? account.page.rows.map((tran, index) =>
               <tr key={index}>
                 <td>{tran.reason}</td>
-                <td>{tran.bet_amt}</td>
-                <StatisticChange transaction={tran} />
-                <td>{tran.total}</td>
+                <td>{Utils.format(tran.bet_amt)}</td>
+                <Change transaction={tran} />
+                <td>{Utils.format(tran.total)}</td>
                 <td>{moment(tran.date_changed).format("MM/DD/YYYY hh:mm A")}</td>
               </tr>
             ) : <PageLoadingSpinner />}
@@ -108,9 +109,9 @@ const Account = () => {
   )
 }
 
-const StatisticChange = ({ transaction: { bet_amt, return_amt } } : { transaction: Transaction }) => {
-  if (return_amt < 0) return <td className="text-danger">-{bet_amt}</td>;
-  else if (return_amt > 0) return <td className="text-success">+{return_amt ?? 0}</td>;
+const Change = ({ transaction: { bet_amt, return_amt } } : { transaction: Transaction }) => {
+  if (return_amt < 0) return <td className="text-danger">-{Utils.format(bet_amt)}</td>;
+  else if (return_amt > 0) return <td className="text-success">+{Utils.format(return_amt ?? 0)}</td>;
   else return <td>NONE</td>;
 }
 

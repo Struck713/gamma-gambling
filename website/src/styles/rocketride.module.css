@@ -2,10 +2,13 @@
     margin-top: 1rem;
 }
 
-.col{
+/* .col{
     display: flex;
     justify-content: center;
     flex-direction: row;
+} */
+.names{
+    max-width: 100%;
 }
 
 .cardBody{
@@ -15,9 +18,10 @@
 .coin{
     width: 2em;
     height: 2em;
-    margin-right: .2em;
+    margin-right: .3em;
 }
 
 .button{
     width: 100%;
+    height: 3.8rem;
 }

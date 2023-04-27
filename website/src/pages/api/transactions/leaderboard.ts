@@ -10,8 +10,14 @@ const handler = nc(ncOpts);
 handler.use(...auths);
 
 handler.get<any, NextApiResponse>(async (req, res) => {
-    let all: Leader[] | undefined = await execute<Leader>("SELECT * FROM leaderboard");
-    res.status(200).json(all);
+    let leaders = await execute<Leader>("SELECT * FROM leaderboard LIMIT 10");
+    if (!req.user) {
+        res.status(200).json({ leaders });
+        return;
+    }
+
+    let [ player ] = await execute<Leader>("SELECT * FROM leaderboard WHERE id=?", req.user.id) ?? [];
+    res.status(200).json({ player, leaders });
 }) 
 
 export default handler;
