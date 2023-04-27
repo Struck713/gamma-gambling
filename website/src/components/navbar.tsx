@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import { useCurrentUser } from "@/lib/user";
