@@ -4,6 +4,7 @@ import { Games } from "./games";
 import { Callback, Undefineable } from "../utils";
 import { execute } from "./db";
 import { Webhook } from "./webhook";
+import { OkPacket } from "mysql";
 
 /**
  * Game
@@ -118,21 +119,33 @@ abstract class Game {
      */
     abstract end(): void;
 
-    payout() {
+    /**
+     * Pays out the winners and losers. (yep!)
+     * This also sends a webhook to the Discord channel.
+     */
+    async payout() {
         let fields: Webhook.Field[] = [];
         let payout: Payout[] = [];
         this.players.forEach(player => {
-            if (player.bet == 0) { fields.push({ name: player.username, value: "NONE", inline: true }); return; }
+            if (player.bet == 0) return;
+
             let winner = this.winners.find(value => value.id == player.id);
             let returnAmount = winner ? winner.value : -player.bet;
+
             player.total = player.total + returnAmount;
             payout.push({ id: player.id, bet: player.bet, total: player.total, returnAmount, reason: this.type.toUpperCase() });
             fields.push({ name: player.username, value: returnAmount.toString(), inline: true });
         });
-        payout.forEach(payout => this.createTransaction(payout));
-        Webhook.sendStatusMessage(this.type, this.getName(), this.id, fields);
+
+        let id = await this.createGameHistory();
+        payout.forEach(payout => this.createTransaction(id, payout));
+        Webhook.sendStatusMessage(this.type, this.getName(), id, fields);
     }
 
+    /**
+     * Resets the players bets and winners list.
+     * This also broadcasts a reset message and a status message.
+     */
     reset() {
         // reset bets
         this.players.forEach(player => player.bet = 0);
@@ -143,11 +156,30 @@ abstract class Game {
         this.log("Reset all players.");
     }
 
-    private createTransaction = async (payout: Payout) => await execute("INSERT INTO user_transaction (account_id, total, bet_amt, return_amt, reason) VALUES (?, ?, ?, ?, ?)", payout.id, payout.total, payout.bet, payout.returnAmount, payout.reason);
-    private createGameHistory = async () => {};
+    /**
+     * This function allows a game creator
+     * to override the status object sent to
+     * the client.
+     * 
+     * @param player the Player
+     * @returns A status object
+     */
+    getStatus(player: Player): any {
+        return { data: player.bet ?? 0 };
+    }
+
+    private createTransaction = async (gameHistoryId: number, payout: Payout) => {
+        let { insertId } = await execute<OkPacket>("INSERT INTO user_transaction (account_id, total, bet_amt, return_amt, reason) VALUES (?, ?, ?, ?, ?)", payout.id, payout.total, payout.bet, payout.returnAmount, payout.reason);
+        await execute("INSERT INTO game_history_players (account_id, game_history_id, user_transaction_id) VALUES (?, ?, ?)", payout.id, gameHistoryId, insertId);
+    }
+
+    private createGameHistory = async (): Promise<number> => {
+        let { insertId } = await execute<OkPacket>("INSERT INTO game_history (game) VALUES (?)", this.getName());
+        return insertId;
+    };
 
     broadcastTick = (data: any) => this.broadcast("tick", { data, state: this.state });
-    broadcastStatus = () => this.broadcast("status", { players: this.players.map(player => { return { id: player.id, username: player.username, bet: player.bet ?? 0 } }), max: this.max });
+    broadcastStatus = () => this.broadcast("status", { players: this.players.map(player => { return { id: player.id, username: player.username, ...this.getStatus(player) } }), max: this.max });
     broadcast = (event: string, data?: any): boolean => io.in(this.getName()).emit(event, data);
     error = (socket: Socket, message: string): boolean => socket.emit("game_error", message);
     

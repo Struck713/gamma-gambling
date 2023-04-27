@@ -53,7 +53,6 @@ const RocketRide = () => {
 
   return (
     <>
-      <Image id="rocket-image" src={Images.Rocket} alt="Rocket" hidden={true} />
       <Container className={`p-2 ${styles.container}`}>
         <Row>
           <Col lg={4} className={styles.col}>
@@ -115,7 +114,6 @@ const draw = (p5: p5, tick: Game.Tick) => {
   p5.clear();
   p5.textSize(25);
   p5.fill(0);
-  document.getElementById("rocket-image")
   p5.text(`Getting ready for takeoff..`, 150, p5.height - 20);
 
 }

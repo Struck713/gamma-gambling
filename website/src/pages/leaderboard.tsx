@@ -1,11 +1,14 @@
-import { LoadingSpinner } from "@/components/loading";
-import { Leader } from "@/lib/models";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Table, Container } from "react-bootstrap";
-import styles from "../styles/leaderboard.module.css";
+
+import { PageLoadingSpinner } from "@/components/loading";
+import { Leader } from "@/lib/models";
 import { Images } from "@/components/images";
-import Image from "next/image";
 import { Utils } from "@/lib/utils";
+import { fetcher } from "@/lib/fetcher";
+
+import styles from "../styles/leaderboard.module.css";
 
 interface Leaderboard {
 
@@ -23,18 +26,16 @@ const Leaderboards = () => {
   useEffect(() => {
 
     const loadLeaderboard = async () => {
-      const res = await fetch('/api/transactions/leaderboard');
-      const json = await res.json();
-      setLeaderboard(json);
+      const leaderboard = await fetcher('/api/transactions/leaderboard');
+      setLeaderboard(leaderboard as Leaderboard);
+      setLoading(false);
     }
 
     setLoading(true);
     loadLeaderboard();
-    setLoading(false);
-
   }, []);
 
-  if (loading || !leaderboard) return <LoadingSpinner />
+  if (loading || !leaderboard) return <PageLoadingSpinner />
 
   return (
     <Container className={styles.container}>

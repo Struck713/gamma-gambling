@@ -1,17 +1,19 @@
+import Image from 'next/image';
 import { useEffect, useState } from "react";
-import { useRouter, NextRouter } from "next/router";
-import { useCurrentUser } from "@/lib/user";
-
-import styles from "../../styles/account.module.css"
-import { PageLoadingSpinner } from "@/components/loading";
-import { Transaction } from "@/lib/models";
-import { toast } from "react-hot-toast";
 import { Container, Table, ButtonGroup, Button } from 'react-bootstrap';
+import { useRouter, NextRouter } from "next/router";
+import { toast } from "react-hot-toast";
 import moment from "moment";
 
-import Image from 'next/image';
+
+import { PageLoadingSpinner } from "@/components/loading";
+import { Transaction } from "@/lib/models";
+import { useCurrentUser } from "@/lib/user";
 import { Images } from "@/components/images";
 import { Utils } from "@/lib/utils";
+import { fetcher } from "@/lib/fetcher";
+
+import styles from "../../styles/account.module.css"
 
 interface Transactions {
 
@@ -48,16 +50,14 @@ const Account = () => {
   }, [router, user, error]);
 
   const loadTransations = async (page: number) => {
-    const res = await fetch(`/api/transactions?page=${page}`);
-    const data = await res.json();
+    const data = await fetcher(`/api/transactions?page=${page}`);
     if (data) setAccount(data as Transactions);
     else toast.error("Something went wrong when loading your account..")
     setLoading(false);
   }
 
   const loadTotal = async () => {
-    const res = await fetch(`/api/transactions/recent`);
-    const data = await res.json();
+    const data = await fetcher(`/api/transactions/recent`);
     if (data) setTotal(data as Transaction);
     else toast.error("Something went wrong when loading your total..")
     setLoading(false);

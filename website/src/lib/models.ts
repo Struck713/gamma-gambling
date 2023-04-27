@@ -1,4 +1,3 @@
-
 interface Account {
 
     id: number;
@@ -20,6 +19,22 @@ interface Transaction {
 
 }
 
+interface GameHistory {
+
+    id: number;
+    game: string;
+    date_of: Date;
+
+}
+
+interface GameHistoryPlayer {
+
+    username: string;
+    game: string;
+    date_of: Date;
+
+}
+
 interface Leader {
 
     position: number;
@@ -29,4 +44,4 @@ interface Leader {
 }
 
 
-export type { Account, Leader, Transaction };
+export type { Account, Leader, Transaction, GameHistory, GameHistoryPlayer };
