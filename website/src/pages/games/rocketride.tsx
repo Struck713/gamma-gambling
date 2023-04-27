@@ -80,6 +80,12 @@ const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Un
   const [bet, setBet] = useState<number>(0);
   const [pull, setPull] = useState<number>(0);
   const [joined, setJoined] = useState<boolean>(false);
+
+  useEffect(() => {
+    document.onkeydown = (e: KeyboardEvent) => {
+      if (e.keyCode == 32) handleButton();
+    }
+  }, [ tick ])
   
   const handleButton = () => {
     if (tick?.state == Game.State.Lobby) socket?.emit("opt", joined ? 0 : betRef.current?.value);
@@ -88,7 +94,7 @@ const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Un
 
   const displayButton = () => {
     if (tick?.state == Game.State.Lobby) return joined ? "Leave queue" : "Queue for game";
-    if (joined) return !pull ? "Eject" : `Ejected at ${pull}x`;
+    if (joined) return !pull ? "Eject (hit space)" : `Ejected at ${pull}x`;
     return "Waiting for next round..";
   }
 
@@ -108,7 +114,6 @@ const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Un
     p5.createCanvas(dimension.width, dimension.width - (dimension.width / 3)).parent(canvasParentRef);
     p5.background(0, 0, 0, 0);
     p5.textAlign(p5.CENTER, p5.CENTER);
-    console.log("setup called");
   }
   
   const draw = (p5: p5, tick: Undefineable<Game.Tick>) => {
