@@ -38,6 +38,7 @@ const AccountRegister = () => {
             });
 
             mutate({ user: response.user }, false);
+            toast.success("Account created! You have been logged in.");
             router.replace('/user');
 
           } catch (e: any) {

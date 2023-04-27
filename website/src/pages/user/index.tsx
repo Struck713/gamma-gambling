@@ -43,7 +43,7 @@ const Account = () => {
     if (!user) { router.replace('/user/login'); return; }
 
     loadTotal();
-    handlePageChange(1);
+    handlePageChange(0);
   }, [router, user, error]);
 
   const loadTransations = async (page: number) => {
@@ -63,7 +63,7 @@ const Account = () => {
   }
 
   const handlePageChange = (page: number) => {
-    if (page < 1) setPage(1);
+    if (page < 0) setPage(0);
     else setPage(page);
 
     setLoading(true);
