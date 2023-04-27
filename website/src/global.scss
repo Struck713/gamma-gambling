@@ -4,7 +4,12 @@ $secondary: #9768d1;
 $info: #553285;
 $font-family-base: KoHo;
 
-// set the font and global backgroun
+
+html {
+    background-color: $primary;
+}
+
+// set the font and global background
 body {
     background: url(../public/assets/images/background.svg) no-repeat center center fixed; 
     -webkit-background-size: cover;
