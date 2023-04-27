@@ -23,6 +23,8 @@ interface GameHistory {
 
     name: string;
     date_of: Date;
+    totalBet: number;
+    totalReturn: number;
     players: GameHistoryPlayer[];
 
 }

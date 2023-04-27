@@ -11,6 +11,8 @@ import styles from "../styles/navbar.module.css"
 import { Images } from "@/components/images"
 import { Transaction } from '@/lib/models';
 import { Utils } from '@/lib/utils';
+import { InlineCoin } from './coin';
+import { LoadingSpinner } from './loading';
 
 const GuestNavbar = () => {
   return (
@@ -60,7 +62,7 @@ const UserNavbar = ({ user, mutate }: any) => {
   return (
     <>
       <div className={`text-light d-flex align-items-center container-fluid justify-content-center ${styles.balance}`}>
-          <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" /> {Utils.format(total?.total)}
+          {total ? <InlineCoin amount={total.total}/> : <LoadingSpinner />}
       </div>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="container-fluid justify-content-end">
@@ -83,7 +85,7 @@ const UserNavbar = ({ user, mutate }: any) => {
 }
 
 const FullNavbar = () => {
-  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+  const { data: { user } = {}, mutate } = useCurrentUser();
   return (
     <Navbar className={styles.navbar} sticky="top" bg="primary" variant="dark" expand="md">
       <Container className="bg-primary">

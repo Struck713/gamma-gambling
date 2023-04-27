@@ -8,6 +8,11 @@ import { useEffect, useState } from "react";
 import { Container, Col, Row, Table } from "react-bootstrap";
 import { toast } from "react-hot-toast";
 
+import styles from "@/styles/leaderboard.module.css";
+import { Images } from "@/components/images";
+import Image from "next/image";
+import { InlineCoin } from "@/components/coin";
+
 const Game = () => {
 
     const router = useRouter();
@@ -21,6 +26,7 @@ const Game = () => {
         if (!id) return;
 
         const data = await fetcher(`/api/games/${id}`);
+        console.log(data);
         if (data) setData(data as GameHistory);
         else toast.error("There was an error when trying to load this page.");
         setLoading(false);
@@ -48,15 +54,22 @@ const Game = () => {
               {data.players.map((player, index) => (
                 <tr key={index}>
                   <td>{player.username}</td>
-                  <td>{Utils.format(player.betAmount)}</td>
-                  <td>{Utils.format(player.returnAmount)}</td>
+                  <td><InlineCoin amount={player.betAmount} /></td>
+                  <td><InlineCoin amount={player.returnAmount} /></td>
                 </tr>
               ))}
+              <tr className="bg-primary">
+                  <td>TOTALS</td>
+                  <td><InlineCoin amount={data.totalBet}/></td>
+                  <td><InlineCoin amount={data.totalReturn}/></td>
+              </tr>
             </tbody>
           </Table>
         </div>
       </Container>
     )
-  }
-  
+}
+
+
+
 export default Game;
