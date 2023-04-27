@@ -1,11 +1,8 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Table, Container } from "react-bootstrap";
 
 import { PageLoadingSpinner } from "@/components/loading";
 import { Leader } from "@/lib/models";
-import { Images } from "@/components/images";
-import { Utils } from "@/lib/utils";
 import { fetcher } from "@/lib/fetcher";
 
 import styles from "../styles/leaderboard.module.css";

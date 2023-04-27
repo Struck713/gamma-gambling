@@ -35,7 +35,7 @@ const RocketRide = () => {
       socket.current.on("tick", data => setTick(data));
       socket.current.on("status", data => setStatus(data));
       socket.current.on("game_error", (message) => toast.error(message ?? "Something went wrong."));
-      socket.current.on("connect_error", (err) => toast.error(err.message ?? "Something went wrong."));
+      socket.current.on("connect_error", (err) => toast.error("Could not connect to game servers. Are they down?"));
 
       setLoading(false);
     }
