@@ -170,7 +170,7 @@ abstract class Game {
 
     private createTransaction = async (gameHistoryId: number, payout: Payout) => {
         let { insertId } = await execute<OkPacket>("INSERT INTO user_transaction (account_id, total, bet_amt, return_amt, reason) VALUES (?, ?, ?, ?, ?)", payout.id, payout.total, payout.bet, payout.returnAmount, payout.reason);
-        await execute("INSERT INTO game_history_players (account_id, game_history_id, user_transaction_id) VALUES (?, ?, ?)", payout.id, gameHistoryId, insertId);
+        await execute("INSERT INTO game_history_players (game_history_id, user_transaction_id) VALUES (?, ?)", gameHistoryId, insertId);
     }
 
     private createGameHistory = async (): Promise<number> => {
