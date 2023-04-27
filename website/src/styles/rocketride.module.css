@@ -12,6 +12,12 @@
     padding: 1rem;
 }
 
+.coin{
+    width: 2em;
+    height: 2em;
+    margin-right: .2em;
+}
+
 .button{
     width: 100%;
 }

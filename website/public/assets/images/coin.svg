@@ -1,25 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 549.45">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #fff;
-        font-family: YuGothic-Bold, 'Yu Gothic';
-        font-size: 330px;
-        font-weight: 700;
-        letter-spacing: -.09em;
-      }
-
-      .cls-2 {
-        fill: #f2cd72;
-      }
-
-      .cls-3 {
-        fill: #f2be72;
-      }
-    </style>
-  </defs>
-  <circle class="cls-3" cx="250" cy="304.45" r="245"/>
-  <circle class="cls-2" cx="250" cy="304.45" r="197.5"/>
-  <text class="cls-1" transform="translate(84.76 380.02)"><tspan x="0" y="0">γ</tspan></text>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#F2BE72;}
+	.st1{fill:#F2CD72;}
+	.st2{fill:#FFFFFF;}
+	.st3{display:none;}
+</style>
+<g id="Layer_1">
+	<circle class="st0" cx="250" cy="250" r="245"/>
+	<circle class="st1" cx="250" cy="250" r="197.5"/>
+	<g>
+		<path class="st2" d="M374.5,129.63L252.2,290.93l-24.81,83.47h-42.54l26.75-85.72l-14.18-110.21c-1.29-8.92-3.54-15.09-6.77-18.53
+			c-2.79-2.9-6.82-4.35-12.08-4.35c-4.41,0-8.92,0.38-13.54,1.13l8.54-29.33c9.45-1.18,15.95-1.77,19.5-1.77
+			c16.44,0,27.98,4.08,34.64,12.25c5.26,6.55,8.48,17.03,9.67,31.42l7.9,78.79l83.14-118.43H374.5z"/>
+	</g>
+</g>
+<g id="Layer_3" class="st3">
+</g>
+<g id="Layer_2" class="st3">
+</g>
 </svg>

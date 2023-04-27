@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter, NextRouter } from "next/router";
 import { useCurrentUser } from "@/lib/user";
 
-import styles from "../../styles/statistics.module.css"
+import styles from "../../styles/account.module.css"
 import { PageLoadingSpinner } from "@/components/loading";
 import { Transaction } from "@/lib/models";
 import { toast } from "react-hot-toast";
@@ -12,28 +12,28 @@ import moment from "moment";
 import Image from 'next/image';
 import { Images } from "@/components/images";
 
-interface Statistics {
+interface Account {
 
   recent: Transaction;
-  page: StatisticsPage;
+  page: AccountPage;
   totalPages: number;
 
 }
 
-interface StatisticsPage {
+interface AccountPage {
 
   index: Transaction;
   rows: Transaction[];
 
 }
 
-// Statistics page
-const Statistics = () => {
+// Account page
+const Account = () => {
 
   const [ loading, setLoading ] = useState<boolean>();
   const [ page, setPage ] = useState<number>(0);
   const [ total, setTotal ] = useState<Transaction>();
-  const [ statistics, setStatistics ] = useState<Statistics>();
+  const [ account, setAccount ] = useState<Account>();
 
   const { data: user, error, isValidating } = useCurrentUser();
   const router: NextRouter = useRouter();
@@ -47,17 +47,15 @@ const Statistics = () => {
   }, [router, user, error]);
 
   const loadTransations = async (page: number) => {
-    const res = await fetch(`/api/statistics?page=${page}`);
+    const res = await fetch(`/api/account?page=${page}`);
     const data = await res.json();
-    if (data) setStatistics(data as Statistics);
-    else toast.error("Something went wrong when loading your statistics..");
-    console.log(page);
-    console.log(data);
+    if (data) setAccount(data as Account);
+    else toast.error("Something went wrong when loading your account..")
     setLoading(false);
   }
 
   const loadTotal = async () => {
-    const res = await fetch(`/api/statistics/recent`);
+    const res = await fetch(`/api/account/recent`);
     const data = await res.json();
     if (data) setTotal(data as Transaction);
     else toast.error("Something went wrong when loading your total..")
@@ -76,7 +74,7 @@ const Statistics = () => {
 
   return (
     <>
-      <h1 className={`text-light ${styles.h1}`}>
+      <h1 className={`text-light align-items-center ${styles.h1}`}>
         <span className={styles.balance}>{total?.total}</span> <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
       </h1>
       <Container style={{ minHeight: "10rem" }}>
@@ -91,7 +89,7 @@ const Statistics = () => {
             </tr>
           </thead>
           <tbody>
-            {!loading && statistics ? statistics.page.rows.map((tran, index) =>
+            {!loading && account ? account.page.rows.map((tran, index) =>
               <tr key={index}>
                 <td>{tran.reason}</td>
                 <td>{tran.bet_amt}</td>
@@ -103,7 +101,7 @@ const Statistics = () => {
           </tbody>
         </Table>
         <ButtonGroup className="me-2" aria-label="First group">
-          {Array.from(Array(statistics?.totalPages).keys()).map(index => <Button key={index} active={page == index} onClick={() => handlePageChange(index)}>{index + 1}</Button>)}
+          {Array.from(Array(account?.totalPages).keys()).map(index => <Button key={index} onClick={() => handlePageChange(index + 1)}>{index + 1}</Button>)}
         </ButtonGroup>
       </Container>
     </>
@@ -116,4 +114,4 @@ const StatisticChange = ({ transaction: { bet_amt, return_amt } } : { transactio
   else return <td>NONE</td>;
 }
 
-export default Statistics;
+export default Account;

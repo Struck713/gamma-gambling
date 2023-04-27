@@ -1,5 +1,5 @@
 
-import Crash from "./crash"; 
+import RocketRide from "./rocketride"; 
 import Slots from "./slots"; 
 import Roulette from "./roulette"; 
 
@@ -13,8 +13,8 @@ enum Games {
 
     Roulette = "Roulette",
     Slots = "Slots",
-    Crash = "Crash",
+    RocketRide = "RocketRide",
 
 }
 
-export { Games, Crash, Slots, Roulette };
+export { Games, RocketRide, Slots, Roulette };
