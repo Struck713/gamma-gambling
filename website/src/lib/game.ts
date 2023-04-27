@@ -1,6 +1,3 @@
-import { toast } from "react-hot-toast";
-import { Socket, io } from "socket.io-client";
-
 namespace Game {
 
     export enum State {
@@ -15,15 +12,15 @@ namespace Game {
 
     export interface Status {
 
-        players?: PlayerStatus[];
-        max?: number;
+        players: PlayerStatus[];
+        max: number;
     
     }
 
     export interface Tick {
 
-        data?: any;
-        state?: Game.State;
+        data: any;
+        state: Game.State;
     
     }
 
@@ -35,7 +32,7 @@ interface PlayerStatus {
 
     id: number;
     username: string;
-    bet: number;
+    data: any;
 
 }
 

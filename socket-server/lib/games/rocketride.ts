@@ -87,4 +87,8 @@ export default class RocketRide extends Game {
         this.broadcastStatus();
     }
 
+    getStatus(player: Player) {
+        return this.state == GameState.Started ? { data: (this.winners.find(value => value.id === player.id) === undefined) } : super.getStatus(player);
+    }
+
 }

@@ -1,16 +1,19 @@
+import Image from 'next/image';
 import { useEffect, useState } from "react";
-import { useRouter, NextRouter } from "next/router";
-import { useCurrentUser } from "@/lib/user";
-
-import styles from "../../styles/account.module.css"
-import { PageLoadingSpinner } from "@/components/loading";
-import { Transaction } from "@/lib/models";
-import { toast } from "react-hot-toast";
 import { Container, Table, ButtonGroup, Button } from 'react-bootstrap';
+import { useRouter, NextRouter } from "next/router";
+import { toast } from "react-hot-toast";
 import moment from "moment";
 
-import Image from 'next/image';
+
+import { PageLoadingSpinner } from "@/components/loading";
+import { Transaction } from "@/lib/models";
+import { useCurrentUser } from "@/lib/user";
 import { Images } from "@/components/images";
+import { Utils } from "@/lib/utils";
+import { fetcher } from "@/lib/fetcher";
+
+import styles from "../../styles/account.module.css"
 
 interface Transactions {
 
@@ -47,16 +50,14 @@ const Account = () => {
   }, [router, user, error]);
 
   const loadTransations = async (page: number) => {
-    const res = await fetch(`/api/transactions?page=${page}`);
-    const data = await res.json();
+    const data = await fetcher(`/api/transactions?page=${page}`);
     if (data) setAccount(data as Transactions);
     else toast.error("Something went wrong when loading your account..")
     setLoading(false);
   }
 
   const loadTotal = async () => {
-    const res = await fetch(`/api/transactions/recent`);
-    const data = await res.json();
+    const data = await fetcher(`/api/transactions/recent`);
     if (data) setTotal(data as Transaction);
     else toast.error("Something went wrong when loading your total..")
     setLoading(false);
@@ -75,7 +76,7 @@ const Account = () => {
   return (
     <>
       <h1 className={`text-light align-items-center ${styles.h1}`}>
-        <span className={styles.balance}>{total?.total}</span> <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
+      <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" /> <span className={styles.balance}>{total?.total.toLocaleString()}</span>
       </h1>
       <Container style={{ minHeight: "10rem" }}>
         <Table className={`text-light bg-primary ${styles.table}`} >
@@ -92,9 +93,9 @@ const Account = () => {
             {!loading && account ? account.page.rows.map((tran, index) =>
               <tr key={index}>
                 <td>{tran.reason}</td>
-                <td>{tran.bet_amt}</td>
-                <StatisticChange transaction={tran} />
-                <td>{tran.total}</td>
+                <td>{Utils.format(tran.bet_amt)}</td>
+                <Change transaction={tran} />
+                <td>{Utils.format(tran.total)}</td>
                 <td>{moment(tran.date_changed).format("MM/DD/YYYY hh:mm A")}</td>
               </tr>
             ) : <PageLoadingSpinner />}
@@ -108,9 +109,9 @@ const Account = () => {
   )
 }
 
-const StatisticChange = ({ transaction: { bet_amt, return_amt } } : { transaction: Transaction }) => {
-  if (return_amt < 0) return <td className="text-danger">-{bet_amt}</td>;
-  else if (return_amt > 0) return <td className="text-success">+{return_amt ?? 0}</td>;
+const Change = ({ transaction: { bet_amt, return_amt } } : { transaction: Transaction }) => {
+  if (return_amt < 0) return <td className="text-danger">-{Utils.format(bet_amt)}</td>;
+  else if (return_amt > 0) return <td className="text-success">+{Utils.format(return_amt ?? 0)}</td>;
   else return <td>NONE</td>;
 }
 

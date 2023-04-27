@@ -1,30 +1,41 @@
-import { LoadingSpinner } from "@/components/loading";
-import { Leader } from "@/lib/models";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Table, Container } from "react-bootstrap";
-import styles from "../styles/leaderboard.module.css"
+
+import { PageLoadingSpinner } from "@/components/loading";
+import { Leader } from "@/lib/models";
+import { Images } from "@/components/images";
+import { Utils } from "@/lib/utils";
+import { fetcher } from "@/lib/fetcher";
+
+import styles from "../styles/leaderboard.module.css";
+
+interface Leaderboard {
+
+  player?: Leader;
+  leaders: Leader[];
+
+}
 
 // The Leaderboard
 const Leaderboards = () => {
 
   const [ loading, setLoading ] = useState<boolean>();
-  const [ leaderboard, setLeaderboard ] = useState<Leader[]>([]);
+  const [ leaderboard, setLeaderboard ] = useState<Leaderboard>();
 
   useEffect(() => {
 
     const loadLeaderboard = async () => {
-      const res = await fetch('/api/transactions/leaderboard');
-      const json = await res.json();
-      setLeaderboard(json);
+      const leaderboard = await fetcher('/api/transactions/leaderboard');
+      setLeaderboard(leaderboard as Leaderboard);
+      setLoading(false);
     }
 
     setLoading(true);
     loadLeaderboard();
-    setLoading(false);
-
   }, []);
 
-  if (loading) return <LoadingSpinner />
+  if (loading || !leaderboard) return <PageLoadingSpinner />
 
   return (
     <Container className={styles.container}>
@@ -37,27 +48,22 @@ const Leaderboards = () => {
           </tr>
         </thead>
         <tbody>
-          {leaderboard.map((leader, index) => 
-            <tr key={index}>
-              <td className={textColor(index)}>#{index + 1}</td>
-              <td>{leader.username}</td>
-              <td>{leader.total}</td>
-            </tr>
-          )}
-          <tr className="bg-info">
-              <td>#user_id</td>
-              <td>username</td>
-              <td>total</td>
-            </tr>
+          {leaderboard.player ? <LeaderboardPosition player={leaderboard.player} highlighted={true} /> : undefined}
+          {leaderboard?.leaders.map((leader, index) => <LeaderboardPosition key={index} player={leader}/>)}
         </tbody>
       </Table>
     </Container>
   )
 }
 
-const textColor = (index: number): string => {
-  if (index == 1) return "text-go";
-  return "text-light";
+const LeaderboardPosition = ({ player, highlighted } : { player: Leader, highlighted?: boolean }) => {
+  return (
+    <tr className={highlighted ? "bg-info" : ""}>
+        <td>#{player.position}</td>
+        <td>{player.username}</td>
+        <td><span className="d-flex align-items-center"><Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />{Utils.format(player.total)}</span></td>
+    </tr>
+  )
 }
 
 export default Leaderboards;

@@ -17,9 +17,9 @@ const RocketRide = () => {
 
   const socket = useRef<Socket | null>(null);
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [status, setStatus] = useState<Game.Status>();
-  const [tick, setTick] = useState<Game.Tick>();
+  const [ loading, setLoading ] = useState<boolean>(false);
+  const [ status, setStatus ] = useState<Game.Status>();
+  const [ tick, setTick ] = useState<Game.Tick>();
 
   useEffect(() => {
 
@@ -52,70 +52,73 @@ const RocketRide = () => {
   if (loading) return <PageLoadingSpinner />
 
   return (
-    <Container className={`p-2 ${styles.container}`}>
-      <Row>
-        <Col className={styles.col}>
-          <PlayersList tick={tick!} status={status!} />
-        </Col>
-        <Col>
-          <Card>
-            <Card.Header>Rocket Ride</Card.Header>
-            <Card.Body className={styles.cardBody}>
-              WE&apos;RE GOING TO THE MOON!
-              <RocketRideCanvas tick={tick} />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col className={styles.col}>
-          <RocketRideBetBox socket={socket.current} tick={tick} />
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <Container className={`p-2 ${styles.container}`}>
+        <Row>
+          <Col lg={4} className={styles.col}>
+            <span className={styles.names}><PlayersList tick={tick!} status={status!} /></span>
+          </Col>
+          <Col lg={8}>
+            <Card>
+              <Card.Header>Rocket Ride</Card.Header>
+              <Card.Body className={styles.cardBody}>
+                WE&apos;RE GOING TO THE MOON!
+                <RocketRideCanvas socket={socket.current}tick={tick} />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
   )
 }
 
 const setup = (p5: p5, canvasParentRef: Element) => {
-  p5.frameRate(25);
-  p5.createCanvas(600, 600).parent(canvasParentRef);
+  let dimension = canvasParentRef.getBoundingClientRect();
+  p5.createCanvas(dimension.width, dimension.width - (dimension.width / 3)).parent(canvasParentRef);
   p5.background(0, 0, 0, 0);
   p5.textAlign(p5.CENTER, p5.CENTER);
 }
 
-// let x = 0;
-// let y = 0;
-// let yValues: any = [];
-
 const draw = (p5: p5, tick: Game.Tick) => {
-  if (!tick || tick.state != Game.State.Started) return;
+
+  if (tick.state == Game.State.Ended) {
+    p5.textSize(50);
+    p5.fill(0);
+    p5.text("CRASHED.", p5.width / 2, p5.height / 2);
+    return;
+  }
+  
+  if (tick.state == Game.State.Started) {
+    p5.clear();
+
+    let multiplier = tick.data.multiplier;
+    let mappedMultiplier = p5.map(multiplier, 0, multiplier + (p5.height / 2), p5.height, 0);
+  
+    p5.stroke(0);
+    p5.strokeWeight(3);
+    p5.line(0, p5.height, multiplier, mappedMultiplier);
+    // p5.beginShape();
+
+    // for (let x = 0; x < multiplier; x++) {
+    //   p5.vertex(x, mappedMultiplier - x);
+    // }
+
+    // p5.endShape(p5.CLOSE);
+    p5.textSize(10);
+    p5.text(`${(multiplier / 10)}x`, multiplier, mappedMultiplier);
+
+    return;
+  }
+
   p5.clear();
+  p5.textSize(25);
+  p5.fill(0);
+  p5.text(`Getting ready for takeoff..`, 150, p5.height - 20);
 
-  p5.text(tick.data.multiplier, p5.width / 2, p5.height / 2)
-
-  // let yValue = 100 * p5.log(x / 2) / p5.log(5);
-  // yValues.push(tick.data.multiplier);
-
-  // p5.noStroke();
-  // p5.fill(200);
-  // p5.beginShape();
-  // p5.vertex(0, p5.height);
-  // for (let i = 0; i < yValues.length; i++) p5.vertex(i, p5.height - yValues[i]);
-  // p5.vertex((yValues.length - 1), p5.height);
-  // p5.endShape(p5.CLOSE);
-
-  // x = p5.constrain(x, 0, p5.width);
-  // y = p5.constrain(p5.height - yValue, 0, p5.height - 48);
-
-  // p5.text(":rocket:", x, y);
-
-  // x += 1;
 }
 
-const RocketRideCanvas = ({ tick }: { tick?: Game.Tick }) => {
-  if (!tick) return <></>;
-  return <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />
-}
-
-const RocketRideBetBox = ({ socket, tick }: { socket: Nullable<Socket>, tick: Undefineable<Game.Tick> }) => {
+const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Undefineable<Game.Tick> }) => {
 
   const betRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   const [bet, setBet] = useState<number>(0);
@@ -148,23 +151,20 @@ const RocketRideBetBox = ({ socket, tick }: { socket: Nullable<Socket>, tick: Un
   socket?.on("pull", data => setPull(data));
   socket?.on("opt", data => { setBet(data.amount ?? 0); setJoined(data.confirmed); });
 
-  return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Header>Bet</Card.Header>
-      <Card.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="betAmount">
-            <div className="d-flex align-items-center">
-              <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
-              <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
-            </div>
-            <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.` : "Place a bet to enter the game."}</Form.Text>
-          </Form.Group>
-          <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
-        </Form>
-      </Card.Body>
-    </Card>
-  )
+  if (!tick) return <></>;
+  return <>
+    <DynamicSketch setup={setup} draw={(p5: p5) => draw(p5, tick)} />
+    <Form onSubmit={(e) => { e.preventDefault(); handleButton() }}>
+      <Form.Group className="mb-3" controlId="betAmount">
+        <div className="d-flex align-items-center">
+          <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
+          <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
+        </div>
+        <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.` : "Place a bet to enter the game."}</Form.Text>
+      </Form.Group>
+      <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
+    </Form>
+  </>
 }
 
 export default RocketRide;

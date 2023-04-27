@@ -8,7 +8,7 @@ import { Games } from "./lib/games";
 import { execute } from "./lib/db";
 import { createServer } from "https";
 import { readFileSync } from "fs";
-import { Webhook } from "./lib/webhook";
+import { OkPacket } from "mysql";
 
 console.log(`Running enviroment in ${env.production ? "PRODUCTION" : "DEV"}.`);
 
@@ -50,11 +50,6 @@ io.on("connection", (socket: Socket) => {
 
 httpsServer.listen(env.port);
 io.listen(httpsServer);
-
-// Webhook.sendStatusMessage(Games.RocketRide, "Lobby-1", 100, new Date().toISOString(), [
-//   { name: "Struck713", value: "1500", inline: true },
-//   { name: "hey", value: "-300", inline: true }
-// ]);
 
 console.log(`Socket server started on ${env.port}.`);
 export { io, gameManager, playerManager };

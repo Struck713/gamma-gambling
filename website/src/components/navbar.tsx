@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { useCallback } from 'react';
@@ -6,9 +7,8 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useCurrentUser } from "@/lib/user";
 import { fetcher } from '@/lib/fetcher';
 
-import Styles from "../styles/navbar.module.css"
-import Logo from '../../public/assets/images/logo.svg';
-import Image from 'next/image';
+import styles from "../styles/navbar.module.css"
+import { Images } from "@/components/images"
 
 const GuestNavbar = () => {
   return (
@@ -53,15 +53,21 @@ const UserNavbar = ({ user, mutate }: any) => {
 const FullNavbar = () => {
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   return (
-    <Navbar className={Styles.navbar} sticky="top" bg="primary" variant="dark" expand="md">
+    <Navbar className={styles.navbar} sticky="top" bg="primary" variant="dark" expand="md">
       <Container className="bg-primary">
         <Navbar.Brand as={Link} href="/">
           <div className="d-flex align-items-center">
-            <Image className={Styles.logo} src={Logo} alt={"Gamma Gambling Logo"} />
+            <Image className={styles.logo} src={Images.Logo} alt={"Gamma Gambling Logo"} />
             GAMMA GAMBLING
           </div>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <div className="text-light d-flex align-items-center container-fluid justify-content-center">
+          <Nav.Link as={Link} href="/user/index" className={styles.balance}>
+            <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
+            190002
+          </Nav.Link>
+        </div>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="container-fluid justify-content-end">
             <Nav.Link as={Link} href="/leaderboard">Leaderboard</Nav.Link>

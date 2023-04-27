@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import { PlayerStatus, Game } from "@/lib/game";
 import { Card, ListGroup, Badge } from "react-bootstrap";
 
-const PlayerListItem: React.FC<{username: string, bet: number}> = ({ username, bet }) => <ListGroup.Item>{username} <BetBadge bet={bet}/></ListGroup.Item>;
-const BetBadge: React.FC<{bet: number}> = ({ bet }) => <Badge className="float-end" bg={bet ? "secondary" : "danger"}>{bet ? bet : "No bet"}</Badge>;
+const PlayerListItem: React.FC<{ username: string, data: any }> = ({ username, data }) => <ListGroup.Item>{username} <PlayerListItemBadge data={data}/></ListGroup.Item>;
+const PlayerListItemBadge: React.FC<{ data: any }> = ({ data }) => <Badge className="float-end" bg={data ? "secondary" : "danger"}>{data ? data : "None"}</Badge>;
 
 const decodeTick = (tick: Game.Tick) => {
     if (!tick) return "Loading...";
@@ -35,8 +35,8 @@ export const PlayersList: React.FC<{ tick: Game.Tick, status: Game.Status }> = (
         <Card>
             <Card.Header>{decodeTick(tick)}</Card.Header>
             <Card.Body  style={{ width: '18rem' }}>
-                <Card.Subtitle className="mb-2 text-muted">{players?.length} out of {max}</Card.Subtitle>
-                <ListGroup variant="list-group-flush">{players?.map((player: PlayerStatus) => <PlayerListItem key={player.username} username={player.username} bet={player.bet} />)}</ListGroup>
+                <Card.Subtitle className="mb-2 text-muted">{players.length} out of {max}</Card.Subtitle>
+                <ListGroup variant="list-group-flush">{players.map((player: PlayerStatus) => <PlayerListItem key={player.username} username={player.username} data={player.data} />)}</ListGroup>
             </Card.Body>
         </Card>
     )
