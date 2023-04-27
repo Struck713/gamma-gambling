@@ -35,7 +35,7 @@ export const PlayersList: React.FC<{ tick: Game.Tick, status: Game.Status }> = (
     return (
         <Card>
             <Card.Header>{decodeTick(tick)}</Card.Header>
-            <Card.Body  style={{ width: '18rem' }}>
+            <Card.Body>
                 <Card.Subtitle className="mb-2 text-muted">{players.length} out of {max}</Card.Subtitle>
                 <ListGroup variant="list-group-flush">{players.map((player: PlayerStatus) => <PlayerListItem key={player.username} username={player.username} data={player.data} />)}</ListGroup>
             </Card.Body>
