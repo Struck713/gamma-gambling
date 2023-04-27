@@ -27,7 +27,7 @@ const Leaderboards = () => {
   if (loading) return <LoadingSpinner />
 
   return (
-    <Container className="jumbotron">
+    <Container className={styles.container}>
       <Table className={`text-light bg-primary border-primary p-5 ${styles.table}`}>
         <thead className={styles.thead}>
           <tr>

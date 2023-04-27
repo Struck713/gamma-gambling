@@ -36,7 +36,7 @@ const AccountLogin = () => {
           toast.success('You have been logged in.');
           
         } catch (error: any) {
-          toast.error("Invalid username or password.");
+          toast.error("Invalid email or password.");
         } finally {
           setLoading(false);
         }

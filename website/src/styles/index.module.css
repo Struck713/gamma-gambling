@@ -1,7 +1,3 @@
-.main{
-    margin-top: 100px;
-}
-
 .image {
     margin-left: auto;
     padding-bottom: .5rem;
@@ -11,10 +7,15 @@
     border-color: var(--bs-secondary);
 }
 
+.centerColContents{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .coin {
-    margin-left: auto;
-    height: 11rem;
-    width: 11rem;
+    height: 15rem;
+    width: 15rem;
     transition: all 0.3s ease-in-out 0s; 
     display: inline-block;
 }
