@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import { useCurrentUser } from "@/lib/user";
@@ -9,18 +9,42 @@ import { fetcher } from '@/lib/fetcher';
 
 import styles from "../styles/navbar.module.css"
 import { Images } from "@/components/images"
+import { Transaction } from '@/lib/models';
+import { Utils } from '@/lib/utils';
 
 const GuestNavbar = () => {
   return (
     <>
-      <Nav.Link as={Link} href="/user/login">Login</Nav.Link>
-      <span className="navbar-text">or</span>
-      <Nav.Link as={Link} href="/user/register">Sign up</Nav.Link>
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="container-fluid justify-content-end">
+          <Nav.Link as={Link} href="/leaderboard">Leaderboard</Nav.Link>
+          <Nav.Link as={Link} href="/user/login">Login</Nav.Link>
+          <span className="navbar-text">or</span>
+          <Nav.Link as={Link} href="/user/register">Sign up</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
     </>
   )
 }
 
 const UserNavbar = ({ user, mutate }: any) => {
+
+  const [ loading, setLoading ] = useState<boolean>(false);
+  const [ total, setTotal ] = useState<Transaction>();
+
+  useEffect(() => {
+
+    const loadTotal = async () => {
+      const data = await fetcher(`/api/transactions/recent`);
+      if (data) setTotal(data as Transaction);
+      else toast.error("Something went wrong when loading your total..")
+      setLoading(false);
+    }
+
+    setLoading(true);
+    loadTotal();
+  }, []);
+
   const onSignOut = useCallback(async () => {
     try {
       await fetcher('/api/user/auth', {
@@ -35,17 +59,25 @@ const UserNavbar = ({ user, mutate }: any) => {
 
   return (
     <>
-      <NavDropdown title="Games" id="games-dropdown">
-        <NavDropdown.Item as={Link} href="/games/rocketride">Rocket Ride</NavDropdown.Item>
-        <NavDropdown.Item as={Link} href="/games/roulette">Roulette</NavDropdown.Item>
-        <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
-      </NavDropdown>
-      <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
-        <NavDropdown.Item as={Link} href="/user">Account</NavDropdown.Item>
-        <NavDropdown.Item as={Link} href="/user/settings">Settings</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item as={Link} href="/" onClick={onSignOut}>Logout</NavDropdown.Item>
-      </NavDropdown>
+      <div className={`text-light d-flex align-items-center container-fluid justify-content-center ${styles.balance}`}>
+          <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" /> {Utils.format(total?.total)}
+      </div>
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="container-fluid justify-content-end">
+          <Nav.Link as={Link} href="/leaderboard">Leaderboard</Nav.Link>
+          <NavDropdown title="Games" id="games-dropdown">
+            <NavDropdown.Item as={Link} href="/games/rocketride">Rocket Ride</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href="/games/roulette">Roulette</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
+            <NavDropdown.Item as={Link} href="/user">Account</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href="/user/settings">Settings</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item as={Link} href="/" onClick={onSignOut}>Logout</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
     </>
   )
 }
@@ -62,18 +94,7 @@ const FullNavbar = () => {
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <div className="text-light d-flex align-items-center container-fluid justify-content-center">
-          <Nav.Link as={Link} href="/user/index" className={styles.balance}>
-            <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
-            190002
-          </Nav.Link>
-        </div>
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="container-fluid justify-content-end">
-            <Nav.Link as={Link} href="/leaderboard">Leaderboard</Nav.Link>
-            {user ? <UserNavbar user={user} mutate={mutate} /> : <GuestNavbar />}
-          </Nav>
-        </Navbar.Collapse>
+        {user ? <UserNavbar user={user} mutate={mutate} /> : <GuestNavbar />}
       </Container>
     </Navbar>
   );

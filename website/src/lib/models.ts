@@ -21,17 +21,17 @@ interface Transaction {
 
 interface GameHistory {
 
-    id: number;
-    game: string;
+    name: string;
     date_of: Date;
+    players: GameHistoryPlayer[];
 
 }
 
 interface GameHistoryPlayer {
 
     username: string;
-    game: string;
-    date_of: Date;
+    betAmount: number;
+    returnAmount: number;
 
 }
 

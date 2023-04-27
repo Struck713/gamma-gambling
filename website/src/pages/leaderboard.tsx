@@ -39,7 +39,7 @@ const Leaderboards = () => {
 
   return (
     <Container className={styles.container}>
-      <Table className={`text-light bg-primary border-primary p-5 ${styles.table}`}>
+      <Table className={`text-light bg-primary p-5 ${styles.table}`}>
         <thead className={styles.thead}>
           <tr>
             <th>POSITION</th>

@@ -96,7 +96,7 @@ const Account = () => {
                 <td>{Utils.format(tran.bet_amt)}</td>
                 <Change transaction={tran} />
                 <td>{Utils.format(tran.total)}</td>
-                <td>{moment(tran.date_changed).format("MM/DD/YYYY hh:mm A")}</td>
+                <td>{moment(tran.date_changed).format(Utils.DATE_FORMAT)}</td>
               </tr>
             ) : <PageLoadingSpinner />}
           </tbody>
