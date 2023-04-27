@@ -3,9 +3,9 @@ import { Game, GameState, Player } from '../models';
 import { Games } from '.';
 
 /**
- * Crash
+ * RocketRide
  * 
- * The concrete implementation of the Crash
+ * The concrete implementation of the RocketRide
  * game type.
  *
  */

@@ -51,7 +51,7 @@ io.on("connection", (socket: Socket) => {
 httpsServer.listen(env.port);
 io.listen(httpsServer);
 
-// Webhook.sendStatusMessage(Games.Crash, "Lobby-1", 100, new Date().toISOString(), [
+// Webhook.sendStatusMessage(Games.RocketRide, "Lobby-1", 100, new Date().toISOString(), [
 //   { name: "Struck713", value: "1500", inline: true },
 //   { name: "hey", value: "-300", inline: true }
 // ]);
