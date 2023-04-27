@@ -28,13 +28,13 @@ const Game = () => {
         const data = await fetcher(`/api/games/${id}`);
         console.log(data);
         if (data) setData(data as GameHistory);
-        else toast.error("There was an error when trying to load this page.");
+        else router.replace("/404");
         setLoading(false);
       }
 
       setLoading(true);
       loadGameData();
-    }, [ id ]);
+    }, [ id, router ]);
 
     if (loading || !data) return <PageLoadingSpinner />;
 
