@@ -46,8 +46,8 @@ const Leaderboards = () => {
           </tr>
         </thead>
         <tbody>
-          {leaderboard.player ? <LeaderboardPosition player={leaderboard.player} highlighted={true} /> : undefined}
-          {leaderboard?.leaders.map((leader, index) => <LeaderboardPosition key={index} player={leader}/>)}
+          {leaderboard ? leaderboard.leaders.map((leader, index) => <LeaderboardPosition key={index} player={leader} highlighted={leaderboard.player?.position == leader.position} />) : undefined}
+          {leaderboard.player && leaderboard.player.position > 10 ? <LeaderboardPosition player={leaderboard.player} highlighted={true} /> : undefined}
         </tbody>
       </Table>
     </Container>
