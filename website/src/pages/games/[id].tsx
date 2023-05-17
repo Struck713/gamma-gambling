@@ -25,11 +25,14 @@ const Game = () => {
       const loadGameData = async () => {
         if (!id) return;
 
-        const data = await fetcher(`/api/games/${id}`);
-        console.log(data);
-        if (data) setData(data as GameHistory);
-        else router.replace("/404");
-        setLoading(false);
+        try {
+          const data = await fetcher(`/api/games/${id}`);
+          if (data) setData(data as GameHistory);
+        } catch (e: any) {
+          router.replace("/404");
+        } finally {
+          setLoading(false);
+        }
       }
 
       setLoading(true);

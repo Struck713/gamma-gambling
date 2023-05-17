@@ -12,7 +12,7 @@ handler.get<any, NextApiResponse>(async (req, res) => {
     const { id } = req.query;
     const [ gameHistory ] = await execute<{ id: number, game: string, date_of: Date }>("SELECT * FROM game_history WHERE id=?", id) ?? [];
     if (!gameHistory) {
-        res.status(200).json({ message: "Invalid request." });
+        res.status(400).end();
         return;
     }
 
