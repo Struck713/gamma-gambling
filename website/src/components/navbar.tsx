@@ -56,8 +56,8 @@ const UserNavbar = ({ user, mutate }: any) => {
           <Nav.Link as={Link} href="/leaderboard">Leaderboard</Nav.Link>
           <NavDropdown title="Games" id="games-dropdown">
             <NavDropdown.Item as={Link} href="/games/rocketride">Rocket Ride</NavDropdown.Item>
-            <NavDropdown.Item as={Link} href="/games/roulette">Roulette</NavDropdown.Item>
-            <NavDropdown.Item as={Link} href="/games/blackjack">Blackjack</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href="/games/roulette" disabled>Roulette</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href="/games/blackjack" disabled>Blackjack</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title={`Welcome back, ${user.username}`} id="profile-dropdown">
             <NavDropdown.Item as={Link} href="/user">Account</NavDropdown.Item>
