@@ -7,6 +7,10 @@ import { SSRProvider } from 'react-bootstrap';
 
 import '@/global.scss'
 
+const TITLE = "Gamma Gambling";
+const DESCRIPTION = "Make your money go up!";
+const IMAGE = "/assets/images/og/logo.png";
+
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
@@ -16,10 +20,13 @@ const App = ({ Component, pageProps }: AppProps) => {
         }
       `}</style> */}
       <Head>
-        <title>Gamma Gambling</title>
-        <meta name="description" content="Make your money go up!" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{TITLE}</title>
+        <meta name="description" content={DESCRIPTION} />
+        <meta name="og:title" content={TITLE} />
+        <meta name="og:description" content={DESCRIPTION} />
+        <meta name="og:image" content={IMAGE} />
         <meta name="theme-color" content="#200542" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=KoHo&display=swap" rel="stylesheet" />
