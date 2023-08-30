@@ -1,10 +1,9 @@
 import Axios from "axios";
 import { Game } from "./models";
 import { Games } from "./games";
+import env from '../env.json';
 
 export namespace Webhook {
-
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1100123414997508136/YD2L1SY8ZpKWGMnNCDmJ85cLmWaVzCmahKHKP4N2zEyJFkIE0WHV5Rg4fmvoBcM4Ph6y";
 
     export interface Message {
         content?: string | null;
@@ -69,7 +68,7 @@ export namespace Webhook {
     }
 
     export const send = async (message: Message) => {
-      const res = await Axios.post(WEBHOOK_URL, JSON.stringify(message), { 
+      const res = await Axios.post(env.discord.webhook_url, JSON.stringify(message), { 
         headers: {
           'Content-Type': 'application/json'
         }

@@ -24,7 +24,7 @@ namespace Game {
     
     }
 
-    export const SERVER_URL = "https://vps.gammagambling.com:3001";
+    export const SERVER_URL = "https://s.gammagambling.com:3001";
 
 }
 
