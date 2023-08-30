@@ -14,6 +14,8 @@ import { Utils } from "@/lib/utils";
 import { fetcher } from "@/lib/fetcher";
 
 import styles from "../../styles/account.module.css"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 interface Transactions {
 
@@ -29,6 +31,9 @@ interface TransactionsPage {
   rows: Transaction[];
 
 }
+
+const PAGE_BUTTON_DISPLAY = 13;
+const PAGE_BUTTON_SEGMENT = Math.floor(PAGE_BUTTON_DISPLAY / 2);
 
 // Account page
 const Account = () => {
@@ -101,9 +106,19 @@ const Account = () => {
             ) : <PageLoadingSpinner />}
           </tbody>
         </Table>
-        <ButtonGroup className="me-2" aria-label="Page Buttons Group">
-          {Array.from(Array(account?.totalPages).keys()).map(index => <Button key={index} active={index == page} onClick={() => handlePageChange(index)}>{index + 1}</Button>)}
-        </ButtonGroup>
+        {account && 
+          <div className="text-center">
+            <ButtonGroup className="me-2" aria-label="Page Buttons Group">
+              <Button disabled={page - 1 < 0} onClick={() => handlePageChange(page - 1)}>{"<"}</Button>
+              {Array.from(Array(Math.min(account.totalPages, PAGE_BUTTON_DISPLAY)).keys()).map(index => {
+                if (account.totalPages > PAGE_BUTTON_DISPLAY) 
+                  index += ((page + PAGE_BUTTON_SEGMENT) >= account.totalPages) ? (page - (PAGE_BUTTON_DISPLAY + (page - account.totalPages))) : (page - Math.min(page, PAGE_BUTTON_SEGMENT));
+                return <Button key={index} active={index == page} onClick={() => handlePageChange(index)}>{index + 1}</Button>
+              })}
+              <Button disabled={page + 1 >= account.totalPages} onClick={() => handlePageChange(page + 1)}>{">"}</Button>
+            </ButtonGroup>
+          </div>
+        }
       </Container>
     </>
   )
