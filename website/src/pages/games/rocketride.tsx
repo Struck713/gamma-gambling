@@ -8,7 +8,7 @@ import { io, Socket } from 'socket.io-client';
 import Image from 'next/image';
 
 import p5 from "p5";
-import { Nullable, Undefineable } from "@/lib/utils";
+import { Nullable, Undefineable, Utils } from "@/lib/utils";
 
 import styles from "../../styles/rocketride.module.css"
 import { Images } from "@/components/images"
@@ -162,7 +162,7 @@ const RocketRideCanvas = ({ socket, tick }: { socket: Nullable<Socket>, tick: Un
             <Image className={styles.coin} src={Images.GammaCoin} alt="GAMMA COIN" />
             <Form.Control ref={betRef} type="number" placeholder="Enter a bet to place" />
           </div>
-          <Form.Text className="text-muted" >{joined ? `Your current bet is ${bet}.` : "Place a bet to enter the game."}</Form.Text>
+          <Form.Text className="text-muted" >{joined ? `Your current bet is ${Utils.format(bet)}.` : "Place a bet to enter the game."}</Form.Text>
         </Form.Group>
         <Button onClick={handleButton} disabled={toggleButton()} variant={displayVariant()} className={`w-2 ${styles.button}`}>{displayButton()}</Button>
       </Form>

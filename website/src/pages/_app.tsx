@@ -19,6 +19,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <title>Gamma Gambling</title>
         <meta name="description" content="Make your money go up!" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#200542" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=KoHo&display=swap" rel="stylesheet" />

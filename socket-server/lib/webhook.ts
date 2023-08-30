@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { Game } from "./models";
 import { Games } from "./games";
 import env from '../env.json';
 
