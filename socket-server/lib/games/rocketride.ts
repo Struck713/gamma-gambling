@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 import { Game, GameState, Player } from '../models';
 import { Games } from '.';
+import { Utils } from '../../utils';
 
 /**
  * RocketRide
@@ -58,7 +59,7 @@ export default class RocketRide extends Game {
         }
 
         player.bet = amount;
-        socket.emit("opt", { confirmed: true, amount });
+        socket.emit("opt", { confirmed: true, amount: Utils.format(amount) });
         this.log(`${player.username} opted-in for ${amount}.`);
         this.broadcastStatus();
     }
